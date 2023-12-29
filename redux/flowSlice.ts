@@ -14,9 +14,8 @@ interface Filter {
 
 export interface InitialFlowType {
   step: number;
-  genres: Genre[];
-  keywords: Keyword[];
-  activeList: { name: string; id: number }[];
+  genres: number[];
+  keywords: number[];
   filters: Filter;
 }
 
@@ -25,17 +24,6 @@ const initialState: InitialFlowType = {
   genres: [],
   keywords: [],
   filters: {},
-  activeList: [
-    ...Object.values(Genres).sort((a, b) => {
-      if (a.name < b.name) {
-        return -1;
-      }
-      if (a.name > b.name) {
-        return 1;
-      }
-      return 0;
-    }),
-  ],
 };
 
 export const flowSlice = createSlice({
@@ -46,55 +34,23 @@ export const flowSlice = createSlice({
       state.step = action.payload;
     },
     updateGenre: (state, action) => {
-      if (state.genres.filter((g) => g.id === action.payload.id).length === 0) {
-        let index = state.activeList.findIndex(
-          (val) => val.id === action.payload.id
-        );
-        let keys = KeywordMap[action.payload.id].map((k) => {
-          return { id: k.id, name: k.name };
-        });
-        state.genres = [...state.genres, action.payload];
-        if (index === 0) {
-          state.activeList = [
-            state.activeList[0],
-            ...keys,
-            ...state.activeList.slice(index + 1),
-          ];
-        } else if (index === state.activeList.length - 1) {
-          state.activeList = state.activeList = [...state.activeList, ...keys];
-        } else {
-          state.activeList = [
-            ...state.activeList.slice(0, index + 1),
-            ...keys,
-            ...state.activeList.slice(index + 1),
-          ];
-        }
+      if (!!state.genres.find((id) => id === action.payload)) {
+        state.genres = state.genres.filter((id) => id !== action.payload);
       } else {
-        state.genres = [
-          ...state.genres.filter((g) => g.id !== action.payload.id),
-        ];
+        state.genres.push(action.payload);
       }
     },
     updateKeywords: (state, action) => {
-      if (
-        state.keywords.filter((k) => k.id === action.payload.id).length === 0
-      ) {
-        return {
-          ...state,
-          keywords: [...state.keywords, action.payload],
-        };
+      if (!!state.keywords.find((id) => id === action.payload)) {
+        state.keywords = state.keywords.filter((id) => id !== action.payload);
       } else {
-        return {
-          ...state,
-          keywords: [
-            ...state.keywords.filter((k) => k.id !== action.payload.id),
-          ],
-        };
+        state.keywords.push(action.payload);
       }
     },
     addKeyword: (state, action) => {
-      let currList = state.activeList;
+      /*let currList = state.activeList;
       state.activeList = [action.payload, ...currList];
+      */
     },
     resetFlow: () => {
       return initialState;
@@ -125,3 +81,53 @@ export const {
 } = flowSlice.actions;
 
 export default flowSlice.reducer;
+
+/*
+updateGenre: (state, action) => {
+      if (state.genres.filter((g) => g.id === action.payload.id).length === 0) {
+        let index = state.activeList.findIndex(
+          (val) => val.id === action.payload.id
+        );
+        let keys = KeywordMap[action.payload.id].map((k) => {
+          return { id: k.id, name: k.name };
+        });
+        state.genres = [...state.genres, action.payload];
+        if (index === 0) {
+          state.activeList = [
+            state.activeList[0],
+            ...keys,
+            ...state.activeList.slice(index + 1),
+          ];
+        } else if (index === state.activeList.length - 1) {
+          state.activeList = state.activeList = [...state.activeList, ...keys];
+        } else {
+          state.activeList = [
+            ...state.activeList.slice(0, index + 1),
+            ...keys,
+            ...state.activeList.slice(index + 1),
+          ];
+        }
+      } else {
+        state.genres = [
+          ...state.genres.filter((g) => g.id !== action.payload.id),
+        ];
+      }
+    },
+
+*/
+
+/* if (
+        state.keywords.filter((k) => k.id === action.payload.id).length === 0
+      ) {
+        return {
+          ...state,
+          keywords: [...state.keywords, action.payload],
+        };
+      } else {
+        return {
+          ...state,
+          keywords: [
+            ...state.keywords.filter((k) => k.id !== action.payload.id),
+          ],
+        };
+      }*/

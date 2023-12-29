@@ -172,15 +172,15 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
             {movie.vote_average}
           </Text>
         </View>
-        <Text style={{ color: "white", paddingTop: 10 }}>
-          {movie.genre_ids
+        {/*        <Text style={{ color: "white", paddingTop: 10 }}>
+          {!!movie.genre_ids
             ? movie.genre_ids.map((id, index) =>
                 index !== movie.genre_ids!.length - 1
                   ? Genres[id].name + ", "
                   : Genres[id].name
               )
             : ""}
-        </Text>
+          </Text>*/}
       </View>
     </View>
   );

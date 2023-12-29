@@ -42,56 +42,29 @@ const FilterStep = () => {
 
   return (
     <View style={{ flex: 1, padding: 10 }}>
-      <TouchableOpacity
-        style={{
-          backgroundColor: "white",
-          padding: 10,
-          borderRadius: 20,
-          width: 80,
-        }}
-        onPress={() => dispatch(updateStep(0))}
-      >
-        <Text style={{ textAlign: "center" }}>Back</Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: "white",
-          textAlign: "center",
-          fontSize: 16,
-          fontWeight: "bold",
-          paddingTop: 15,
-        }}
-      >
-        Add filters for more specific recs
-      </Text>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingVertical: 20 }}
-      >
-        <FilterAccordion
-          name="years"
-          description="Years of Release"
-          visualText={(min, max) => `${min + 1890} - ${max + 1890}`}
-          defaultMin={0}
-          defaultMax={yearDiff}
-        />
-        <FilterAccordion
-          name="length"
-          description="Movie Length"
-          visualText={(min, max) => `${min} minutes - ${max} minutes`}
-          defaultMin={0}
-          defaultMax={300}
-        />
-        <FilterAccordion
-          name="rating"
-          description="Average Rating"
-          visualText={(min, max) => `${min / 10}/10 - ${max / 10}/10`}
-          defaultMin={0}
-          defaultMax={100}
-        />
-        <ProviderAccordion />
-        <View style={{ paddingBottom: 80 }} />
-      </ScrollView>
+      <FilterAccordion
+        name="years"
+        description="Years of Release"
+        visualText={(min, max) => `${min + 1890} - ${max + 1890}`}
+        defaultMin={0}
+        defaultMax={yearDiff}
+      />
+      <FilterAccordion
+        name="length"
+        description="Movie Length"
+        visualText={(min, max) => `${min} minutes - ${max} minutes`}
+        defaultMin={0}
+        defaultMax={300}
+      />
+      <FilterAccordion
+        name="rating"
+        description="Average Rating"
+        visualText={(min, max) => `${min / 10}/10 - ${max / 10}/10`}
+        defaultMin={0}
+        defaultMax={100}
+      />
+      <ProviderAccordion />
+      <View style={{ paddingBottom: 80 }} />
       <View
         style={{
           position: "absolute",

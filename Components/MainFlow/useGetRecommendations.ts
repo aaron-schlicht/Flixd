@@ -22,15 +22,13 @@ const useGetRecommendations = () => {
     let queryString = BASE_URL + BASE_PARAMS;
     if (!!genres.length) {
       queryString += `&with_genres=${genres
-        .map((genre, index) =>
-          index === genres.length - 1 ? `${genre.id}` : `${genre.id},`
-        )
+        .map((id, index) => (index === genres.length - 1 ? `${id}` : `${id},`))
         .join("")}`;
     }
     if (!!keywords.length) {
       queryString += `&with_keywords=${keywords
-        .map((key, index) =>
-          index === keywords.length - 1 ? `${key.id}` : `${key.id}|`
+        .map((id, index) =>
+          index === keywords.length - 1 ? `${id}` : `${id}|`
         )
         .join("")}`;
     }
