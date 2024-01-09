@@ -1,15 +1,27 @@
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
+  Text,
   View,
   TouchableOpacity,
-  Image,
-  TextInput,
-  Text,
+  Keyboard,
   ImageSourcePropType,
+  Image,
+  StyleSheet,
+  TextInput,
+  ScrollView,
 } from "react-native";
-import { useState } from "react";
-import { Movie } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
+import { Movie } from "../../constants";
+import * as Haptics from "expo-haptics";
+import {
+  removeSelectedMovie,
+  updateSelectedMovie,
+  updateFocus,
+} from "../../redux/movieSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useGetSearchResultsQuery } from "../../redux/apiSlice";
+
+const SEARCH = "search";
 
 export const styles = StyleSheet.create({
   container: {
@@ -123,8 +135,7 @@ export const StyledTextInput: React.FC<{
   handleSearch: () => void;
   handleChange: (e: string) => void;
 }> = ({ handleSearch, handleChange, query }) => {
-  return (
-    <TextInput
+  return ` <TextInput
       keyboardAppearance="dark"
       autoFocus
       autoCapitalize="sentences"
@@ -136,8 +147,7 @@ export const StyledTextInput: React.FC<{
       returnKeyType="search"
       onSubmitEditing={() => handleSearch()}
       placeholder="Search movies..."
-    />
-  );
+    />`;
 };
 
 export const Logo = () => {
@@ -203,6 +213,135 @@ export const LogoLarge = () => {
           style={{ width: 105, height: 30 }}
         />
       </View>
+    </View>
+  );
+};
+
+const useDebounce = (value: string) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedValue(value);
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return debouncedValue;
+};
+
+const SearchFunction = () => {
+  const { selectedMovie, focus } = useSelector((state: any) => state.movies);
+  const [query, setQuery] = useState("");
+  const dispatch = useDispatch();
+  const debouncedValue = useDebounce(query);
+  const { data } = useGetSearchResultsQuery(debouncedValue);
+
+  const onPress = (movie: Movie) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!!selectedMovie && selectedMovie.id === movie.id) {
+      dispatch(removeSelectedMovie());
+    } else {
+      dispatch(updateSelectedMovie(movie));
+    }
+  };
+
+  const handleCancel = () => {
+    setQuery("");
+    if (!!selectedMovie) {
+      dispatch(removeSelectedMovie(selectedMovie));
+    }
+    dispatch(updateFocus("home"));
+  };
+
+  if (focus !== SEARCH) return null;
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchBarContent}>
+        <View style={styles.inputContainer}>
+          <Ionicons name="search" color="#ccc" size={15} />
+          <StyledTextInput
+            query={query}
+            handleChange={(e) => setQuery(e)}
+            handleSearch={() => Keyboard.dismiss()}
+          />
+          {query.length > 0 ? (
+            <TouchableOpacity
+              onPress={() => {
+                setQuery("");
+                if (!!selectedMovie) {
+                  dispatch(removeSelectedMovie(selectedMovie));
+                }
+              }}
+            >
+              <Ionicons name="close-circle" color="#ccc" size={18} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => handleCancel()}
+        >
+          <Text style={{ color: "white", fontWeight: "500", fontSize: 18 }}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <SearchResults
+        movies={data ? data.results : []}
+        onPress={onPress}
+        selectedMovie={selectedMovie}
+      />
+    </View>
+  );
+};
+
+export default SearchFunction;
+
+const SearchResults = ({
+  movies,
+  onPress,
+  selectedMovie,
+}: {
+  movies: Movie[];
+  onPress: (movie: Movie) => void;
+  selectedMovie: Movie;
+}) => {
+  return (
+    <View>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.searchResultContainer}
+        alwaysBounceVertical={false}
+      >
+        {movies.length
+          ? movies.map((movie, index) => {
+              if (!movie.poster_path) return null;
+              const isSelected =
+                !!selectedMovie && selectedMovie.id === movie.id;
+              return (
+                <View key={`result-${index}`}>
+                  {isSelected ? (
+                    <Ionicons
+                      position="absolute"
+                      style={styles.checkIcon}
+                      name="checkmark-circle"
+                      color="#ccc"
+                      size={25}
+                    />
+                  ) : null}
+                  <ImageButton
+                    movie={movie}
+                    onPress={onPress}
+                    isSelected={isSelected}
+                  />
+                </View>
+              );
+            })
+          : null}
+      </ScrollView>
     </View>
   );
 };

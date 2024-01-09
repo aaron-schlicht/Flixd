@@ -32,7 +32,7 @@ const FilterStep = () => {
     try {
       const recs = await getRecommendations();
       if (recs) {
-        navigation.navigate("Recs", { recs: recs });
+        navigation.replace("Recs", { recs: recs });
         dispatch(resetFlow());
       }
     } catch (error) {

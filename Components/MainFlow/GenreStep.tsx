@@ -56,6 +56,11 @@ const GenreStep = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ color: "white", fontSize: 20, fontWeight: "600" }}>
+            Select up to 3 genres
+          </Text>
+        </View>
         <FlatList
           data={Object.entries(Genres)}
           numColumns={3}
@@ -78,48 +83,47 @@ const GenreStep = () => {
             );
           }}
         />
-        {!!!genres.length ? null : (
-          <View
+
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            alignSelf: "center",
+            width: "120%",
+          }}
+        >
+          <LinearGradient
             style={{
-              position: "absolute",
-              bottom: 0,
-              alignSelf: "center",
-              width: "120%",
+              width: "100%",
+              height: 100,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
             }}
+            colors={["transparent", "rgba(21, 24, 45, 0.5)"]}
           >
-            <LinearGradient
+            <TouchableHighlight
               style={{
-                width: "100%",
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
+                backgroundColor: "white",
+                width: 150,
+                borderRadius: 30,
+                padding: 10,
               }}
-              colors={["transparent", "rgba(21, 24, 45, 0.5)"]}
+              underlayColor="rgba(255,255,255,0.8)"
+              onPress={handleNext}
             >
-              <TouchableHighlight
+              <Text
                 style={{
-                  backgroundColor: "white",
-                  width: 150,
-                  borderRadius: 30,
-                  padding: 10,
+                  textAlign: "center",
+                  fontWeight: "500",
+                  fontSize: 25,
                 }}
-                underlayColor="rgba(255,255,255,0.8)"
-                onPress={handleNext}
               >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontWeight: "500",
-                    fontSize: 25,
-                  }}
-                >
-                  Next
-                </Text>
-              </TouchableHighlight>
-            </LinearGradient>
-          </View>
-        )}
+                {!!!genres.length ? "Skip" : "Next"}
+              </Text>
+            </TouchableHighlight>
+          </LinearGradient>
+        </View>
       </View>
     </View>
   );

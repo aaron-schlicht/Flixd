@@ -7,6 +7,7 @@ import SimilarMoviesScreen from "./Components/SimilarMovies";
 
 export type RootStackParamList = {
   Home: undefined;
+  Flow: undefined;
   Recs: { recs: Movie[] };
   Movie: { id: number };
 };
@@ -16,6 +17,7 @@ import store from "./redux/store";
 import RecsScreen from "./Components/MainFlow/RecsScreen";
 import { Movie } from "./constants";
 import MovieScreen from "./Components/MainFlow/MovieScreen";
+import MainFlow from "./Components/MainFlow/MainFlow";
 
 export default function App() {
   //mobileAds().initialize();
@@ -28,6 +30,11 @@ export default function App() {
             options={{ headerShown: false }}
             name="Home"
             component={Home}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Flow"
+            component={MainFlow}
           />
           <Stack.Screen
             options={{ headerShown: false }}

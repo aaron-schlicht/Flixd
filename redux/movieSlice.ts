@@ -5,6 +5,7 @@ interface InitialType {
   selectedMovie: Movie | null;
   similarMovies: FullMovie[];
   selectedServices: WatchProvider[];
+  searchResults: Movie[];
   focus: "home" | "lucky" | "search";
 }
 
@@ -12,6 +13,7 @@ const initialState: InitialType = {
   selectedMovie: null,
   similarMovies: [],
   selectedServices: [],
+  searchResults: [],
   focus: "home",
 };
 
@@ -38,6 +40,9 @@ export const movieSlice = createSlice({
         state.selectedServices.push(action.payload);
       }
     },
+    updateSearchResults: (state, action) => {
+      return { ...state, searchResults: action.payload };
+    },
     updateFocus: (state, action) => {
       return { ...state, focus: action.payload };
     },
@@ -55,6 +60,7 @@ export const {
   updateSimilarMovies,
   updateSelectedServices,
   updateFocus,
+  updateSearchResults,
   removeSelectedMovie,
   onNewSearch,
 } = movieSlice.actions;

@@ -18,7 +18,7 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getSearchResults: builder.query<SearchResults, string>({
       query: (str) =>
-        `/search/movie?api_key=${API_KEY}&query=${str}&adult=false&language=en-US&page=1`,
+        `/search/movie?api_key=${API_KEY}&query=${str}&include_adult=false&language=en-US&page=1`,
     }),
     getMovieInfo: builder.query<FullMovie, number>({
       query: (id) =>
@@ -38,6 +38,28 @@ export const apiSlice = createApi({
     getMovieRating: builder.query<any, number>({
       query: (id) => `/movie/${id}/release_dates?api_key=${API_KEY}`,
     }),
+    getPopularMovies: builder.query<SearchResults, null>({
+      query: () =>
+        `trending/movie/week?language=en-US&page=1&api_key=${API_KEY}`,
+    }),
+    getPopularMoviesStreaming: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=US&with_watch_providers=8%7C9%7C337%7C1899%7C15%7C387%7C350%7C531%7C73%7C300`,
+    }),
+    getNowPlayingMovies: builder.query<SearchResults, null>({
+      query: () =>
+        `/movie/now_playing?language=en-US&page=1&region=US&api_key=${API_KEY}`,
+    }),
+    getUpcomingMovies: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&primary_release_date.gte=${new Date().toISOString()}`,
+    }),
+    getTopMoviesYear: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=vote_count.desc&vote_average.gte=7.0&primary_release_date.gte=${new Date(
+          new Date().setFullYear(new Date().getFullYear() - 1)
+        ).toISOString()}`,
+    }),
   }),
 });
 
@@ -49,4 +71,9 @@ export const {
   useGetKeywordSearchResultsQuery,
   useLazyGetKeywordSearchResultsQuery,
   useGetMovieRatingQuery,
+  useGetPopularMoviesQuery,
+  useGetNowPlayingMoviesQuery,
+  useGetUpcomingMoviesQuery,
+  useGetPopularMoviesStreamingQuery,
+  useGetTopMoviesYearQuery,
 } = apiSlice;
