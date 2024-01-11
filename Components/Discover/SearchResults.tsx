@@ -25,15 +25,15 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
     navigation.navigate("Movie", { id: id });
   };
 
+  const filteredResults = searchResults
+    .filter((movie) => !!movie.poster_path)
+    .slice(0, 10);
+
   return (
     <View style={{ flex: 1 }}>
       <Animated.FlatList
         showsHorizontalScrollIndicator={false}
-        data={[
-          { poster_path: null, id: 1345 },
-          ...searchResults,
-          { poster_path: null, id: 23232 },
-        ]}
+        data={filteredResults}
         keyExtractor={(item) => item.id.toString()}
         horizontal
         bounces={false}
@@ -50,35 +50,36 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
         )}
         scrollEventThrottle={16}
         renderItem={({ item, index }) => {
-          if (!item.poster_path) {
-            return <View style={{ width: EMPTY_ITEM_SIZE }} />;
-          }
-
+          const isFirstOrLast =
+            index === 0 || index === filteredResults.length - 1;
+          const isFirst = index === 0;
+          const isLast = index === filteredResults.length - 1;
           const inputRange = [
-            (index - 2) * ITEM_SIZE,
             (index - 1) * ITEM_SIZE,
             index * ITEM_SIZE,
+            (index + 1) * ITEM_SIZE,
           ];
-
           const translateY = scrollX.interpolate({
             inputRange,
-            outputRange: [55, 40, 55],
+            outputRange: [55, 30, 55],
             extrapolate: "clamp",
           });
 
           return (
             <View
               style={{
-                width: ITEM_SIZE,
+                flexDirection: "row",
+                justifyContent: "center",
               }}
             >
+              <View style={{ width: isFirst ? EMPTY_ITEM_SIZE : 0 }} />
               <Animated.View
                 style={{
-                  marginHorizontal: 5,
-                  paddingHorizontal: 5 * 2,
+                  paddingHorizontal: 15,
                   alignItems: "center",
                   transform: [{ translateY }],
                   borderRadius: 15,
+                  width: ITEM_SIZE,
                 }}
               >
                 <TouchableOpacity
@@ -97,25 +98,20 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                       height: ITEM_SIZE * 1.5,
                     }}
                   >
-                    <LinearGradient
-                      colors={["transparent", "rgba(21, 24, 45, 0.9)"]}
-                    >
-                      <Image
-                        source={{
-                          uri:
-                            "https://image.tmdb.org/t/p/w500/" +
-                            item.poster_path,
-                        }}
-                        contentFit="cover"
-                        transition={500}
-                        style={{
-                          width: "100%",
-                          height: ITEM_SIZE * 1.5,
-                          borderRadius: 15,
-                          margin: 0,
-                        }}
-                      />
-                    </LinearGradient>
+                    <Image
+                      source={{
+                        uri:
+                          "https://image.tmdb.org/t/p/w500/" + item.poster_path,
+                      }}
+                      contentFit="cover"
+                      transition={500}
+                      style={{
+                        width: "100%",
+                        height: ITEM_SIZE * 1.5,
+                        borderRadius: 15,
+                        margin: 0,
+                      }}
+                    />
                   </View>
                 </TouchableOpacity>
 
@@ -133,6 +129,7 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                   {item.title}
                 </Text>
               </Animated.View>
+              <View style={{ width: isLast ? EMPTY_ITEM_SIZE : 0 }} />
             </View>
           );
         }}

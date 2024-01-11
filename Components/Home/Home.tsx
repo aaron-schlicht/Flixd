@@ -20,10 +20,15 @@ import { RootState } from "../../redux/store";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RecsIcon from "./RecsIcon";
 import { updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +44,7 @@ const CustomTab = ({ children, onPress }: { children: any; onPress?: any }) => (
       height: 75,
     }}
     onPress={onPress}
-    underlayColor="white"
+    underlayColor="#A3BBD3"
   >
     {children}
   </TouchableHighlight>

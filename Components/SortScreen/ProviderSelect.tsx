@@ -1,9 +1,9 @@
 import {
   View,
-  TouchableOpacity,
   Image,
-  ImageSourcePropType,
   TouchableHighlight,
+  FlatList,
+  Dimensions,
 } from "react-native";
 import { Providers, WatchProvider, imageBasePath } from "../../constants";
 import * as Haptics from "expo-haptics";
@@ -16,24 +16,16 @@ import { isEqual } from "lodash";
 
 export default function ProviderSelect() {
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        flexWrap: "wrap",
-        margin: 10,
-        alignItems: "center",
-        justifyContent: "center",
+    <FlatList
+      data={Providers}
+      numColumns={3}
+      contentContainerStyle={{ alignItems: "center" }}
+      showsVerticalScrollIndicator={false}
+      keyExtractor={({ provider_id }) => `provider-${provider_id}`}
+      renderItem={({ item }) => {
+        return <ProviderButton provider={item} />;
       }}
-    >
-      {Providers.map((provider) => {
-        return (
-          <ProviderButton
-            key={`provider-${provider.provider_id}`}
-            provider={provider}
-          />
-        );
-      })}
-    </View>
+    />
   );
 }
 
@@ -46,18 +38,23 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
       )
   );
   return (
-    <View>
+    <View
+      style={{
+        width: Dimensions.get("window").width * 0.3,
+        height: Dimensions.get("window").width * 0.25,
+        alignItems: "center",
+      }}
+    >
       <TouchableHighlight
         style={{
-          width: 70,
-          height: 70,
-          margin: 10,
-          marginVertical: 5,
+          padding: 5,
           borderRadius: 5,
           alignItems: "center",
           justifyContent: "center",
           borderWidth: selected ? 2 : 0,
-          borderColor: selected ? "white" : "",
+          borderColor: selected ? "white" : "transparent",
+          width: Dimensions.get("window").width * 0.2 + 10,
+          height: Dimensions.get("window").width * 0.2 + 10,
         }}
         underlayColor="transparent"
         onPress={() => {
@@ -68,8 +65,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
         <Image
           source={{ uri: imageBasePath + provider.logo_url }}
           style={{
-            width: 55,
-            height: 55,
+            width: Dimensions.get("window").width * 0.2,
+            height: Dimensions.get("window").width * 0.2,
             borderRadius: 5,
             opacity: selected ? 1 : 0.65,
           }}

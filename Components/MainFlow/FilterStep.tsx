@@ -63,7 +63,6 @@ const FilterStep = () => {
         defaultMin={0}
         defaultMax={100}
       />
-      <ProviderAccordion />
       <View style={{ paddingBottom: 80 }} />
       <View
         style={{

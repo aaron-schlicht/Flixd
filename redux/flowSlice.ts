@@ -14,13 +14,15 @@ interface Filter {
 
 export interface InitialFlowType {
   step: number;
+  prevStep: number;
   genres: number[];
-  keywords: number[];
+  keywords: Keyword[];
   filters: Filter;
 }
 
 const initialState: InitialFlowType = {
   step: 0,
+  prevStep: 0,
   genres: [],
   keywords: [],
   filters: {},
@@ -33,6 +35,9 @@ export const flowSlice = createSlice({
     updateStep: (state, action) => {
       state.step = action.payload;
     },
+    updatePrevStep: (state, action) => {
+      state.prevStep = action.payload;
+    },
     updateGenre: (state, action) => {
       if (!!state.genres.find((id) => id === action.payload)) {
         state.genres = state.genres.filter((id) => id !== action.payload);
@@ -41,8 +46,10 @@ export const flowSlice = createSlice({
       }
     },
     updateKeywords: (state, action) => {
-      if (!!state.keywords.find((id) => id === action.payload)) {
-        state.keywords = state.keywords.filter((id) => id !== action.payload);
+      if (!!state.keywords.find(({ id }) => id === action.payload.id)) {
+        state.keywords = state.keywords.filter(
+          ({ id }) => id !== action.payload.id
+        );
       } else {
         state.keywords.push(action.payload);
       }
@@ -73,6 +80,7 @@ export const flowSlice = createSlice({
 
 export const {
   updateStep,
+  updatePrevStep,
   updateGenre,
   updateKeywords,
   addKeyword,
@@ -81,53 +89,3 @@ export const {
 } = flowSlice.actions;
 
 export default flowSlice.reducer;
-
-/*
-updateGenre: (state, action) => {
-      if (state.genres.filter((g) => g.id === action.payload.id).length === 0) {
-        let index = state.activeList.findIndex(
-          (val) => val.id === action.payload.id
-        );
-        let keys = KeywordMap[action.payload.id].map((k) => {
-          return { id: k.id, name: k.name };
-        });
-        state.genres = [...state.genres, action.payload];
-        if (index === 0) {
-          state.activeList = [
-            state.activeList[0],
-            ...keys,
-            ...state.activeList.slice(index + 1),
-          ];
-        } else if (index === state.activeList.length - 1) {
-          state.activeList = state.activeList = [...state.activeList, ...keys];
-        } else {
-          state.activeList = [
-            ...state.activeList.slice(0, index + 1),
-            ...keys,
-            ...state.activeList.slice(index + 1),
-          ];
-        }
-      } else {
-        state.genres = [
-          ...state.genres.filter((g) => g.id !== action.payload.id),
-        ];
-      }
-    },
-
-*/
-
-/* if (
-        state.keywords.filter((k) => k.id === action.payload.id).length === 0
-      ) {
-        return {
-          ...state,
-          keywords: [...state.keywords, action.payload],
-        };
-      } else {
-        return {
-          ...state,
-          keywords: [
-            ...state.keywords.filter((k) => k.id !== action.payload.id),
-          ],
-        };
-      }*/

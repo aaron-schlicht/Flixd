@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
   TouchableHighlight,
+  Dimensions,
+  ScrollView,
 } from "react-native";
 import { useGetKeywordSearchResultsQuery } from "../../redux/apiSlice";
 import { Keyword } from "../../constants";
@@ -44,7 +46,12 @@ const KeywordSearch = () => {
   };
 
   return (
-    <View style={{ marginTop: 15, paddingHorizontal: 5 }}>
+    <View
+      style={{
+        marginTop: 15,
+        paddingHorizontal: 10,
+      }}
+    >
       {isFocused ? (
         <View
           style={{
@@ -69,7 +76,6 @@ const KeywordSearch = () => {
             onChangeText={(e) => setQuery(e)}
             value={query}
             returnKeyType="search"
-            //placeholder={`Search keywords... Try "Spies"`}
           />
           {query.length > 0 ? (
             <TouchableOpacity
@@ -104,23 +110,25 @@ const KeywordSearch = () => {
       )}
       {!data ? null : (
         <View style={{ marginTop: 10 }}>
-          <FlatList
-            horizontal
-            data={data.results.filter(
-              (k) => !keywords.filter((key: Keyword) => key.id === k.id).length
-            )}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => {
-              const keyWord: Keyword = { name: item.name, id: item.id };
-              return (
-                <KeywordButton
-                  handleSelect={handleSelect}
-                  keyword={keyWord}
-                  isActive={false}
-                />
-              );
-            }}
-          />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {data.results
+              .filter(
+                (k) =>
+                  !keywords.filter((key: Keyword) => key.id === k.id).length
+              )
+              .slice(0, 10)
+              .map((item) => {
+                const keyWord: Keyword = { name: item.name, id: item.id };
+                return (
+                  <KeywordButton
+                    key={`keyword-${keyWord.id}`}
+                    handleSelect={handleSelect}
+                    keyword={keyWord}
+                    isActive={false}
+                  />
+                );
+              })}
+          </ScrollView>
         </View>
       )}
     </View>
@@ -156,8 +164,8 @@ const KeywordButton = ({
           textAlign: "center",
           fontSize: 14,
         }}
-        numberOfLines={2}
-        adjustsFontSizeToFit={true}
+        numberOfLines={1}
+        adjustsFontSizeToFit
         allowFontScaling={true}
       >
         {keyword.name.charAt(0).toUpperCase() + keyword.name.slice(1)}
