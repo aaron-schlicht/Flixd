@@ -2,19 +2,21 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
 import { Genres, Movie, imageBasePath } from "../../constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import SummaryStep from "./SummaryStep";
+import { resetFlow } from "../../redux/flowSlice";
+import { Image } from "expo-image";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 interface Props extends StackScreenProps<RootStackParamList, "Recs"> {}
@@ -35,10 +37,28 @@ const RecsScreen: FC<Props> = ({ route }) => {
     (state: RootState) => state.movies.similarMovies
   );*/
   const navigation = useNavigation<recsScreenProp>();
+  const dispatch = useDispatch();
 
   const handleMoviePress = (id: number) => {
     navigation.navigate("Movie", { id: id });
   };
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    dispatch(resetFlow());
+  }, [dispatch]);
+  /*useEffect(() => {
+    if (isLoading) {
+      setTimeout(() => {
+        dispatch(resetFlow());
+        setIsLoading(false);
+      }, 2000);
+    }
+  }, [isLoading]);*/
+
+  /*if (true) {
+    return <SummaryStep />;
+  }*/
 
   return (
     <View style={{ flex: 1, backgroundColor: "#15182D" }}>
@@ -72,7 +92,7 @@ const RecsScreen: FC<Props> = ({ route }) => {
               textAlign: "center",
             }}
           >
-            Your Recs
+            Your Results
           </Text>
           <View style={{ width: 40 }} />
         </View>
@@ -128,6 +148,7 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
             //borderWidth: 1,
             borderColor: "#A3BBD3",
           }}
+          transition={500}
           source={{ uri: imageBasePath + movie.poster_path }}
         />
       </View>

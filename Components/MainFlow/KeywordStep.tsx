@@ -4,6 +4,7 @@ import {
   Text,
   FlatList,
   TouchableHighlight,
+  Dimensions,
 } from "react-native";
 import { Genre, Keyword, KeywordMap } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +18,7 @@ import * as Haptics from "expo-haptics";
 import KeywordSearch from "./KeywordSearch";
 import { LinearGradient } from "expo-linear-gradient";
 import { Key, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 const KeywordStep = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
@@ -60,7 +62,7 @@ const KeywordStep = () => {
     dispatch(updateKeywords(selection));
   };
 
-  const keywordArray = getKeywordSet();
+  const keywordArray = !genres.length ? getKeywordSet() : buildKeywords();
 
   const handleNext = () => {
     dispatch(updateStep(2));
@@ -93,17 +95,29 @@ const KeywordStep = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text
+      <View
         style={{
-          color: "#A3BBD3",
-          fontSize: 20,
           paddingTop: 15,
           paddingLeft: 15,
-          fontWeight: "600",
+          flexDirection: "row",
+          gap: 5,
+          alignItems: "center",
+          width: Dimensions.get("window").width * 0.9,
         }}
       >
-        Select any relevant keywords
-      </Text>
+        <Ionicons name="key" color="#A3BBD3" size={30} />
+        <Text
+          style={{
+            color: "#A3BBD3",
+            fontSize: 25,
+            fontWeight: "600",
+          }}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          Select any keywords
+        </Text>
+      </View>
       <Text
         style={{
           height: 30,
@@ -134,7 +148,7 @@ const KeywordStep = () => {
           data={keywordArray}
           numColumns={3}
           style={{ marginTop: 10 }}
-          contentContainerStyle={{ paddingBottom: 65, paddingHorizontal: 5 }}
+          contentContainerStyle={{ paddingBottom: 120, paddingHorizontal: 5 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             return (
@@ -153,7 +167,7 @@ const KeywordStep = () => {
             position: "absolute",
             bottom: 0,
             alignSelf: "center",
-            width: "120%",
+            width: Dimensions.get("window").width,
           }}
         >
           <LinearGradient
@@ -233,7 +247,7 @@ const KeywordButton = ({
         flex: 1,
         borderRadius: 15,
         margin: 5,
-        height: 60,
+        height: 70,
         justifyContent: "center",
       }}
       onPress={() => handleSelect(keyword)}

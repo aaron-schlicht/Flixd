@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   TouchableHighlight,
+  Dimensions,
 } from "react-native";
 import { Genre, Keyword, KeywordMap } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,18 +18,15 @@ import { RootState } from "../../redux/store";
 import * as Haptics from "expo-haptics";
 import KeywordSearch from "./KeywordSearch";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, {
-  SlideInDown,
-  SlideInLeft,
-  SlideInRight,
-  SlideOutDown,
-  SlideOutLeft,
-  SlideOutRight,
-} from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 
 const StreamingStep = () => {
   const step = useSelector((state: RootState) => state.flow.step);
   const prevStep = useSelector((state: RootState) => state.flow.prevStep);
+
+  const servicesLength = useSelector(
+    (state: RootState) => state.movies.selectedServices.length
+  );
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -43,18 +41,30 @@ const StreamingStep = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text
+      <View
         style={{
-          color: "#A3BBD3",
-          fontSize: 20,
+          flexDirection: "row",
           paddingTop: 15,
-          paddingLeft: 15,
-          fontWeight: "600",
+          paddingHorizontal: 15,
+          gap: 5,
+          alignItems: "center",
+          width: Dimensions.get("window").width * 0.9,
         }}
       >
-        Select your streaming services
-      </Text>
-      <View style={{ paddingVertical: 10 }}>
+        <Ionicons name="tv" color="#A3BBD3" size={30} />
+        <Text
+          style={{
+            color: "#A3BBD3",
+            fontSize: 25,
+            fontWeight: "600",
+          }}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          Select your streaming services
+        </Text>
+      </View>
+      <View style={{ flex: 1 }}>
         <ProviderSelect />
       </View>
       <View
@@ -62,7 +72,7 @@ const StreamingStep = () => {
           position: "absolute",
           bottom: 0,
           alignSelf: "center",
-          width: "120%",
+          width: Dimensions.get("window").width,
         }}
       >
         <LinearGradient
@@ -115,7 +125,7 @@ const StreamingStep = () => {
                 fontSize: 25,
               }}
             >
-              Next
+              {servicesLength ? "Next" : "Skip"}
             </Text>
           </TouchableHighlight>
         </LinearGradient>

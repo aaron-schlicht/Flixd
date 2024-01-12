@@ -32,8 +32,10 @@ const MainFlow = () => {
   const navigation = useNavigation<recsScreenProp>();
 
   useEffect(() => {
-    ref.current && ref.current.scrollToIndex({ animated: true, index: step });
-  }, [step]);
+    if (ref.current) {
+      ref.current.scrollToIndex({ animated: true, index: step });
+    }
+  }, [ref.current, step]);
 
   const SCREEN_WIDTH = Dimensions.get("screen").width;
 
@@ -79,8 +81,8 @@ const MainFlow = () => {
         decelerationRate={0}
         showsHorizontalScrollIndicator={false}
         snapToInterval={SCREEN_WIDTH}
-        onScrollToIndexFailed={() => {
-          ref.current?.scrollToIndex({ index: step, animated: true });
+        onScrollToIndexFailed={(error) => {
+          console.log("error: ", error);
         }}
         snapToAlignment="start"
         scrollEnabled={false}

@@ -4,14 +4,13 @@ import {
   Text,
   SafeAreaView,
   ActivityIndicator,
-  Image,
-  ImageBackground,
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { RootStackParamList } from "../../App";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   useGetMovieInfoQuery,
   useGetMovieRatingQuery,
@@ -21,6 +20,7 @@ import { Service, WatchProvider, imageBasePath } from "../../constants";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "expo-image";
 
 interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
 
@@ -74,65 +74,59 @@ const MovieScreen: FC<Props> = ({ route }) => {
       console.log(error);
     }
   };
+  const BACKDROP_URL = imageBasePath + data?.backdrop_path;
 
   const rating = getMovieRating();
   const streamingServices = getStreamingServices();
   const navigation = useNavigation();
   if (data) {
     return (
-      <View style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 0, backgroundColor: "#15182D" }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#15182D" }}>
-          <TouchableOpacity
-            style={{
-              padding: 10,
-              borderRadius: 360,
-              width: 50,
-              height: 50,
-              position: "absolute",
-              top: 10,
-              left: 15,
-              zIndex: 100,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(21, 24, 45, 0.3)",
-            }}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="chevron-back" color="white" size={30} />
-          </TouchableOpacity>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 0.45,
-            }}
-          >
-            <ImageBackground
-              style={{
-                width: "100%",
-              }}
-              source={{ uri: imageBasePath + data.backdrop_path }}
-              resizeMode="cover"
-            >
-              <LinearGradient
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                colors={["transparent", "rgba(21, 24, 45, 0.9)"]}
-              />
-            </ImageBackground>
-          </View>
+      <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+        <Image
+          style={{
+            zIndex: 0,
+            width: Dimensions.get("window").width,
+            height: Dimensions.get("window").height * 0.45,
+          }}
+          transition={500}
+          source={{ uri: BACKDROP_URL }}
+          contentFit="cover"
+        />
+        <LinearGradient
+          style={{
+            zIndex: 1,
+            width: Dimensions.get("window").width,
+            height: Dimensions.get("window").height * 0.45,
+            position: "absolute",
+          }}
+          colors={["transparent", "rgba(21, 24, 45, 1)"]}
+        />
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            borderRadius: 360,
+            width: 50,
+            height: 50,
+            position: "absolute",
+            top: 50,
+            left: 15,
+            zIndex: 100,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(21, 24, 45, 0.3)",
+          }}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" color="white" size={30} />
+        </TouchableOpacity>
+        <View style={{ flex: 1, marginTop: -70, zIndex: 100 }}>
           <Text
             style={{
               color: "white",
               fontSize: 25,
+              zIndex: 100,
               fontWeight: "bold",
-              marginTop: -20,
+
               paddingHorizontal: 15,
             }}
             numberOfLines={2}
@@ -213,8 +207,6 @@ const MovieScreen: FC<Props> = ({ route }) => {
             <View style={{ padding: 20, gap: 5 }}>
               <Text
                 style={{ color: "#A3BBD3", fontSize: 20, fontWeight: "bold" }}
-                numberOfLines={2}
-                adjustsFontSizeToFit
               >
                 {data.tagline}
               </Text>
@@ -275,7 +267,7 @@ const MovieScreen: FC<Props> = ({ route }) => {
               </View>
             ) : null}
           </View>
-        </SafeAreaView>
+        </View>
       </View>
     );
   }

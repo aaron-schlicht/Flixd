@@ -4,11 +4,18 @@ import {
   TouchableOpacity,
   ScrollView,
   TouchableHighlight,
+  FlatList,
+  Dimensions,
 } from "react-native";
 import { Slider } from "@miblanchard/react-native-slider";
 import { FC, memo, useCallback, useMemo, useState } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { resetFlow, updateFilters, updateStep } from "../../redux/flowSlice";
+import {
+  resetFlow,
+  updateFilters,
+  updatePrevStep,
+  updateStep,
+} from "../../redux/flowSlice";
 import ProviderSelect from "../SortScreen/ProviderSelect";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,7 +32,6 @@ const FilterStep = () => {
   let yearDiff = new Date().getFullYear() - 1890;
   const dispatch = useDispatch();
   const navigation = useNavigation<recsScreenProp>();
-
   const { getRecommendations } = useGetRecommendations();
 
   const handleNextStep = async () => {
@@ -33,66 +39,142 @@ const FilterStep = () => {
       const recs = await getRecommendations();
       if (recs) {
         navigation.replace("Recs", { recs: recs });
-        dispatch(resetFlow());
       }
     } catch (error) {
       console.log(error);
     }
   };
+  const handlePrev = () => {
+    dispatch(updateStep(2));
+    dispatch(updatePrevStep(3));
+  };
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <FilterAccordion
-        name="years"
-        description="Years of Release"
-        visualText={(min, max) => `${min + 1890} - ${max + 1890}`}
-        defaultMin={0}
-        defaultMax={yearDiff}
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          paddingTop: 15,
+          paddingLeft: 15,
+          gap: 5,
+          alignItems: "center",
+          width: Dimensions.get("window").width * 0.9,
+        }}
+      >
+        <Ionicons name="filter" color="#A3BBD3" size={30} />
+        <Text
+          style={{
+            color: "#A3BBD3",
+            fontSize: 25,
+            fontWeight: "600",
+          }}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          Add any additional filters
+        </Text>
+      </View>
+      <FlatList
+        contentContainerStyle={{
+          paddingTop: 35,
+          paddingHorizontal: 20,
+          gap: 20,
+        }}
+        data={[
+          {
+            name: "year",
+            icon: "calendar",
+            description: "Years of Release",
+            visualText: (min: number, max: number) =>
+              `${min + 1890} - ${max + 1890}`,
+            defaultMin: 0,
+            defaultMax: yearDiff,
+          },
+          {
+            name: "length",
+            icon: "time",
+            description: "Movie Length",
+            visualText: (min: number, max: number) =>
+              `${min} minutes - ${max} minutes`,
+            defaultMin: 0,
+            defaultMax: 300,
+          },
+          {
+            name: "rating",
+            icon: "star",
+            description: "Average Rating",
+            visualText: (min: number, max: number) =>
+              `${min / 10}/10 - ${max / 10}/10`,
+            defaultMin: 0,
+            defaultMax: 100,
+          },
+        ]}
+        keyExtractor={({ name }) => `${name}-filter`}
+        renderItem={({ item }) => {
+          return <FilterAccordion {...item} />;
+        }}
       />
-      <FilterAccordion
-        name="length"
-        description="Movie Length"
-        visualText={(min, max) => `${min} minutes - ${max} minutes`}
-        defaultMin={0}
-        defaultMax={300}
-      />
-      <FilterAccordion
-        name="rating"
-        description="Average Rating"
-        visualText={(min, max) => `${min / 10}/10 - ${max / 10}/10`}
-        defaultMin={0}
-        defaultMax={100}
-      />
-      <View style={{ paddingBottom: 80 }} />
       <View
         style={{
           position: "absolute",
           bottom: 0,
           alignSelf: "center",
-          width: "120%",
+          width: Dimensions.get("window").width,
         }}
       >
         <LinearGradient
           style={{
             width: "100%",
-            height: 100,
+            height: 120,
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 10,
+            flexDirection: "row",
+            gap: 20,
+            paddingBottom: 30,
           }}
-          colors={["transparent", "rgba(21, 24, 45, 0.5)"]}
+          colors={["transparent", "rgba(21, 24, 45, 0.9)"]}
         >
-          <TouchableOpacity
+          <TouchableHighlight
             style={{
-              alignSelf: "center",
               backgroundColor: "white",
-              padding: 15,
+              width: 150,
               borderRadius: 30,
+              padding: 10,
             }}
+            underlayColor="rgba(255,255,255,0.8)"
+            onPress={handlePrev}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "500",
+                fontSize: 25,
+              }}
+            >
+              Previous
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={{
+              backgroundColor: "white",
+              width: 150,
+              borderRadius: 30,
+              padding: 10,
+            }}
+            underlayColor="rgba(255,255,255,0.8)"
             onPress={handleNextStep}
           >
-            <Text style={{ fontSize: 18 }}>Get Recommendations</Text>
-          </TouchableOpacity>
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "500",
+                fontSize: 25,
+              }}
+            >
+              See Results
+            </Text>
+          </TouchableHighlight>
         </LinearGradient>
       </View>
     </View>
@@ -101,6 +183,7 @@ const FilterStep = () => {
 
 interface FilterAccordionProps {
   name: string;
+  icon: any;
   description: string;
   visualText: (min: number, max: number) => string;
   defaultMin: number;
@@ -109,12 +192,12 @@ interface FilterAccordionProps {
 
 const FilterAccordion: FC<FilterAccordionProps> = ({
   name,
+  icon,
   description,
   visualText,
   defaultMin,
   defaultMax,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useDispatch();
   const { min, max } = useSelector(
     (state: RootState) => state.flow.filters[name]
@@ -122,111 +205,53 @@ const FilterAccordion: FC<FilterAccordionProps> = ({
     min: defaultMin,
     max: defaultMax,
   };
+  const isDefault = min === defaultMin && max === defaultMax;
   return (
     <View style={{ flex: 1, width: "100%", alignSelf: "center" }}>
-      <TouchableHighlight
+      <View
         style={{
           width: "100%",
-          alignSelf: "center",
           padding: 15,
+          paddingHorizontal: 20,
+          borderRadius: 10,
           backgroundColor: "#252942",
-          borderBottomColor: "white",
-          borderBottomWidth: 1,
+          flexDirection: "row",
+          gap: 10,
+          alignItems: "center",
         }}
-        underlayColor="#252942"
-        onPress={() => setIsExpanded(!isExpanded)}
       >
-        <View
+        <Ionicons name={icon} size={25} color="white" />
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+          {description}
+        </Text>
+      </View>
+      <View style={{ paddingVertical: 10 }}>
+        <Text
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 5,
-            alignSelf: "center",
-            width: 300,
+            color: "white",
+            textAlign: "center",
+            fontWeight: "300",
+            fontSize: 20,
           }}
         >
-          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Filter by {description}
-          </Text>
-          <Ionicons
-            name={isExpanded ? "chevron-up" : "chevron-down"}
-            color="white"
-            size={25}
+          {isDefault ? `Any ${name}` : visualText(min, max)}
+        </Text>
+        <View style={{ marginTop: 10 }}>
+          <Slider
+            value={[min, max]}
+            animateTransitions
+            step={1}
+            onValueChange={(value) =>
+              dispatch(updateFilters({ name, min: value[0], max: value[1] }))
+            }
+            minimumValue={defaultMin}
+            maximumValue={defaultMax}
+            minimumTrackTintColor="#A3BBD3"
+            thumbTintColor="#A3BBD3"
+            maximumTrackTintColor="#252942"
           />
         </View>
-      </TouchableHighlight>
-      {isExpanded ? (
-        <View style={{ paddingVertical: 10 }}>
-          <Text
-            style={{
-              color: "white",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: 16,
-            }}
-          >
-            {visualText(min, max)}
-          </Text>
-          <View style={{ marginTop: 10 }}>
-            <Slider
-              value={[min, max]}
-              animateTransitions
-              step={1}
-              onValueChange={(value) =>
-                dispatch(updateFilters({ name, min: value[0], max: value[1] }))
-              }
-              minimumValue={defaultMin}
-              maximumValue={defaultMax}
-              minimumTrackTintColor="#A3BBD3"
-              thumbTintColor="#A3BBD3"
-              maximumTrackTintColor="#252942"
-            />
-          </View>
-        </View>
-      ) : null}
-    </View>
-  );
-};
-
-const ProviderAccordion = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  return (
-    <View style={{ flex: 1, width: "100%", alignSelf: "center" }}>
-      <TouchableHighlight
-        style={{
-          width: "100%",
-          alignSelf: "center",
-          padding: 15,
-          backgroundColor: "#252942",
-          borderBottomColor: "white",
-          borderBottomWidth: 1,
-        }}
-        underlayColor="#252942"
-        onPress={() => setIsExpanded(!isExpanded)}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 5,
-            alignSelf: "center",
-            width: 300,
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Filter by Streaming Service
-          </Text>
-          <Ionicons
-            name={isExpanded ? "chevron-up" : "chevron-down"}
-            color="white"
-            size={25}
-          />
-        </View>
-      </TouchableHighlight>
-      {!isExpanded ? null : <ProviderSelect />}
+      </View>
     </View>
   );
 };

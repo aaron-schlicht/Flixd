@@ -27,14 +27,14 @@ const useGetRecommendations = () => {
     }
     if (!!keywords.length) {
       queryString += `&with_keywords=${keywords
-        .map((id, index) =>
+        .map(({ id, name }, index) =>
           index === keywords.length - 1 ? `${id}` : `${id}|`
         )
         .join("")}`;
     }
     if (!!Object.keys(filters).length) {
-      if (!!filters["years"]) {
-        const { min, max } = filters["years"];
+      if (!!filters["year"]) {
+        const { min, max } = filters["year"];
         queryString += `&release_date.gte=${new Date(
           min + 1890,
           0,
