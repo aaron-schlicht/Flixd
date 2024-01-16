@@ -1,114 +1,97 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import {
   View,
-  SafeAreaView,
   Text,
-  Image,
-  Modal,
+  SafeAreaView,
+  ActivityIndicator,
   ScrollView,
 } from "react-native";
-import { FC } from "react";
-import { FullMovie } from "../../constants";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { styles } from "./MovieScreen.styled";
+import { RootStackParamList } from "../../App";
+import { FC, useEffect, useState } from "react";
+import useGetMovieInfo from "./useGetMovieInfo";
+import Header from "./Header";
+import Description from "./Description";
+import StreamingServices from "./StreamingServices";
+import People from "./People";
+import SimilarMovies from "./SimilarMovies";
+import { Image } from "expo-image";
 
-const MovieScreen: FC<{
-  movie: FullMovie | null;
-  visible: boolean;
-  onClose: any;
-}> = ({ movie, visible, onClose }) => {
-  const base_path = "https://image.tmdb.org/t/p/original/";
-  return (
-    <Modal visible={visible} animationType="slide">
-      <View style={styles.container}>
-        <SafeAreaView style={{ width: "100%" }}>
-          <View style={styles.topBar}>
-            <TouchableOpacity onPress={() => onClose()}>
-              <Text style={styles.closeText}>Close</Text>
-            </TouchableOpacity>
+interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
+
+//TODO: query watch providers and say 'powered by justwatch'
+
+const MovieScreen: FC<Props> = ({ route }) => {
+  const { id } = route.params;
+
+  const {
+    isLoading,
+    movie,
+    rating,
+    topCast,
+    topCrew,
+    streamingServices,
+    similarMovies,
+  } = useGetMovieInfo(id);
+
+  if (movie) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <Header movie={movie} rating={rating} />
+          <Description
+            tagline={movie.tagline || ""}
+            overview={movie.overview || ""}
+            genres={movie.genres || []}
+          />
+          <StreamingServices streamingServices={streamingServices} />
+          <People topCast={topCast} topCrew={topCrew} />
+          <SimilarMovies similarMovies={similarMovies} />
+          <PoweredLogo />
+        </ScrollView>
+      </View>
+    );
+  }
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator
+              size="large"
+              color="white"
+              style={{ alignSelf: "center" }}
+            />
           </View>
-          <ScrollView style={styles.scrollContainer}>
-            {movie ? (
-              <View style={{ width: "100%" }}>
-                <View style={styles.topInfo}>
-                  <Image
-                    style={styles.moviePoster}
-                    source={{ uri: base_path + movie.poster_path }}
-                  />
-                  <View
-                    style={{
-                      paddingHorizontal: 20,
-                    }}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={styles.titleText}>{movie.title}</Text>
-                    </View>
-                    <View style={styles.infoFlex}>
-                      <Text style={styles.infoText}>
-                        {new Date(movie.release_date).getFullYear()}
-                      </Text>
-                      <Text style={styles.infoText}>|</Text>
-                      <Text style={styles.infoText}>
-                        {movie.runtime} minutes
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        paddingTop: 5,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={{ color: "white" }}>Average Rating: </Text>
-                      <Text style={styles.infoText}>
-                        {movie.vote_average.toFixed(2)}
-                      </Text>
-                      <Text style={{ color: "white" }}>/10</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={{ padding: 20 }}>
-                  <Text style={styles.taglineText}>{movie.tagline}</Text>
-
-                  <Text style={styles.infoText}>{movie.overview}</Text>
-                </View>
-                {movie.services && movie.services.length > 0 ? (
-                  <View style={styles.servicesContainer}>
-                    <View style={styles.underlinedBox}>
-                      <Text style={styles.titleText}>Available On</Text>
-                    </View>
-                    <View
-                      style={{
-                        paddingTop: 15,
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {movie.services.map((service) => {
-                        const path =
-                          "https://image.tmdb.org/t/p/original/" +
-                          service.logo_path;
-                        return (
-                          <Image
-                            key={`provider-${service.provider_id}`}
-                            source={{ uri: path }}
-                            style={styles.serviceImage}
-                          />
-                        );
-                      })}
-                    </View>
-                  </View>
-                ) : null}
-              </View>
-            ) : (
-              <Text style={{ color: "white" }}>
-                Sorry, there was an issue retrieving the info for this film
-              </Text>
-            )}
-          </ScrollView>
         </SafeAreaView>
       </View>
-    </Modal>
+    );
+  }
+  return (
+    <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+      <Text style={{ color: "white" }}>Issue getting movie details</Text>
+    </View>
   );
 };
+
+const PoweredLogo = () => (
+  <View
+    style={{
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 30,
+      justifyContent: "center",
+    }}
+  >
+    <Text style={{ color: "#A3BBD3" }}>Powered by </Text>
+    <Image
+      style={{ width: 120, height: "100%" }}
+      contentFit="contain"
+      source={require("../../assets/tmdb.png")}
+    />
+  </View>
+);
 
 export default MovieScreen;

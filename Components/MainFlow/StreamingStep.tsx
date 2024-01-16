@@ -1,4 +1,4 @@
-import ProviderSelect from "../SortScreen/ProviderSelect";
+import ProviderSelect from "./ProviderSelect";
 import {
   TouchableOpacity,
   View,

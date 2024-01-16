@@ -12,10 +12,21 @@ import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import { Ionicons } from "@expo/vector-icons";
 
 const ITEM_SIZE = Dimensions.get("window").width * 0.8;
 const EMPTY_ITEM_SIZE = (Dimensions.get("window").width - ITEM_SIZE) / 2;
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
+
+const getColor = (rating: number) => {
+  if (rating < 5) {
+    return "#EE3535";
+  } else if (rating < 7) {
+    return "#EEA435";
+  } else {
+    return "#91EE35";
+  }
+};
 
 const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
   const navigation = useNavigation<recsScreenProp>();
@@ -25,9 +36,9 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
     navigation.navigate("Movie", { id: id });
   };
 
-  const filteredResults = searchResults
-    .filter((movie) => !!movie.poster_path)
-    .slice(0, 10);
+  const filteredResults = searchResults.filter(
+    (movie) => !!movie.poster_path && movie.popularity > 10.0
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -50,8 +61,6 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
         )}
         scrollEventThrottle={16}
         renderItem={({ item, index }) => {
-          const isFirstOrLast =
-            index === 0 || index === filteredResults.length - 1;
           const isFirst = index === 0;
           const isLast = index === filteredResults.length - 1;
           const inputRange = [
@@ -89,10 +98,12 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                   <View
                     style={{
                       shadowColor: "black",
-                      shadowOffset: { width: 2, height: 4 },
+                      shadowOffset: { width: 0, height: 4 },
                       shadowOpacity: 0.8,
                       shadowRadius: 2,
                       borderRadius: 15,
+                      borderBottomLeftRadius: 0,
+                      borderBottomRightRadius: 0,
                       backgroundColor: "black",
                       width: "100%",
                       height: ITEM_SIZE * 1.5,
@@ -109,25 +120,83 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                         width: "100%",
                         height: ITEM_SIZE * 1.5,
                         borderRadius: 15,
+                        borderBottomLeftRadius: 0,
+                        borderBottomRightRadius: 0,
                         margin: 0,
                       }}
                     />
+                    <LinearGradient
+                      style={{
+                        zIndex: 2,
+                        width: "100%",
+                        marginTop: 10,
+                        height: ITEM_SIZE * 1.5,
+                        position: "absolute",
+                        borderRadius: 0,
+                      }}
+                      colors={["transparent", "rgba(21, 24, 45, 1)"]}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginTop: -ITEM_SIZE * 0.15,
+                      zIndex: 100,
+                      width: ITEM_SIZE,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 22,
+                        fontWeight: "600",
+                      }}
+                      numberOfLines={2}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.7}
+                    >
+                      {item.title}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        paddingTop: 10,
+                        gap: 6,
+                      }}
+                    >
+                      <Ionicons name="calendar" color="#A3BBD3" size={20} />
+                      <Text
+                        style={{
+                          color: "#A3BBD3",
+                          fontSize: 18,
+                          fontWeight: "800",
+                        }}
+                      >
+                        {new Date(item.release_date).getFullYear()}
+                      </Text>
+                      <Text
+                        style={{
+                          color: "#A3BBD3",
+                          fontSize: 18,
+                          fontWeight: "800",
+                          paddingHorizontal: 5,
+                        }}
+                      >
+                        |
+                      </Text>
+                      <Ionicons name="star" color="#A3BBD3" size={20} />
+                      <Text
+                        style={{
+                          color: getColor(item.vote_average),
+                          fontSize: 18,
+                          fontWeight: "800",
+                        }}
+                      >
+                        {item.vote_average.toPrecision(3)}
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
-
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: "#A3BBD3",
-                    fontWeight: "600",
-                    paddingTop: 10,
-                    textAlign: "center",
-                  }}
-                  numberOfLines={2}
-                  adjustsFontSizeToFit
-                >
-                  {item.title}
-                </Text>
               </Animated.View>
               <View style={{ width: isLast ? EMPTY_ITEM_SIZE : 0 }} />
             </View>

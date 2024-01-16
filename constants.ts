@@ -37,6 +37,20 @@ export interface WatchProvider {
   logo_url: string;
 }
 
+export interface CastMember {
+  id: number;
+  name: string;
+  profile_path?: string;
+  character: string;
+}
+
+export interface CrewMember {
+  id: number;
+  name: string;
+  profile_path?: string;
+  job: string;
+}
+
 export const Providers: WatchProvider[] = [
   {
     provider_id: 8,

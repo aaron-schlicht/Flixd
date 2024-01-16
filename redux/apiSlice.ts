@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { FullMovie, Keyword, Movie, Service } from "../constants";
+import {
+  CastMember,
+  CrewMember,
+  FullMovie,
+  Keyword,
+  Movie,
+  Service,
+} from "../constants";
 
 export interface SearchResults {
   results: Movie[];
@@ -7,6 +14,11 @@ export interface SearchResults {
 
 export interface KeywordSearchResults {
   results: Keyword[];
+}
+
+export interface CastResults {
+  cast: CastMember[];
+  crew: CrewMember[];
 }
 
 const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
@@ -60,6 +72,16 @@ export const apiSlice = createApi({
           new Date().setFullYear(new Date().getFullYear() - 1)
         ).toISOString()}`,
     }),
+    getSimilarMovies: builder.query<SearchResults, number>({
+      query: (id) =>
+        `/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`,
+    }),
+    getMovieCredits: builder.query<CastResults, number>({
+      query: (id) => `/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
+    }),
+    getExternalIds: builder.query<any, number>({
+      query: (id) => `movie/${id}/external_ids?api_key=${API_KEY}`,
+    }),
   }),
 });
 
@@ -76,4 +98,7 @@ export const {
   useGetUpcomingMoviesQuery,
   useGetPopularMoviesStreamingQuery,
   useGetTopMoviesYearQuery,
+  useGetSimilarMoviesQuery,
+  useGetMovieCreditsQuery,
+  useGetExternalIdsQuery,
 } = apiSlice;
