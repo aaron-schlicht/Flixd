@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import axios from "axios";
 import { Movie } from "../../constants";
-import { updateSimilarMovies } from "../../redux/movieSlice";
 
 const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
 const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`;
@@ -73,11 +72,9 @@ const useGetRecommendations = () => {
 
   const getRecommendations = async () => {
     const queryString = getQueryString();
-    console.log(queryString);
     try {
       const response = await axios.get(queryString);
       if (response && response.data) {
-        //dispatch(updateSimilarMovies(response.data.results as Movie[]));
         return response.data.results as Movie[];
       }
     } catch (error) {

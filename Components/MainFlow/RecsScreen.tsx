@@ -4,61 +4,33 @@ import {
   FlatList,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
-import { Genres, Movie, imageBasePath } from "../../constants";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { Movie, getRatingColor, imageBasePath } from "../../constants";
+import { useDispatch } from "react-redux";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { FC, useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { FC, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import SummaryStep from "./SummaryStep";
 import { resetFlow } from "../../redux/flowSlice";
 import { Image } from "expo-image";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 interface Props extends StackScreenProps<RootStackParamList, "Recs"> {}
 
-const getColor = (rating: number) => {
-  if (rating < 5) {
-    return "#EE3535";
-  } else if (rating < 7) {
-    return "#EEA435";
-  } else {
-    return "#91EE35";
-  }
-};
-
 const RecsScreen: FC<Props> = ({ route }) => {
   const { recs } = route.params;
-  /*const similarMovies = useSelector(
-    (state: RootState) => state.movies.similarMovies
-  );*/
   const navigation = useNavigation<recsScreenProp>();
   const dispatch = useDispatch();
 
   const handleMoviePress = (id: number) => {
     navigation.navigate("Movie", { id: id });
   };
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     dispatch(resetFlow());
   }, [dispatch]);
-  /*useEffect(() => {
-    if (isLoading) {
-      setTimeout(() => {
-        dispatch(resetFlow());
-        setIsLoading(false);
-      }, 2000);
-    }
-  }, [isLoading]);*/
-
-  /*if (true) {
-    return <SummaryStep />;
-  }*/
 
   return (
     <View style={{ flex: 1, backgroundColor: "#15182D" }}>
@@ -96,6 +68,39 @@ const RecsScreen: FC<Props> = ({ route }) => {
           </Text>
           <View style={{ width: 40 }} />
         </View>
+        {!recs.length ? (
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              flex: 1,
+              padding: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 24,
+                color: "white",
+                fontWeight: "600",
+                textAlign: "center",
+                paddingHorizontal: 20,
+              }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+            >
+              Looks like this search didn't return any results
+            </Text>
+            <Text style={{ fontSize: 60, paddingTop: 20 }}>😔</Text>
+            <Text
+              style={{ color: "#A3BBD3", textAlign: "center", paddingTop: 20 }}
+              numberOfLines={2}
+              adjustsFontSizeToFit
+            >
+              Hint: Some keywords are more specific than others, try searching
+              with more broad keywords to return more results
+            </Text>
+          </View>
+        ) : null}
         <View style={{ flex: 1, backgroundColor: "#15182D" }}>
           <FlatList
             data={recs}
@@ -145,8 +150,6 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
             width: 80,
             height: 120,
             borderRadius: 10,
-            //borderWidth: 1,
-            borderColor: "#A3BBD3",
           }}
           transition={500}
           source={{ uri: imageBasePath + movie.poster_path }}
@@ -185,7 +188,7 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
           <Ionicons name="star" color="#A3BBD3" size={20} />
           <Text
             style={{
-              color: getColor(movie.vote_average),
+              color: getRatingColor(movie.vote_average),
               fontSize: 18,
               fontWeight: "800",
             }}
@@ -193,15 +196,6 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
             {movie.vote_average}
           </Text>
         </View>
-        {/*        <Text style={{ color: "white", paddingTop: 10 }}>
-          {!!movie.genre_ids
-            ? movie.genre_ids.map((id, index) =>
-                index !== movie.genre_ids!.length - 1
-                  ? Genres[id].name + ", "
-                  : Genres[id].name
-              )
-            : ""}
-          </Text>*/}
       </View>
     </View>
   );

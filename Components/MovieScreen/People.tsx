@@ -36,7 +36,7 @@ const DirectorView = ({ directors }: { directors: CrewMember[] }) => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 20, paddingTop: 10 }}
+          contentContainerStyle={{ gap: 5, paddingTop: 10 }}
         >
           {directors.map((director, index) => (
             <View
@@ -112,16 +112,38 @@ const Person = ({
 }) => {
   return (
     <View style={{ width: 110, alignItems: "center" }}>
-      <View style={{ height: 80 }}>
-        {profile_path ? (
-          <Image
-            source={{ uri: imageBasePath + profile_path }}
-            style={{ width: 80, height: 80, borderRadius: 10 }}
-            transition={200}
-          />
-        ) : (
-          <Ionicons name="person" color="#A3BBD3" size={80} />
-        )}
+      <View
+        style={{
+          shadowColor: "black",
+          shadowOffset: { width: 2, height: 4 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+          borderRadius: 30,
+          backgroundColor: "black",
+          alignSelf: "center",
+        }}
+      >
+        <View
+          style={{
+            height: 100,
+            backgroundColor: "#252942",
+            borderRadius: 20,
+            width: 100,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {profile_path ? (
+            <Image
+              source={{ uri: imageBasePath + profile_path }}
+              style={{ width: 100, height: 100, borderRadius: 20 }}
+              transition={200}
+              contentFit="cover"
+            />
+          ) : (
+            <Ionicons name="person" color="#A3BBD3" size={80} />
+          )}
+        </View>
       </View>
       <Text
         style={{

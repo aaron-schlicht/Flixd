@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   useGetNowPlayingMoviesQuery,
   useGetPopularMoviesQuery,
@@ -5,6 +6,7 @@ import {
   useGetTopMoviesYearQuery,
   useGetUpcomingMoviesQuery,
 } from "../../redux/apiSlice";
+import { Movie } from "../../constants";
 
 const useGetDiscoverMovies = () => {
   const { data: popularMovies } = useGetPopularMoviesQuery(null);

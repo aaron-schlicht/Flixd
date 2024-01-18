@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   Dimensions,
 } from "react-native";
-import { Genre, Keyword, KeywordMap } from "../../constants";
+import { Genre, Keyword, KeywordMap, Keywords } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateKeywords,
@@ -23,8 +23,6 @@ import { Ionicons } from "@expo/vector-icons";
 const KeywordStep = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
   const keywords = useSelector((state: RootState) => state.flow.keywords);
-  const step = useSelector((state: RootState) => state.flow.step);
-  const prevStep = useSelector((state: RootState) => state.flow.prevStep);
   const dispatch = useDispatch();
 
   const buildKeywords = () => {
@@ -47,22 +45,12 @@ const KeywordStep = () => {
       .map((val) => val.keyword);
   };
 
-  const getKeywordSet = () => {
-    const keywordSet: Set<Keyword> = new Set();
-    Object.values(KeywordMap).map((keywords) => {
-      for (const keyword of keywords) {
-        keywordSet.add(keyword);
-      }
-    });
-    return [...keywordSet];
-  };
-
   const handlePress = (selection: Keyword) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(updateKeywords(selection));
   };
 
-  const keywordArray = !genres.length ? getKeywordSet() : buildKeywords();
+  const keywordArray = !genres.length ? Keywords : buildKeywords();
 
   const handleNext = () => {
     dispatch(updateStep(2));
@@ -76,7 +64,6 @@ const KeywordStep = () => {
 
   const getKeywordText = () => {
     if (!keywords.length) return null;
-    console.log("keywords: ", keywords);
     if (keywords.length === 1) {
       return (
         keywords[0].name.charAt(0).toUpperCase() + keywords[0].name.slice(1)

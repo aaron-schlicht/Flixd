@@ -1,35 +1,18 @@
-import { Movie } from "../../constants";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-  Animated,
-} from "react-native";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
+import { MEDIUM_POSTER_BASE_URL, Movie } from "../../constants";
+import { View, Dimensions, Animated } from "react-native";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
-import { Ionicons } from "@expo/vector-icons";
+import LargePosterButton from "../LargePosterButton";
 
 const ITEM_SIZE = Dimensions.get("window").width * 0.8;
+const IMAGE_WIDTH = Dimensions.get("window").width * 0.75;
 const EMPTY_ITEM_SIZE = (Dimensions.get("window").width - ITEM_SIZE) / 2;
-type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
-
-const getColor = (rating: number) => {
-  if (rating < 5) {
-    return "#EE3535";
-  } else if (rating < 7) {
-    return "#EEA435";
-  } else {
-    return "#91EE35";
-  }
-};
+type homeScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
-  const navigation = useNavigation<recsScreenProp>();
+  const navigation = useNavigation<homeScreenProp>();
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const handleMoviePress = (id: number) => {
@@ -91,112 +74,14 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                   width: ITEM_SIZE,
                 }}
               >
-                <TouchableOpacity
-                  style={{ width: "100%" }}
+                <LargePosterButton
+                  posterPath={MEDIUM_POSTER_BASE_URL + item.poster_path}
                   onPress={() => handleMoviePress(item.id)}
-                >
-                  <View
-                    style={{
-                      shadowColor: "black",
-                      shadowOffset: { width: 0, height: 4 },
-                      shadowOpacity: 0.8,
-                      shadowRadius: 2,
-                      borderRadius: 15,
-                      borderBottomLeftRadius: 0,
-                      borderBottomRightRadius: 0,
-                      backgroundColor: "black",
-                      width: "100%",
-                      height: ITEM_SIZE * 1.5,
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri:
-                          "https://image.tmdb.org/t/p/w500/" + item.poster_path,
-                      }}
-                      contentFit="cover"
-                      transition={500}
-                      style={{
-                        width: "100%",
-                        height: ITEM_SIZE * 1.5,
-                        borderRadius: 15,
-                        borderBottomLeftRadius: 0,
-                        borderBottomRightRadius: 0,
-                        margin: 0,
-                      }}
-                    />
-                    <LinearGradient
-                      style={{
-                        zIndex: 2,
-                        width: "100%",
-                        marginTop: 10,
-                        height: ITEM_SIZE * 1.5,
-                        position: "absolute",
-                        borderRadius: 0,
-                      }}
-                      colors={["transparent", "rgba(21, 24, 45, 1)"]}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      marginTop: -ITEM_SIZE * 0.15,
-                      zIndex: 100,
-                      width: ITEM_SIZE,
-                      paddingHorizontal: 10,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 22,
-                        fontWeight: "600",
-                      }}
-                      numberOfLines={2}
-                      adjustsFontSizeToFit
-                      minimumFontScale={0.7}
-                    >
-                      {item.title}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        paddingTop: 10,
-                        gap: 6,
-                      }}
-                    >
-                      <Ionicons name="calendar" color="#A3BBD3" size={20} />
-                      <Text
-                        style={{
-                          color: "#A3BBD3",
-                          fontSize: 18,
-                          fontWeight: "800",
-                        }}
-                      >
-                        {new Date(item.release_date).getFullYear()}
-                      </Text>
-                      <Text
-                        style={{
-                          color: "#A3BBD3",
-                          fontSize: 18,
-                          fontWeight: "800",
-                          paddingHorizontal: 5,
-                        }}
-                      >
-                        |
-                      </Text>
-                      <Ionicons name="star" color="#A3BBD3" size={20} />
-                      <Text
-                        style={{
-                          color: getColor(item.vote_average),
-                          fontSize: 18,
-                          fontWeight: "800",
-                        }}
-                      >
-                        {item.vote_average.toPrecision(3)}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                  title={item.title}
+                  release_date={item.release_date}
+                  vote_average={item.vote_average}
+                  dimensions={{ width: IMAGE_WIDTH, height: IMAGE_WIDTH * 1.5 }}
+                />
               </Animated.View>
               <View style={{ width: isLast ? EMPTY_ITEM_SIZE : 0 }} />
             </View>

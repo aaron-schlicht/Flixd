@@ -1,9 +1,5 @@
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { FullMovie, imageBasePath } from "../../constants";
+import { View, Text, Dimensions } from "react-native";
+import { FullMovie } from "../../constants";
 
 const getColor = (rating: number) => {
   if (rating < 5) {
@@ -15,54 +11,21 @@ const getColor = (rating: number) => {
   }
 };
 
-//TODO: Conditionally render header image if url doesn't exist
 const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
-  const navigation = useNavigation();
   return (
     <View>
-      <Image
+      <View
         style={{
-          zIndex: 0,
-          width: Dimensions.get("window").width,
-          height: Dimensions.get("window").height * 0.45,
+          flex: 1,
+          marginTop: -Dimensions.get("window").height * 0.06,
+          zIndex: 90,
         }}
-        transition={500}
-        source={{ uri: imageBasePath + movie.backdrop_path }}
-        contentFit="cover"
-      />
-      <LinearGradient
-        style={{
-          zIndex: 1,
-          width: Dimensions.get("window").width,
-          height: Dimensions.get("window").height * 0.45,
-          position: "absolute",
-        }}
-        colors={["transparent", "rgba(21, 24, 45, 1)"]}
-      />
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          borderRadius: 360,
-          width: 50,
-          height: 50,
-          position: "absolute",
-          top: 50,
-          left: 15,
-          zIndex: 100,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "rgba(21, 24, 45, 0.3)",
-        }}
-        onPress={() => navigation.goBack()}
       >
-        <Ionicons name="chevron-back" color="white" size={30} />
-      </TouchableOpacity>
-      <View style={{ flex: 1, marginTop: -70, zIndex: 100 }}>
         <Text
           style={{
             color: "white",
-            fontSize: 25,
-            zIndex: 100,
+            fontSize: 40,
+            zIndex: 90,
             fontWeight: "bold",
 
             paddingHorizontal: 15,

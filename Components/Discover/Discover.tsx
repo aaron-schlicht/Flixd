@@ -6,29 +6,33 @@ import { RootState } from "../../redux/store";
 import SearchResults from "./SearchResults";
 import MovieList from "./MovieList";
 import { Movie } from "../../constants";
+import { useEffect, useState } from "react";
 
 const Discover = () => {
-  const data = useGetDiscoverMovies();
-  const searchResults = useSelector(
-    (state: RootState) => state.movies.searchResults
-  );
-
   return (
-    <View style={{ flex: 1, backgroundColor: "#15182D" }}>
-      <View style={{ width: "100%", padding: 10 }}>
-        <SearchBar />
-      </View>
-      <DiscoverView discoverLists={data} searchResults={searchResults} />
+    <View style={{ flex: 1, backgroundColor: "#15182D", gap: 10 }}>
+      <SearchBar />
+      <DiscoverView />
     </View>
   );
 };
 
-interface DiscoverViewProps {
-  discoverLists: { name: string; movies: Movie[] }[];
-  searchResults: Movie[];
-}
+const DiscoverView = () => {
+  const data = useGetDiscoverMovies();
 
-const DiscoverView = ({ discoverLists, searchResults }: DiscoverViewProps) => {
+  const searchResults = useSelector(
+    (state: RootState) => state.movies.searchResults
+  );
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (isRefreshing) {
+      setTimeout(() => {
+        setIsRefreshing(false);
+      }, 1000);
+    }
+  }, [isRefreshing]);
+
   if (searchResults.length) {
     return <SearchResults searchResults={searchResults} />;
   } else {
@@ -38,11 +42,19 @@ const DiscoverView = ({ discoverLists, searchResults }: DiscoverViewProps) => {
           gap: 15,
           paddingBottom: 200,
         }}
-        data={discoverLists}
+        data={data}
+        refreshing={isRefreshing}
+        onRefresh={() => setIsRefreshing(true)}
         showsVerticalScrollIndicator={false}
         keyExtractor={({ name }) => name}
         renderItem={({ item }) => {
-          return <MovieList name={item.name} data={item.movies} />;
+          return (
+            <MovieList
+              isRefreshing={isRefreshing}
+              name={item.name}
+              data={item.movies}
+            />
+          );
         }}
       />
     );
