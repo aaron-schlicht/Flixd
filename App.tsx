@@ -19,8 +19,6 @@ import MovieScreen from "./Components/MovieScreen";
 import MainFlow from "./Components/MainFlow/MainFlow";
 
 export default function App() {
-  //mobileAds().initialize();
-
   return (
     <NavigationContainer>
       <Provider store={store}>
