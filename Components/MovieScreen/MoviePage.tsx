@@ -103,7 +103,6 @@ const MoviePage: React.FC<Props> = ({ route }) => {
           <ImageHeader
             sv={scrollY}
             posterPath={imageBasePath + movie.backdrop_path}
-            title={movie.title}
           />
         )}
         <BackButton onPress={handleBack} />
@@ -112,6 +111,7 @@ const MoviePage: React.FC<Props> = ({ route }) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
+              paddingHorizontal: 40,
             }}
           >
             <Text

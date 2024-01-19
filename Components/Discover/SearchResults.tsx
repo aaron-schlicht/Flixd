@@ -8,6 +8,7 @@ import LargePosterButton from "../LargePosterButton";
 
 const ITEM_SIZE = Dimensions.get("window").width * 0.8;
 const IMAGE_WIDTH = Dimensions.get("window").width * 0.75;
+const ITEM_HEIGHT = Dimensions.get("window").height * 0.55;
 const EMPTY_ITEM_SIZE = (Dimensions.get("window").width - ITEM_SIZE) / 2;
 type homeScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -80,7 +81,7 @@ const SearchResults = ({ searchResults }: { searchResults: Movie[] }) => {
                   title={item.title}
                   release_date={item.release_date}
                   vote_average={item.vote_average}
-                  dimensions={{ width: IMAGE_WIDTH, height: IMAGE_WIDTH * 1.5 }}
+                  dimensions={{ width: IMAGE_WIDTH, height: ITEM_HEIGHT }}
                 />
               </Animated.View>
               <View style={{ width: isLast ? EMPTY_ITEM_SIZE : 0 }} />

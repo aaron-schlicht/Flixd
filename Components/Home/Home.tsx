@@ -1,34 +1,15 @@
-import {
-  View,
-  StatusBar,
-  ScrollView,
-  Text,
-  TouchableHighlight,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, StatusBar, Text, TouchableHighlight } from "react-native";
 import Discover from "../Discover";
-import SimilarMoviesFunction from "../SimilarMovies/SimilarMoviesFunction";
 import { SafeAreaView } from "react-native";
 import { styles } from "./Home.styled";
-import InfoFunction from "../InfoFunction";
 import Lucky from "../Lucky/Lucky";
-import { useDispatch, useSelector } from "react-redux";
-import MainFlow from "../MainFlow/MainFlow";
-import { RootState } from "../../redux/store";
+import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useEffect, useState } from "react";
 import RecsIcon from "./RecsIcon";
 import { updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
 
 const Tab = createBottomTabNavigator();
 
@@ -65,10 +46,6 @@ export default function Home() {
             paddingBottom: 20,
             borderTopWidth: 0,
             height: "11%",
-            //backgroundColor: "rgba(37, 41, 66, 0.85)",
-            //borderTopColor: "#252942",
-            //height: "11%",
-            //paddingBottom: 20,
           },
           tabBarBackground: () => (
             <LinearGradient
@@ -89,7 +66,7 @@ export default function Home() {
           component={Discover}
           options={{
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center" }}>
+              <View style={{ alignItems: "center", paddingTop: 2, width: 70 }}>
                 <Ionicons
                   name={focused ? "compass" : "compass-outline"}
                   color={focused ? "white" : "#A3BBD3"}
@@ -138,7 +115,14 @@ export default function Home() {
           component={Lucky}
           options={{
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center", gap: 2 }}>
+              <View
+                style={{
+                  alignItems: "center",
+                  gap: 2,
+                  paddingTop: 2,
+                  width: 70,
+                }}
+              >
                 <MaterialCommunityIcons
                   name={focused ? "dice-multiple" : "dice-multiple-outline"}
                   color={focused ? "white" : "#A3BBD3"}

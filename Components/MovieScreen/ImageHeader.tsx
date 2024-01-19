@@ -24,14 +24,10 @@ const HEADER_COLLAPSED_HEIGHT = 100;
 const ImageHeader = ({
   sv,
   posterPath,
-  title,
 }: {
   sv: SharedValue<number>;
   posterPath: string;
-  title: string;
 }) => {
-  const navigation = useNavigation();
-
   const imageOpacityStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
       sv.value,
@@ -55,19 +51,6 @@ const ImageHeader = ({
 
     return {
       transform: [{ scale: scale }],
-    };
-  });
-
-  const headerOpacity = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      sv.value,
-      [210, 215],
-      [0, 1],
-      Extrapolate.CLAMP
-    );
-
-    return {
-      opacity: opacity,
     };
   });
 
@@ -114,24 +97,6 @@ const styles = StyleSheet.create({
     height: "100%",
     top: 0,
     alignSelf: "center",
-  },
-  movieTitleContainer: {
-    position: "absolute",
-    zIndex: 200,
-    top: 0,
-    left: 0,
-    right: 0,
-    height: HEADER_COLLAPSED_HEIGHT,
-    justifyContent: "flex-end",
-    padding: 16,
-    backgroundColor: "#15182D",
-  },
-  movieTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
-    flex: 1,
   },
 });
 

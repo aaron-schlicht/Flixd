@@ -79,7 +79,9 @@ const FilterStep = () => {
           paddingTop: 35,
           paddingHorizontal: 20,
           gap: 20,
+          paddingBottom: 200,
         }}
+        showsVerticalScrollIndicator={false}
         data={[
           {
             name: "year",

@@ -12,7 +12,8 @@ import useGetRandomMovies from "./useGetRandomMovie";
 import LargePosterButton from "../LargePosterButton";
 import DiceButton from "./DiceButton";
 
-const ITEM_WIDTH = Dimensions.get("window").width * 0.9;
+const ITEM_WIDTH = Dimensions.get("window").width - 40;
+const ITEM_HEIGHT = Dimensions.get("window").height * 0.65;
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const Lucky = () => {
@@ -40,14 +41,20 @@ const Lucky = () => {
             <ActivityIndicator size="large" />
           </View>
         ) : (
-          <View style={{ paddingVertical: 10, alignItems: "center" }}>
+          <View
+            style={{
+              paddingVertical: 20,
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
             <LargePosterButton
               posterPath={MEDIUM_POSTER_BASE_URL + randomMovie.poster_path}
               onPress={() => handleMoviePress()}
               title={randomMovie.title}
               release_date={randomMovie.release_date}
               vote_average={randomMovie.vote_average}
-              dimensions={{ width: ITEM_WIDTH, height: ITEM_WIDTH * 1.5 }}
+              dimensions={{ width: ITEM_WIDTH, height: ITEM_HEIGHT }}
             />
           </View>
         )}

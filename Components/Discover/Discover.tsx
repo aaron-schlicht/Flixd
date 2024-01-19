@@ -10,7 +10,14 @@ import { useEffect, useState } from "react";
 
 const Discover = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#15182D", gap: 10 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#15182D",
+        gap: 10,
+        paddingVertical: 10,
+      }}
+    >
       <SearchBar />
       <DiscoverView />
     </View>

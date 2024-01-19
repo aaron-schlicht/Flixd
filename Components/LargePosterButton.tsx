@@ -58,7 +58,7 @@ const LargePosterButton: FC<
       }}
     >
       <Text
-        style={{ color: "white", fontSize: 25, fontWeight: "600" }}
+        style={{ color: "white", fontSize: 20, fontWeight: "600" }}
         numberOfLines={2}
         adjustsFontSizeToFit
         minimumFontScale={0.7}

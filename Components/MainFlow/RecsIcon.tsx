@@ -15,27 +15,27 @@ const RecsIcon = (props: SvgProps) => (
       height={33}
       x={19.5}
       y={21}
-      stroke="white"
+      stroke="#15182D"
       strokeWidth={6}
       mask="url(#a)"
       rx={1}
     />
-    <Path stroke="white" strokeWidth={3} d="M20.5 31.5h16M19.5 41.5h16" />
+    <Path stroke="#15182D" strokeWidth={3} d="M20.5 31.5h16M19.5 41.5h16" />
     <Path
-      stroke="white"
+      stroke="#15182D"
       strokeLinecap="round"
       strokeMiterlimit={4.62}
       strokeWidth={3}
       d="M14 53V22"
     />
     <Path
-      stroke="white"
+      stroke="#15182D"
       strokeLinecap="round"
       strokeWidth={3}
       d="M42.5 53V22"
     />
     <Path
-      stroke="white"
+      stroke="#15182D"
       strokeWidth={4}
       d="M15.5 24h5M15.5 30h5M15.5 36h5M15.5 43h5M14.5 49h5M37.5 24h5M37.5 30h5M37.5 36h5M37.5 43h5M36.5 49h5"
     />
