@@ -5,7 +5,9 @@ const API_KEY = 'f03e1c9e7d2633ef0b20ab2c36cddb39';
 
 export const getSearchResults = async (query: string) => {
 	try {
-		const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`);
+		const response = await axios.get(
+			`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}&adult=false`
+		);
 		return response.data.results as Movie[];
 	} catch (error) {
 		console.log(error);
@@ -16,7 +18,7 @@ export const getMovieRecommendations = async (movieId: number) => {
 	let recommendedMovies: FullMovie[] = [];
 	try {
 		const response = await axios.get(
-			`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&language=en-US&page=1`
+			`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&adulte=false&language=en-US&page=1`
 		);
 		const recommend = response.data.results;
 		if (recommend) {
@@ -31,7 +33,7 @@ export const getMovieRecommendations = async (movieId: number) => {
 export const getMovieInfo = async (movieId: number) => {
 	try {
 		const response = await axios.get(
-			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=en-US`
+			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&adult=false&language=en-US`
 		);
 		const data = response.data;
 		if (data) {

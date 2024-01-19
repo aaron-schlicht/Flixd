@@ -1,37 +1,37 @@
 {
-	"expo": {
-		"name": "ReelRecs",
-		"slug": "ReelRecs",
-		"version": "1.0.2",
-		"orientation": "portrait",
-		"icon": "./assets/AppLogo.png",
-		"userInterfaceStyle": "dark",
-		"splash": {
-			"image": "./assets/splashlogo.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#1f2224"
-		},
-		"assetBundlePatterns": [ "**/*" ],
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.aslick.ReelRecs"
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			}
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		},
-		"extra": {
-			"eas": {
-				"projectId": "45ee09ec-c467-4083-8e3c-3475db5b784a"
-			}
-		}
-	},
-	"react-native-google-mobile-ads": {
-		"ios_app_id": "ca-app-pub-7362913181463643~1224850479"
-	}
+  "expo": {
+    "name": "Flixd",
+    "slug": "ReelRecs",
+    "version": "2.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/AppLogo.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splashlogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#15182D"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aslick.ReelRecs"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "45ee09ec-c467-4083-8e3c-3475db5b784a"
+      }
+    }
+  },
+  "react-native-google-mobile-ads": {
+    "ios_app_id": "ca-app-pub-7362913181463643~1224850479"
+  }
 }
