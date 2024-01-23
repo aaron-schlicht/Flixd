@@ -2,21 +2,22 @@ import React from "react";
 import Home from "./Components/Home";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-//import mobileAds from "react-native-google-mobile-ads";
 
 export type RootStackParamList = {
   Home: undefined;
   Flow: undefined;
   Recs: { recs: Movie[] };
   Movie: { id: number };
+  Person: { person: Person };
 };
 const Stack = createStackNavigator<RootStackParamList>();
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import RecsScreen from "./Components/MainFlow/RecsScreen";
-import { Movie } from "./constants";
+import { Movie, Person } from "./constants";
 import MovieScreen from "./Components/MovieScreen";
 import MainFlow from "./Components/MainFlow/MainFlow";
+import PersonScreen from "./Components/PersonScreen";
 
 export default function App() {
   return (
@@ -44,6 +45,12 @@ export default function App() {
             name="Movie"
             initialParams={{ id: 0 }}
             component={MovieScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Person"
+            initialParams={{ person: { id: 0, name: "" } }}
+            component={PersonScreen}
           />
         </Stack.Navigator>
       </Provider>

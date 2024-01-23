@@ -7,7 +7,7 @@ import {
 import { RootStackParamList } from "../../App";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { MEDIUM_POSTER_BASE_URL } from "../../constants";
+import { Colors, MEDIUM_POSTER_BASE_URL } from "../../constants";
 import useGetRandomMovies from "./useGetRandomMovie";
 import LargePosterButton from "../LargePosterButton";
 import DiceButton from "./DiceButton";
@@ -30,7 +30,7 @@ const Lucky = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#15182D",
+        backgroundColor: Colors.background,
         alignItems: "center",
       }}
     >

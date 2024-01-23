@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { Movie, getRatingColor, imageBasePath } from "../../constants";
+import { Colors, Movie, getRatingColor, imageBasePath } from "../../constants";
 import { useDispatch } from "react-redux";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
@@ -33,15 +33,15 @@ const RecsScreen: FC<Props> = ({ route }) => {
   }, [dispatch]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#15182D" }}>
-      <SafeAreaView style={{ flex: 0, backgroundColor: "#15182D" }} />
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#15182D" }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: Colors.background }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
         <View
           style={{
             flexDirection: "row",
             padding: 10,
             alignItems: "center",
-            backgroundColor: "#15182D",
+            backgroundColor: Colors.background,
           }}
         >
           <TouchableOpacity
@@ -92,7 +92,11 @@ const RecsScreen: FC<Props> = ({ route }) => {
             </Text>
             <Text style={{ fontSize: 60, paddingTop: 20 }}>😔</Text>
             <Text
-              style={{ color: "#A3BBD3", textAlign: "center", paddingTop: 20 }}
+              style={{
+                color: Colors.primary,
+                textAlign: "center",
+                paddingTop: 20,
+              }}
               numberOfLines={2}
               adjustsFontSizeToFit
             >
@@ -101,7 +105,7 @@ const RecsScreen: FC<Props> = ({ route }) => {
             </Text>
           </View>
         ) : null}
-        <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+        <View style={{ flex: 1, backgroundColor: Colors.background }}>
           <FlatList
             data={recs}
             showsVerticalScrollIndicator={false}
@@ -109,7 +113,7 @@ const RecsScreen: FC<Props> = ({ route }) => {
               <View
                 key={`item-${item.id}`}
                 style={{
-                  borderBottomColor: "#252942",
+                  borderBottomColor: Colors.secondary,
                   borderBottomWidth: index === recs.length - 1 ? 0 : 2,
                 }}
               >
@@ -171,13 +175,15 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
             gap: 6,
           }}
         >
-          <Ionicons name="calendar" color="#A3BBD3" size={20} />
-          <Text style={{ color: "#A3BBD3", fontSize: 18, fontWeight: "800" }}>
+          <Ionicons name="calendar" color={Colors.primary} size={20} />
+          <Text
+            style={{ color: Colors.primary, fontSize: 18, fontWeight: "800" }}
+          >
             {new Date(movie.release_date).getFullYear()}
           </Text>
           <Text
             style={{
-              color: "#A3BBD3",
+              color: Colors.primary,
               fontSize: 18,
               fontWeight: "800",
               paddingHorizontal: 5,
@@ -185,7 +191,7 @@ const MovieItem = ({ movie }: { movie: Movie }) => {
           >
             |
           </Text>
-          <Ionicons name="star" color="#A3BBD3" size={20} />
+          <Ionicons name="star" color={Colors.primary} size={20} />
           <Text
             style={{
               color: getRatingColor(movie.vote_average),

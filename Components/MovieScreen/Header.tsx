@@ -1,5 +1,5 @@
 import { View, Text, Dimensions } from "react-native";
-import { FullMovie } from "../../constants";
+import { Colors, FullMovie } from "../../constants";
 
 const getColor = (rating: number) => {
   if (rating < 5) {
@@ -46,10 +46,14 @@ const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={{ color: "#A3BBD3", fontSize: 20, fontWeight: "600" }}>
+            <Text
+              style={{ color: Colors.primary, fontSize: 20, fontWeight: "600" }}
+            >
               {new Date(movie.release_date).getFullYear()}
             </Text>
-            <Text style={{ color: "#A3BBD3", fontSize: 20, fontWeight: "900" }}>
+            <Text
+              style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}
+            >
               ·
             </Text>
             {!!rating.length ? (
@@ -57,13 +61,13 @@ const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
                 style={{
                   paddingHorizontal: 15,
                   paddingVertical: 8,
-                  backgroundColor: "#252942",
+                  backgroundColor: Colors.secondary,
                   borderRadius: 10,
                 }}
               >
                 <Text
                   style={{
-                    color: "#A3BBD3",
+                    color: Colors.primary,
                     fontSize: 14,
                     fontWeight: "600",
                   }}
@@ -75,7 +79,7 @@ const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
             {!!rating.length ? (
               <Text
                 style={{
-                  color: "#A3BBD3",
+                  color: Colors.primary,
                   fontSize: 20,
                   fontWeight: "900",
                 }}
@@ -83,15 +87,21 @@ const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
                 ·
               </Text>
             ) : null}
-            <Text style={{ color: "#A3BBD3", fontSize: 18 }}>
+            <Text style={{ color: Colors.primary, fontSize: 18 }}>
               {movie.runtime} mins
             </Text>
-            <Text style={{ color: "#A3BBD3", fontSize: 20, fontWeight: "900" }}>
+            <Text
+              style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}
+            >
               ·
             </Text>
             {movie.vote_average === 0.0 ? (
               <Text
-                style={{ color: "#A3BBD3", fontSize: 14, fontWeight: "600" }}
+                style={{
+                  color: Colors.primary,
+                  fontSize: 14,
+                  fontWeight: "600",
+                }}
               >
                 No rating yet
               </Text>

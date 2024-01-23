@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import SearchResults from "./SearchResults";
 import MovieList from "./MovieList";
-import { Movie } from "../../constants";
+import { Colors } from "../../constants";
 import { useEffect, useState } from "react";
 
 const Discover = () => {
@@ -13,7 +13,7 @@ const Discover = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#15182D",
+        backgroundColor: Colors.background,
         gap: 10,
         paddingVertical: 10,
       }}

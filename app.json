@@ -2,7 +2,7 @@
   "expo": {
     "name": "Flixd",
     "slug": "ReelRecs",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "orientation": "portrait",
     "icon": "./assets/AppLogo.png",
     "userInterfaceStyle": "dark",
@@ -29,7 +29,8 @@
       "eas": {
         "projectId": "45ee09ec-c467-4083-8e3c-3475db5b784a"
       }
-    }
+    },
+    "plugins": ["expo-build-properties"]
   },
   "react-native-google-mobile-ads": {
     "ios_app_id": "ca-app-pub-7362913181463643~1224850479"

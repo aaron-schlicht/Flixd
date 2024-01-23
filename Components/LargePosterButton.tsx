@@ -10,7 +10,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { FC } from "react";
 import { PosterButtonProps } from "./PosterButton";
-import { getRatingColor } from "../constants";
+import { Colors, getRatingColor } from "../constants";
 
 const BASE_WIDTH = Dimensions.get("window").width * 0.8;
 const LargePosterButton: FC<
@@ -72,7 +72,7 @@ const LargePosterButton: FC<
           gap: 6,
         }}
       >
-        <Ionicons name="calendar" color="#A3BBD3" size={20} />
+        <Ionicons name="calendar" color={Colors.primary} size={20} />
         <Text style={styles.description}>
           {new Date(release_date).getFullYear()}
         </Text>
@@ -86,7 +86,7 @@ const LargePosterButton: FC<
         >
           |
         </Text>
-        <Ionicons name="star" color="#A3BBD3" size={20} />
+        <Ionicons name="star" color={Colors.primary} size={20} />
         <Text
           style={[
             styles.description,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderColor: "#A3BBD3",
+    borderColor: Colors.primary,
     zIndex: 1,
   },
   gradient: {
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
   },
   description: {
-    color: "#A3BBD3",
+    color: Colors.primary,
     fontSize: 18,
     fontWeight: "800",
   },

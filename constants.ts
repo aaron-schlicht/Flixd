@@ -51,6 +51,18 @@ export interface CrewMember {
   job: string;
 }
 
+export interface Person {
+  id: number;
+  name: string;
+  profile_path?: string;
+}
+
+export const Colors = {
+  background: "#15182D",
+  primary: "#A3BBD3",
+  secondary: "#252942",
+};
+
 export const getRatingColor = (rating: number) => {
   if (rating < 5) {
     return "#EE3535";

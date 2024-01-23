@@ -19,6 +19,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { Colors } from "../../constants";
 
 const useDebounce = (value: string) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -90,7 +91,7 @@ const SearchBar = () => {
         style={[
           searchBoxAnimatedStyle,
           {
-            backgroundColor: "#252942",
+            backgroundColor: Colors.secondary,
             borderRadius: 10,
             height: 50,
             flexDirection: "row",
@@ -102,14 +103,14 @@ const SearchBar = () => {
       >
         <Ionicons
           name="search-outline"
-          color={query.length ? "white" : "#A3BBD3"}
+          color={query.length ? "white" : Colors.primary}
           size={25}
         />
         <TextInput
           keyboardAppearance="dark"
           autoCapitalize="words"
           autoCorrect={false}
-          placeholderTextColor="#A3BBD3"
+          placeholderTextColor={Colors.primary}
           style={{
             color: "white",
             fontSize: 20,
@@ -124,7 +125,7 @@ const SearchBar = () => {
         />
         {query.length ? (
           <TouchableOpacity style={{ width: 30 }} onPress={() => handleClear()}>
-            <Ionicons name="close-circle" color="#A3BBD3" size={25} />
+            <Ionicons name="close-circle" color={Colors.primary} size={25} />
           </TouchableOpacity>
         ) : null}
       </Animated.View>

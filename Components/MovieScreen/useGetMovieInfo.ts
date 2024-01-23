@@ -1,34 +1,40 @@
 import { useEffect, useState } from "react";
-import { CastMember, CrewMember, Service } from "../../constants";
 import {
-  useGetExternalIdsQuery,
+  CastMember,
+  CrewMember,
+  FullMovie,
+  Keyword,
+  Movie,
+  Service,
+} from "../../constants";
+import {
   useGetMovieCreditsQuery,
   useGetMovieInfoQuery,
+  useGetMovieKeywordsQuery,
   useGetMovieRatingQuery,
   useGetProvidersQuery,
   useGetSimilarMoviesQuery,
 } from "../../redux/apiSlice";
-import axios from "axios";
-const OMDB_KEY = "28df3520";
 
 const DIRECTOR = "DIRECTOR";
 
 const useGetMovieInfo = (id: number) => {
   const { data, isLoading: isMovieDataLoading } = useGetMovieInfoQuery(id);
+  const genres =
+    [data?.genres?.map((genre) => genre.id.toString())].join(",") || "";
   const { data: movieRatingData, isLoading: isMovieRatingLoading } =
     useGetMovieRatingQuery(id);
   const { data: providersData, isLoading: isProvidersLoading } =
     useGetProvidersQuery(id);
-  const { data: similarMovies, isLoading: isSimilarMoviesLoading } =
-    useGetSimilarMoviesQuery(id);
+  const { data: similarMovieData, isLoading: isSimilarMoviesLoading } =
+    useGetSimilarMoviesQuery(genres);
   const { data: credits, isLoading: isCreditsLoading } =
     useGetMovieCreditsQuery(id);
-  const { data: externalIds, isLoading: isExternalIdsLoading } =
-    useGetExternalIdsQuery(id);
   const [rating, setRating] = useState("");
   const [streamingServices, setStreamingServices] = useState<Service[]>([]);
   const [topCast, setTopCast] = useState<CastMember[]>([]);
   const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
+  const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
 
   const getMovieRating = () => {
     let rating = "";
@@ -74,14 +80,11 @@ const useGetMovieInfo = (id: number) => {
     }
   };
 
-  const getOMDBInfo = async (id: string) => {
-    try {
-      const response = await axios.get(
-        `http://www.omdbapi.com/?apikey=${OMDB_KEY}&i=${id}`
+  const getSimilarMovies = () => {
+    if (similarMovieData) {
+      setSimilarMovies(
+        similarMovieData.results.filter((movie) => movie.id !== id)
       );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -89,12 +92,13 @@ const useGetMovieInfo = (id: number) => {
     setRating(getMovieRating());
     setStreamingServices(getStreamingServices());
     getTopCast();
-  }, [providersData, movieRatingData, credits]);
+    getSimilarMovies();
+  }, [providersData, movieRatingData, credits, similarMovieData]);
 
   return {
     isLoading: isMovieDataLoading || isMovieRatingLoading || isProvidersLoading,
     movie: data,
-    similarMovies: similarMovies?.results || [],
+    similarMovies,
     rating,
     topCast,
     topCrew,

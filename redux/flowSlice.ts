@@ -14,7 +14,6 @@ interface Filter {
 
 export interface InitialFlowType {
   step: number;
-  prevStep: number;
   genres: number[];
   keywords: Keyword[];
   filters: Filter;
@@ -22,7 +21,6 @@ export interface InitialFlowType {
 
 const initialState: InitialFlowType = {
   step: 0,
-  prevStep: 0,
   genres: [],
   keywords: [],
   filters: {},
@@ -34,9 +32,6 @@ export const flowSlice = createSlice({
   reducers: {
     updateStep: (state, action) => {
       state.step = action.payload;
-    },
-    updatePrevStep: (state, action) => {
-      state.prevStep = action.payload;
     },
     updateGenre: (state, action) => {
       if (!!state.genres.find((id) => id === action.payload)) {
@@ -80,7 +75,6 @@ export const flowSlice = createSlice({
 
 export const {
   updateStep,
-  updatePrevStep,
   updateGenre,
   updateKeywords,
   addKeyword,

@@ -15,8 +15,7 @@ import Description from "./Description";
 import StreamingServices from "./StreamingServices";
 import People from "./People";
 import SimilarMovies from "./SimilarMovies";
-import { imageBasePath } from "../../constants";
-import { LinearGradient } from "expo-linear-gradient";
+import { Colors, imageBasePath } from "../../constants";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -34,7 +33,7 @@ const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.5;
 const HEADER_COLLAPSED_HEIGHT = 100;
 interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
 
-const MoviePage: React.FC<Props> = ({ route }) => {
+const MovieScreen: React.FC<Props> = ({ route }) => {
   const { id } = route.params;
   const scrollY = useSharedValue(0);
 
@@ -90,7 +89,7 @@ const MoviePage: React.FC<Props> = ({ route }) => {
             Something went wrong
           </Text>
           <Text style={{ fontSize: 60 }}>😔</Text>
-          <Text style={{ color: "#A3BBD3", fontSize: 20 }}>
+          <Text style={{ color: Colors.primary, fontSize: 20 }}>
             Please try again
           </Text>
         </View>
@@ -162,7 +161,7 @@ const PoweredLogo = () => (
       justifyContent: "center",
     }}
   >
-    <Text style={{ color: "#A3BBD3" }}>Powered by </Text>
+    <Text style={{ color: Colors.primary }}>Powered by </Text>
     <Image
       style={{ width: 120, height: "100%" }}
       contentFit="contain"
@@ -195,7 +194,7 @@ const BackButton = ({ onPress }: { onPress: () => void }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#15182D",
+    backgroundColor: Colors.background,
     justifyContent: "center",
   },
   scrollView: {
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     height: HEADER_COLLAPSED_HEIGHT,
     justifyContent: "flex-end",
     padding: 16,
-    backgroundColor: "#15182D",
+    backgroundColor: Colors.background,
   },
   movieTitle: {
     fontSize: 14,
@@ -225,4 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoviePage;
+export default MovieScreen;

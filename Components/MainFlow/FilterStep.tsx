@@ -1,31 +1,22 @@
 import {
   View,
   Text,
-  TouchableOpacity,
-  ScrollView,
   TouchableHighlight,
   FlatList,
   Dimensions,
 } from "react-native";
 import { Slider } from "@miblanchard/react-native-slider";
-import { FC, memo, useCallback, useMemo, useState } from "react";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import {
-  resetFlow,
-  updateFilters,
-  updatePrevStep,
-  updateStep,
-} from "../../redux/flowSlice";
-import ProviderSelect from "../SortScreen/ProviderSelect";
+import { FC } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateFilters, updateStep } from "../../redux/flowSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { RootState } from "../../redux/store";
-import { createSelector } from "@reduxjs/toolkit";
-import { isEqual } from "lodash";
 import useGetRecommendations from "./useGetRecommendations";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
+import { Colors } from "../../constants";
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 
 const FilterStep = () => {
@@ -46,7 +37,6 @@ const FilterStep = () => {
   };
   const handlePrev = () => {
     dispatch(updateStep(2));
-    dispatch(updatePrevStep(3));
   };
 
   return (
@@ -61,10 +51,10 @@ const FilterStep = () => {
           width: Dimensions.get("window").width * 0.9,
         }}
       >
-        <Ionicons name="filter" color="#A3BBD3" size={30} />
+        <Ionicons name="filter" color={Colors.primary} size={30} />
         <Text
           style={{
-            color: "#A3BBD3",
+            color: Colors.primary,
             fontSize: 25,
             fontWeight: "600",
           }}
@@ -216,7 +206,7 @@ const FilterAccordion: FC<FilterAccordionProps> = ({
           padding: 15,
           paddingHorizontal: 20,
           borderRadius: 10,
-          backgroundColor: "#252942",
+          backgroundColor: Colors.secondary,
           flexDirection: "row",
           gap: 10,
           alignItems: "center",
@@ -248,9 +238,9 @@ const FilterAccordion: FC<FilterAccordionProps> = ({
             }
             minimumValue={defaultMin}
             maximumValue={defaultMax}
-            minimumTrackTintColor="#A3BBD3"
-            thumbTintColor="#A3BBD3"
-            maximumTrackTintColor="#252942"
+            minimumTrackTintColor={Colors.primary}
+            thumbTintColor={Colors.primary}
+            maximumTrackTintColor={Colors.secondary}
           />
         </View>
       </View>

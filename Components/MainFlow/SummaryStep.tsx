@@ -11,7 +11,7 @@ import {
 import RecsIcon from "./RecsIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Genres } from "../../constants";
+import { Colors, Genres } from "../../constants";
 import useGetRecommendations from "./useGetRecommendations";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -210,7 +210,7 @@ const DescriptorView = ({
       }}
     >
       <Text style={{ color: "white", fontSize: 20 }}>{descriptor}</Text>
-      <Text style={{ color: "#A3BBD3", fontSize: 18, fontWeight: "500" }}>
+      <Text style={{ color: Colors.primary, fontSize: 18, fontWeight: "500" }}>
         {text}
       </Text>
     </View>

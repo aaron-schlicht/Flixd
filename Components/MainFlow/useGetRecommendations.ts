@@ -27,7 +27,7 @@ const useGetRecommendations = () => {
     if (!!keywords.length) {
       queryString += `&with_keywords=${keywords
         .map(({ id, name }, index) =>
-          index === keywords.length - 1 ? `${id}` : `${id}|`
+          index === keywords.length - 1 ? `${id}` : `${id},`
         )
         .join("")}`;
     }

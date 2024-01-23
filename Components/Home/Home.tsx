@@ -10,6 +10,7 @@ import * as Haptics from "expo-haptics";
 import RecsIcon from "./RecsIcon";
 import { updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "../../constants";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +26,7 @@ const CustomTab = ({ children, onPress }: { children: any; onPress?: any }) => (
       height: 75,
     }}
     onPress={onPress}
-    underlayColor="#A3BBD3"
+    underlayColor={Colors.primary}
   >
     {children}
   </TouchableHighlight>
@@ -69,12 +70,12 @@ export default function Home() {
               <View style={{ alignItems: "center", paddingTop: 2, width: 70 }}>
                 <Ionicons
                   name={focused ? "compass" : "compass-outline"}
-                  color={focused ? "white" : "#A3BBD3"}
+                  color={focused ? "white" : Colors.primary}
                   size={40}
                 />
                 <Text
                   style={{
-                    color: focused ? "white" : "#A3BBD3",
+                    color: focused ? "white" : Colors.primary,
                     textAlign: "center",
                     fontSize: 12,
                     fontWeight: "bold",
@@ -125,12 +126,12 @@ export default function Home() {
               >
                 <MaterialCommunityIcons
                   name={focused ? "dice-multiple" : "dice-multiple-outline"}
-                  color={focused ? "white" : "#A3BBD3"}
+                  color={focused ? "white" : Colors.primary}
                   size={40}
                 />
                 <Text
                   style={{
-                    color: focused ? "white" : "#A3BBD3",
+                    color: focused ? "white" : Colors.primary,
                     textAlign: "center",
                     fontSize: 12,
                     fontWeight: "bold",

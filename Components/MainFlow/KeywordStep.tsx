@@ -6,18 +6,13 @@ import {
   TouchableHighlight,
   Dimensions,
 } from "react-native";
-import { Genre, Keyword, KeywordMap, Keywords } from "../../constants";
+import { Colors, Keyword, KeywordMap, Keywords } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateKeywords,
-  updatePrevStep,
-  updateStep,
-} from "../../redux/flowSlice";
+import { updateKeywords, updateStep } from "../../redux/flowSlice";
 import { RootState } from "../../redux/store";
 import * as Haptics from "expo-haptics";
 import KeywordSearch from "./KeywordSearch";
 import { LinearGradient } from "expo-linear-gradient";
-import { Key, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const KeywordStep = () => {
@@ -54,12 +49,10 @@ const KeywordStep = () => {
 
   const handleNext = () => {
     dispatch(updateStep(2));
-    dispatch(updatePrevStep(1));
   };
 
   const handlePrev = () => {
     dispatch(updateStep(0));
-    dispatch(updatePrevStep(1));
   };
 
   const getKeywordText = () => {
@@ -92,10 +85,10 @@ const KeywordStep = () => {
           width: Dimensions.get("window").width * 0.9,
         }}
       >
-        <Ionicons name="key" color="#A3BBD3" size={30} />
+        <Ionicons name="key" color={Colors.primary} size={30} />
         <Text
           style={{
-            color: "#A3BBD3",
+            color: Colors.primary,
             fontSize: 25,
             fontWeight: "600",
           }}
@@ -135,7 +128,7 @@ const KeywordStep = () => {
           data={keywordArray}
           numColumns={3}
           style={{ marginTop: 10 }}
-          contentContainerStyle={{ paddingBottom: 120, paddingHorizontal: 5 }}
+          contentContainerStyle={{ paddingBottom: 200, paddingHorizontal: 5 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             return (
@@ -229,7 +222,7 @@ const KeywordButton = ({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: isActive ? "#A3BBD3" : "#252942",
+        backgroundColor: isActive ? Colors.primary : Colors.secondary,
         padding: 5,
         flex: 1,
         borderRadius: 15,
@@ -241,7 +234,7 @@ const KeywordButton = ({
     >
       <Text
         style={{
-          color: isActive ? "#15182D" : "#FFF",
+          color: isActive ? Colors.background : "#FFF",
           textAlign: "center",
           fontSize: 14,
         }}

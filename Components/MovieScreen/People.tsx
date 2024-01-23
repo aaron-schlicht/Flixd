@@ -1,7 +1,10 @@
-import { View, Text, ScrollView } from "react-native";
-import { CastMember, CrewMember, imageBasePath } from "../../constants";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { CastMember, Colors, CrewMember, imageBasePath } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../App";
 
 const People = ({
   topCast,
@@ -99,6 +102,7 @@ const CastView = ({ cast }: { cast: CastMember[] }) => {
   );
 };
 
+type movieScreenProp = StackNavigationProp<RootStackParamList, "Movie">;
 const Person = ({
   name,
   id,
@@ -110,8 +114,15 @@ const Person = ({
   profile_path?: string;
   character?: string;
 }) => {
+  const navigation = useNavigation<movieScreenProp>();
+  const handlePress = () => {
+    navigation.push("Person", { person: { name, id, profile_path } });
+  };
   return (
-    <View style={{ width: 110, alignItems: "center" }}>
+    <TouchableOpacity
+      onPress={handlePress}
+      style={{ width: 110, alignItems: "center" }}
+    >
       <View
         style={{
           shadowColor: "black",
@@ -126,7 +137,7 @@ const Person = ({
         <View
           style={{
             height: 100,
-            backgroundColor: "#252942",
+            backgroundColor: Colors.secondary,
             borderRadius: 20,
             width: 100,
             justifyContent: "center",
@@ -141,7 +152,7 @@ const Person = ({
               contentFit="cover"
             />
           ) : (
-            <Ionicons name="person" color="#A3BBD3" size={80} />
+            <Ionicons name="person" color={Colors.primary} size={80} />
           )}
         </View>
       </View>
@@ -159,14 +170,13 @@ const Person = ({
       </Text>
       {character ? (
         <Text
-          style={{ color: "#A3BBD3", textAlign: "center", fontSize: 10 }}
+          style={{ color: Colors.primary, textAlign: "center", fontSize: 10 }}
           numberOfLines={2}
-          adjustsFontSizeToFit
         >
           "{character}"
         </Text>
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,29 +1,13 @@
 import ProviderSelect from "./ProviderSelect";
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  FlatList,
-  TouchableHighlight,
-  Dimensions,
-} from "react-native";
-import { Genre, Keyword, KeywordMap } from "../../constants";
+import { View, Text, TouchableHighlight, Dimensions } from "react-native";
+import { Colors } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateKeywords,
-  updatePrevStep,
-  updateStep,
-} from "../../redux/flowSlice";
+import { updateStep } from "../../redux/flowSlice";
 import { RootState } from "../../redux/store";
-import * as Haptics from "expo-haptics";
-import KeywordSearch from "./KeywordSearch";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 const StreamingStep = () => {
-  const step = useSelector((state: RootState) => state.flow.step);
-  const prevStep = useSelector((state: RootState) => state.flow.prevStep);
-
   const servicesLength = useSelector(
     (state: RootState) => state.movies.selectedServices.length
   );
@@ -31,12 +15,10 @@ const StreamingStep = () => {
 
   const handleNext = () => {
     dispatch(updateStep(3));
-    dispatch(updatePrevStep(2));
   };
 
   const handlePrev = () => {
     dispatch(updateStep(1));
-    dispatch(updatePrevStep(2));
   };
 
   return (
@@ -51,10 +33,10 @@ const StreamingStep = () => {
           width: Dimensions.get("window").width * 0.9,
         }}
       >
-        <Ionicons name="tv" color="#A3BBD3" size={30} />
+        <Ionicons name="tv" color={Colors.primary} size={30} />
         <Text
           style={{
-            color: "#A3BBD3",
+            color: Colors.primary,
             fontSize: 25,
             fontWeight: "600",
           }}
