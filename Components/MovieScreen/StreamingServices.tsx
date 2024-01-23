@@ -1,6 +1,6 @@
 import { FlatList, View, Text, ScrollView } from "react-native";
 import { Image } from "expo-image";
-import { Service, imageBasePath } from "../../constants";
+import { Colors, Service, imageBasePath } from "../../constants";
 
 const StreamingServices = ({
   streamingServices,
@@ -26,7 +26,7 @@ const StreamingServices = ({
           gap: 5,
         }}
       >
-        <Text style={{ color: "#A3BBD3" }}>Powered by</Text>
+        <Text style={{ color: Colors.primary }}>Powered by</Text>
         <Image
           style={{ width: 120, height: "100%" }}
           contentFit="contain"

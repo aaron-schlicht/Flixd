@@ -21,6 +21,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { resetFlow, updateStep } from "../../redux/flowSlice";
+import { Colors } from "../../constants";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 const MainFlow = () => {
@@ -45,7 +46,7 @@ const MainFlow = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#15182D" }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <SafeAreaView />
       <View>
         <TouchableOpacity
@@ -62,8 +63,14 @@ const MainFlow = () => {
             marginLeft: 10,
           }}
         >
-          <Ionicons name="arrow-back" color="#15182D" size={25} />
-          <Text style={{ color: "#15182D", fontWeight: "600", fontSize: 20 }}>
+          <Ionicons name="arrow-back" color={Colors.background} size={25} />
+          <Text
+            style={{
+              color: Colors.background,
+              fontWeight: "600",
+              fontSize: 20,
+            }}
+          >
             Back
           </Text>
         </TouchableOpacity>

@@ -21,12 +21,12 @@ const MovieList = React.memo(
   }) => {
     const navigation = useNavigation<recsScreenProp>();
     const handleMoviePress = (id: number) => {
-      navigation.navigate("Movie", { id: id });
+      navigation.push("Movie", { id: id });
     };
     const ref = useRef<FlatList>(null);
 
     useEffect(() => {
-      if (isRefreshing && ref.current) {
+      if (isRefreshing && ref.current && Boolean(data.length)) {
         ref.current.scrollToIndex({ index: 0, animated: true });
       }
     }, [isRefreshing]);
@@ -50,7 +50,7 @@ const MovieList = React.memo(
           ref={ref}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 10 }}
+          contentContainerStyle={{ paddingBottom: 10, height: 160 }}
           initialNumToRender={5}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => {

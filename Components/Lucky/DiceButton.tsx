@@ -9,6 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { Colors } from "../../constants";
 
 const ANGLE = 7;
 const TIME = 100;
@@ -76,8 +77,14 @@ const DiceButton = ({ getRandomMovies }: { getRandomMovies: () => void }) => {
           }}
           onPress={handlePress}
         >
-          <FontAwesome5 name="dice" color="#15182D" size={25} />
-          <Text style={{ color: "#15182D", fontWeight: "400", fontSize: 22 }}>
+          <FontAwesome5 name="dice" color={Colors.background} size={25} />
+          <Text
+            style={{
+              color: Colors.background,
+              fontWeight: "400",
+              fontSize: 22,
+            }}
+          >
             Roll the dice
           </Text>
         </TouchableOpacity>

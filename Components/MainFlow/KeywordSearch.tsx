@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useGetKeywordSearchResultsQuery } from "../../redux/apiSlice";
-import { Keyword } from "../../constants";
+import { Colors, Keyword } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addKeyword, updateKeywords } from "../../redux/flowSlice";
 import * as Haptics from "expo-haptics";
@@ -57,7 +57,7 @@ const KeywordSearch = () => {
           style={{
             padding: 10,
             paddingLeft: 20,
-            backgroundColor: "#252942",
+            backgroundColor: Colors.secondary,
             borderRadius: 15,
             height: 50,
             flexDirection: "row",
@@ -92,14 +92,14 @@ const KeywordSearch = () => {
         <View>
           <TouchableHighlight
             style={{
-              backgroundColor: "#252942",
+              backgroundColor: Colors.secondary,
               padding: 10,
               paddingLeft: 20,
               height: 50,
               borderRadius: 15,
               justifyContent: "center",
             }}
-            underlayColor="#252942"
+            underlayColor={Colors.secondary}
             onPress={() => setIsFocused(true)}
           >
             <Text style={{ color: "white", fontSize: 16, opacity: 0.5 }}>
@@ -147,7 +147,7 @@ const KeywordButton = ({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: isActive ? "#A3BBD3" : "#252942",
+        backgroundColor: isActive ? Colors.primary : Colors.secondary,
         padding: 10,
         flex: 1,
         borderRadius: 15,
@@ -160,7 +160,7 @@ const KeywordButton = ({
     >
       <Text
         style={{
-          color: isActive ? "#15182D" : "#FFF",
+          color: isActive ? Colors.background : "#FFF",
           textAlign: "center",
           fontSize: 14,
         }}

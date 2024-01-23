@@ -3,64 +3,21 @@ import {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  ScrollView,
-  RefreshControl,
-  TextInput,
   FlatList,
   Dimensions,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateGenre,
-  updateKeywords,
-  updateStep,
-  resetFlow,
-  addKeyword,
-  updatePrevStep,
-} from "../../redux/flowSlice";
-import {
-  Genre,
-  GenreIcons,
-  Genres,
-  Keyword,
-  KeywordMap,
-} from "../../constants";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { updateGenre, updateStep } from "../../redux/flowSlice";
+import { Colors, Genre, GenreIcons, Genres } from "../../constants";
 import * as Haptics from "expo-haptics";
-import KeywordSearch from "./KeywordSearch";
 import { LinearGradient } from "expo-linear-gradient";
 import { RootState } from "../../redux/store";
-import Animated, {
-  Easing,
-  FadeIn,
-  SlideInLeft,
-  SlideInRight,
-  SlideOutLeft,
-  Transition,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
 import RecsIcon from "./RecsIcon";
 import { Ionicons } from "@expo/vector-icons";
 
 const GenreStep = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
-  const keywords = useSelector((state: RootState) => state.flow.keywords);
-  const step = useSelector((state: RootState) => state.flow.step);
-  const prevStep = useSelector((state: RootState) => state.flow.prevStep);
-  const ref = useRef<Text>(null);
   const dispatch = useDispatch();
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-      dispatch(resetFlow());
-    }, 500);
-  }, []);
 
   const handleGenreSelect = (selection: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -69,7 +26,6 @@ const GenreStep = () => {
 
   const handleNext = () => {
     dispatch(updateStep(1));
-    dispatch(updatePrevStep(0));
   };
 
   const genreText = () => {
@@ -118,10 +74,10 @@ const GenreStep = () => {
             width: Dimensions.get("window").width * 0.9,
           }}
         >
-          <Ionicons name="happy" color="#A3BBD3" size={30} />
+          <Ionicons name="happy" color={Colors.primary} size={30} />
           <Text
             style={{
-              color: "#A3BBD3",
+              color: Colors.primary,
               fontSize: 20,
               fontWeight: "600",
             }}
@@ -149,7 +105,7 @@ const GenreStep = () => {
         horizontal={false}
         contentContainerStyle={{
           paddingTop: 5,
-          paddingBottom: 65,
+          paddingBottom: 200,
           paddingHorizontal: 5,
         }}
         showsVerticalScrollIndicator={false}
@@ -230,7 +186,7 @@ const GenreButton = ({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: isActive ? "#A3BBD3" : "#252942",
+        backgroundColor: isActive ? Colors.primary : Colors.secondary,
         flex: 1,
         alignItems: "center",
         gap: 5,
@@ -246,7 +202,7 @@ const GenreButton = ({
       <Text style={{ fontSize: 20 }}>{GenreIcons[genre.id]}</Text>
       <Text
         style={{
-          color: isActive ? "#15182D" : "#FFF",
+          color: isActive ? Colors.background : "#FFF",
           textAlign: "center",
           fontSize: 14,
         }}

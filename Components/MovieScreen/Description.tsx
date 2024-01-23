@@ -1,5 +1,5 @@
 import { FlatList, View, Text } from "react-native";
-import { Genre } from "../../constants";
+import { Colors, Genre } from "../../constants";
 
 const Description = ({
   tagline,
@@ -12,7 +12,7 @@ const Description = ({
 }) => {
   return (
     <View style={{ padding: 20, gap: 5 }}>
-      <Text style={{ color: "#A3BBD3", fontSize: 20, fontWeight: "bold" }}>
+      <Text style={{ color: Colors.primary, fontSize: 20, fontWeight: "bold" }}>
         {tagline}
       </Text>
       <Text style={{ color: "white", lineHeight: 20, fontSize: 14 }}>
@@ -29,7 +29,7 @@ const Description = ({
               style={{
                 padding: 10,
                 paddingHorizontal: 15,
-                backgroundColor: "#252942",
+                backgroundColor: Colors.secondary,
                 borderRadius: 10,
               }}
             >

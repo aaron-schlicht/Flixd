@@ -21,6 +21,15 @@ export interface CastResults {
   crew: CrewMember[];
 }
 
+export interface CrewMovie extends Movie {
+  job?: string;
+}
+
+export interface PersonCreditResults {
+  cast: Movie[];
+  crew: CrewMovie[];
+}
+
 const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -56,7 +65,7 @@ export const apiSlice = createApi({
     }),
     getPopularMoviesStreaming: builder.query<SearchResults, null>({
       query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=US&with_watch_providers=8%7C9%7C337%7C1899%7C15%7C387%7C350%7C531%7C73%7C300`,
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=8%7C9%7C337%7C1899%7C15%7C387%7C350%7C531%7C73%7C300`,
     }),
     getNowPlayingMovies: builder.query<SearchResults, null>({
       query: () =>
@@ -64,23 +73,49 @@ export const apiSlice = createApi({
     }),
     getUpcomingMovies: builder.query<SearchResults, null>({
       query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&primary_release_date.gte=${new Date().toISOString()}`,
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&primary_release_date.gte=${new Date().toISOString()}`,
     }),
     getTopMoviesYear: builder.query<SearchResults, null>({
       query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=vote_count.desc&vote_average.gte=7.0&primary_release_date.gte=${new Date(
-          new Date().setFullYear(new Date().getFullYear() - 1)
-        ).toISOString()}`,
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=10000&with_original_language=en&vote_average.gte=7.0`,
     }),
-    getSimilarMovies: builder.query<SearchResults, number>({
-      query: (id) =>
-        `/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`,
+    getSimilarMovies: builder.query<SearchResults, string>({
+      query: (genres) =>
+        `/discover/movie?api_key=${API_KEY}&include_adult=false&with_genres=${genres}&sort_by=vote_count.desc&language=en-US&page=1&with_original_language=en`,
     }),
     getMovieCredits: builder.query<CastResults, number>({
       query: (id) => `/movie/${id}/credits?api_key=${API_KEY}&language=en-US`,
     }),
-    getExternalIds: builder.query<any, number>({
-      query: (id) => `movie/${id}/external_ids?api_key=${API_KEY}`,
+    getMovieKeywords: builder.query<{ keywords: Keyword[] }, number>({
+      query: (id) => `/movie/${id}/keywords?api_key=${API_KEY}`,
+    }),
+    getPersonCredits: builder.query<PersonCreditResults, number>({
+      query: (id) =>
+        `person/${id}/movie_credits?api_key=${API_KEY}&language=en-US`,
+    }),
+    getPopularStreaming: builder.query<SearchResults, number>({
+      query: (id) =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=${id}`,
+    }),
+    getPopularHulu: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=15`,
+    }),
+    getPopularMax: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=1899`,
+    }),
+    getPopularPrime: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=9`,
+    }),
+    getPopularDisney: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=337`,
+    }),
+    getPopularPeacock: builder.query<SearchResults, null>({
+      query: () =>
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=387`,
     }),
   }),
 });
@@ -100,5 +135,7 @@ export const {
   useGetTopMoviesYearQuery,
   useGetSimilarMoviesQuery,
   useGetMovieCreditsQuery,
-  useGetExternalIdsQuery,
+  useGetMovieKeywordsQuery,
+  useGetPersonCreditsQuery,
+  useGetPopularStreamingQuery,
 } = apiSlice;
