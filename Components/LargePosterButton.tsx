@@ -9,8 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { FC } from "react";
-import { PosterButtonProps } from "./PosterButton";
 import { Colors, getRatingColor } from "../constants";
+import { PosterButtonProps } from "./PosterButton";
 
 const BASE_WIDTH = Dimensions.get("window").width * 0.8;
 const LargePosterButton: FC<

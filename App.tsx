@@ -1,23 +1,16 @@
 import React from "react";
-import Home from "./Components/Home";
+import Tabs from "./Components/Tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-
-export type RootStackParamList = {
-  Home: undefined;
-  Flow: undefined;
-  Recs: { recs: Movie[] };
-  Movie: { id: number };
-  Person: { person: Person };
-};
-const Stack = createStackNavigator<RootStackParamList>();
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import RecsScreen from "./Components/MainFlow/RecsScreen";
-import { Movie, Person } from "./constants";
-import MovieScreen from "./Components/MovieScreen";
-import MainFlow from "./Components/MainFlow/MainFlow";
-import PersonScreen from "./Components/PersonScreen";
+import RecsScreen from "./screens/RecsScreen";
+import MovieScreen from "./screens/MovieScreen";
+import MainFlow from "./screens/FlowScreen/FlowScreen";
+import PersonScreen from "./screens/PersonScreen";
+import { RootStackParamList } from "./types";
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
@@ -27,7 +20,7 @@ export default function App() {
           <Stack.Screen
             options={{ headerShown: false }}
             name="Home"
-            component={Home}
+            component={Tabs}
           />
           <Stack.Screen
             options={{ headerShown: false, gestureEnabled: false }}

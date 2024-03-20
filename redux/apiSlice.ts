@@ -1,12 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  CastMember,
-  CrewMember,
-  FullMovie,
-  Keyword,
-  Movie,
-  Service,
-} from "../constants";
+import { CastMember, CrewMember, FullMovie, Keyword, Movie } from "../types";
 
 export interface SearchResults {
   results: Movie[];
