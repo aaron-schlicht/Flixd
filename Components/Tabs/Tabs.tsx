@@ -1,4 +1,4 @@
-import { View, StatusBar, Text, TouchableHighlight } from "react-native";
+import { View, StatusBar, Text } from "react-native";
 import Discover from "../../screens/DiscoverScreen";
 import { SafeAreaView } from "react-native";
 import Lucky from "../../screens/RandomScreen/RandomScreen";
@@ -6,16 +6,27 @@ import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { updateSearchResults } from "../../redux/movieSlice";
+import { setServices, updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../../constants";
 import FlowScreen from "../../screens/FlowScreen";
 import { styles } from "./Home.styled";
+import { useEffect } from "react";
+import { WatchProvider } from "../../types";
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
   const dispatch = useDispatch();
+
+  /*useEffect(() => {
+    const storedServices = "";
+    if (storedServices) {
+      const services: WatchProvider[] = JSON.parse(storedServices);
+      dispatch(setServices(services));
+    }
+  });*/
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />

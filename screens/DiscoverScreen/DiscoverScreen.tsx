@@ -8,6 +8,7 @@ import MovieList from "./MovieList";
 import { Colors } from "../../constants";
 import { useEffect, useState } from "react";
 import Results from "../FlowScreen/Results";
+import ServicesSelect from "./ServicesSelect";
 
 const DiscoverScreen = () => {
   return (
@@ -21,6 +22,7 @@ const DiscoverScreen = () => {
     >
       <SafeAreaView />
       <SearchBar />
+      <ServicesSelect />
       <DiscoverView />
     </View>
   );

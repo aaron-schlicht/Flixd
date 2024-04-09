@@ -34,7 +34,8 @@
     "react-native-screens": "^3.20.0",
     "react-native-svg": "14.1.0",
     "react-native-tab-view": "^3.5.2",
-    "react-redux": "^9.0.1"
+    "react-redux": "^9.0.1",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
