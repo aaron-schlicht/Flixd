@@ -14,6 +14,28 @@ import { addKeyword, updateKeywords } from "../../redux/flowSlice";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { Keyword } from "../../types";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+
+const suggestions = [
+  "Small Town",
+  "Independent Film",
+  "Friendship",
+  "Based on Play or Musical",
+  "Politics",
+  "Remake",
+  "Based on Novel or Book",
+  "New York City",
+  "Los Angeles",
+  "Origin Story",
+  "Samurai",
+  "Viking",
+  "World War II",
+  "Paris",
+];
 
 const useDebounce = (value: string) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -36,6 +58,10 @@ const KeywordSearch = () => {
   const { data } = useGetKeywordSearchResultsQuery(debouncedValue);
   const dispatch = useDispatch();
   const { keywords } = useSelector((state: any) => state.flow);
+  const [suggestion, setSuggestion] = useState(
+    suggestions[Math.floor(Math.random() * suggestions.length)]
+  );
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSelect = (selectedValue: Keyword) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -43,6 +69,31 @@ const KeywordSearch = () => {
     dispatch(updateKeywords(selectedValue));
     dispatch(addKeyword(selectedValue));
   };
+
+  useEffect(() => {
+    const randomInterval = setInterval(() => {
+      setIsVisible(true);
+      setSuggestion(
+        suggestions[Math.floor(Math.random() * suggestions.length)]
+      );
+      const timeout = setTimeout(() => {
+        setIsVisible(false);
+      }, 4000);
+      return () => clearTimeout(timeout);
+    }, 6000);
+    return () => clearInterval(randomInterval);
+  }, [suggestion]);
+
+  const opacityStyle = useAnimatedStyle(() => {
+    const opacity = isVisible
+      ? withTiming(0.5, {
+          duration: 1000,
+        })
+      : withTiming(0, { duration: 1000 });
+    return {
+      opacity,
+    };
+  });
 
   return (
     <View
@@ -58,7 +109,7 @@ const KeywordSearch = () => {
             paddingLeft: 20,
             backgroundColor: Colors.secondary,
             borderRadius: 15,
-            height: 50,
+            height: 45,
             flexDirection: "row",
             alignItems: "center",
           }}
@@ -66,7 +117,7 @@ const KeywordSearch = () => {
           <TextInput
             style={{
               fontSize: 16,
-              height: 50,
+              height: 45,
               color: "white",
               flex: 1,
             }}
@@ -94,16 +145,30 @@ const KeywordSearch = () => {
               backgroundColor: Colors.secondary,
               padding: 10,
               paddingLeft: 20,
-              height: 50,
+              height: 45,
               borderRadius: 15,
               justifyContent: "center",
             }}
             underlayColor={Colors.secondary}
             onPress={() => setIsFocused(true)}
           >
-            <Text style={{ color: "white", fontSize: 16, opacity: 0.5 }}>
-              Search for keywords...
-            </Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 12, opacity: 0.5 }}>
+                Search keywords... try
+              </Text>
+              <Animated.Text
+                style={[opacityStyle, { color: "white", fontSize: 13 }]}
+              >
+                "{suggestion}"
+              </Animated.Text>
+            </View>
           </TouchableHighlight>
         </View>
       )}

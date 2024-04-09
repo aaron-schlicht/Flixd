@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import { Movie, RootStackParamList } from "../../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import PosterButton from "../../Components/PosterButton";
+import PosterButton from "../../components/PosterButton";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Movie">;
 

@@ -3,7 +3,7 @@ import { View, Dimensions, Animated } from "react-native";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import LargePosterButton from "../../Components/LargePosterButton";
+import LargePosterButton from "../../components/LargePosterButton";
 import { RootStackParamList, Movie } from "../../types";
 
 const ITEM_SIZE = Dimensions.get("window").width * 0.8;

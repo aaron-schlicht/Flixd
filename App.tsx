@@ -1,5 +1,5 @@
 import React from "react";
-import Tabs from "./Components/Tabs";
+import Tabs from "./components/Tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";

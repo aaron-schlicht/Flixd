@@ -9,34 +9,15 @@ import * as Haptics from "expo-haptics";
 import { updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../../constants";
-import RecsIcon from "./RecsIcon";
+import FlowScreen from "../../screens/FlowScreen";
 import { styles } from "./Home.styled";
 
 const Tab = createBottomTabNavigator();
-
-const CustomTab = ({ children, onPress }: { children: any; onPress?: any }) => (
-  <TouchableHighlight
-    style={{
-      top: -25,
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 360,
-      backgroundColor: "white",
-      width: 75,
-      height: 75,
-    }}
-    onPress={onPress}
-    underlayColor={Colors.primary}
-  >
-    {children}
-  </TouchableHighlight>
-);
 
 export default function Tabs() {
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
-      <SafeAreaView />
       <StatusBar barStyle="light-content" />
       <Tab.Navigator
         screenOptions={{
@@ -93,22 +74,35 @@ export default function Tabs() {
         />
         <Tab.Screen
           name="Recs"
-          component={View}
+          component={FlowScreen}
           options={{
-            tabBarIcon: () => (
-              <View style={{ alignItems: "center", gap: 1 }}>
-                <RecsIcon width={40} height={40} viewBox="0 0 75 75" />
+            tabBarIcon: ({ focused }) => (
+              <View
+                style={{
+                  alignItems: "center",
+                  gap: 2,
+                  paddingTop: 2,
+                  width: 70,
+                }}
+              >
+                <Ionicons
+                  name={focused ? "filter-circle" : "filter-circle-outline"}
+                  color={focused ? "white" : Colors.primary}
+                  size={40}
+                />
+                <Text
+                  style={{
+                    color: focused ? "white" : Colors.primary,
+                    textAlign: "center",
+                    fontSize: 12,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Filter
+                </Text>
               </View>
             ),
-            tabBarButton: (props) => <CustomTab {...props} />,
           }}
-          listeners={({ navigation }) => ({
-            tabPress: (e) => {
-              e.preventDefault();
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              navigation.navigate("Flow");
-            },
-          })}
         />
         <Tab.Screen
           name="Random"

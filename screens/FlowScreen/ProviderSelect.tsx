@@ -17,10 +17,10 @@ export default function ProviderSelect() {
   return (
     <FlatList
       data={Providers}
-      numColumns={3}
+      numColumns={5}
       contentContainerStyle={{
         alignItems: "center",
-        paddingVertical: 40,
+        paddingVertical: 30,
         gap: 10,
       }}
       showsVerticalScrollIndicator={false}
@@ -44,8 +44,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
     <View>
       <View
         style={{
-          width: Dimensions.get("window").width * 0.3,
-          height: Dimensions.get("window").width * 0.25,
+          width: Dimensions.get("window").width * 0.2,
+          height: Dimensions.get("window").width * 0.2,
           alignItems: "center",
         }}
       >
@@ -57,8 +57,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
             justifyContent: "center",
             borderWidth: 1,
             borderColor: selected ? "white" : "transparent",
-            width: Dimensions.get("window").width * 0.2 + 10,
-            height: Dimensions.get("window").width * 0.2 + 10,
+            width: Dimensions.get("window").width * 0.14 + 10,
+            height: Dimensions.get("window").width * 0.14 + 10,
           }}
           underlayColor="transparent"
           onPress={() => {
@@ -69,8 +69,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
           <Image
             source={{ uri: imageBasePath + provider.logo_url }}
             style={{
-              width: Dimensions.get("window").width * 0.2,
-              height: Dimensions.get("window").width * 0.2,
+              width: Dimensions.get("window").width * 0.14,
+              height: Dimensions.get("window").width * 0.14,
               borderRadius: 10,
               opacity: selected ? 1 : 0.8,
             }}
@@ -78,8 +78,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
         </TouchableHighlight>
       </View>
       {selected ? (
-        <View style={{ position: "absolute", top: -15, right: 5 }}>
-          <Ionicons name="checkmark-circle" color="white" size={25} />
+        <View style={{ position: "absolute", top: -11, right: 1 }}>
+          <Ionicons name="checkmark-circle" color="white" size={20} />
         </View>
       ) : null}
     </View>
