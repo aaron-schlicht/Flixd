@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, SafeAreaView } from "react-native";
 import useGetDiscoverMovies from "../../hooks/useGetDiscoverMovies";
 import SearchBar from "./SearchBar";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import SearchResults from "./SearchResults";
 import MovieList from "./MovieList";
 import { Colors } from "../../constants";
 import { useEffect, useState } from "react";
+import Results from "../FlowScreen/Results";
 
 const DiscoverScreen = () => {
   return (
@@ -18,6 +19,7 @@ const DiscoverScreen = () => {
         paddingVertical: 10,
       }}
     >
+      <SafeAreaView />
       <SearchBar />
       <DiscoverView />
     </View>
@@ -41,7 +43,9 @@ const DiscoverView = () => {
   }, [isRefreshing]);
 
   if (searchResults.length) {
-    return <SearchResults searchResults={searchResults} />;
+    return (
+      <Results movies={searchResults.filter((value) => value.poster_path)} />
+    );
   } else {
     return (
       <FlatList

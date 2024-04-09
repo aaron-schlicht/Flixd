@@ -3,7 +3,7 @@ import {
   createSelector,
   createSlice,
 } from "@reduxjs/toolkit";
-import { Genre, Genres, Keyword, KeywordMap } from "../constants";
+import { Keyword, Genre } from "../types";
 
 interface Filter {
   [key: string]: {

@@ -127,10 +127,6 @@ export const Genres: { [id: string]: Genre } = {
     id: 18,
     name: "Drama",
   },
-  10751: {
-    id: 10751,
-    name: "Family",
-  },
   14: {
     id: 14,
     name: "Fantasy",
@@ -142,10 +138,6 @@ export const Genres: { [id: string]: Genre } = {
   27: {
     id: 27,
     name: "Horror",
-  },
-  10402: {
-    id: 10402,
-    name: "Music",
   },
   9648: {
     id: 9648,
@@ -227,10 +219,6 @@ export const KeywordMap: { [genre: string]: Keyword[] } = {
     {
       id: 3713,
       name: "chase",
-    },
-    {
-      id: 10292,
-      name: "gore",
     },
     {
       id: 1701,
@@ -551,10 +539,6 @@ export const KeywordMap: { [genre: string]: Keyword[] } = {
       name: "musical",
     },
     {
-      id: 6029,
-      name: "concert",
-    },
-    {
       id: 4048,
       name: "musician",
     },
@@ -748,10 +732,6 @@ export const Keywords = [
   {
     id: 3713,
     name: "chase",
-  },
-  {
-    id: 10292,
-    name: "gore",
   },
   {
     id: 470,
@@ -989,10 +969,6 @@ export const Keywords = [
   { id: 156174, name: "occult" },
   { id: 12377, name: "zombie" },
   { id: 6158, name: "cult" },
-  {
-    id: 6029,
-    name: "concert",
-  },
   {
     id: 4048,
     name: "musician",

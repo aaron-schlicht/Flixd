@@ -48,72 +48,20 @@ const GenreStep = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ padding: 20, paddingBottom: 0 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            alignItems: "center",
-            width: Dimensions.get("window").width * 0.9,
-          }}
-        >
-          <RecsIcon width={30} height={30} viewBox="0 0 75 75" />
-          <Text
-            style={{ color: "white", fontSize: 24, fontWeight: "bold" }}
-            numberOfLines={1}
-            adjustsFontSizeToFit
-          >
-            Let's find a movie to watch
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 5,
-            alignItems: "center",
-            paddingTop: 20,
-            width: Dimensions.get("window").width * 0.9,
-          }}
-        >
-          <Ionicons name="happy" color={Colors.primary} size={30} />
-          <Text
-            style={{
-              color: Colors.primary,
-              fontSize: 20,
-              fontWeight: "600",
-            }}
-          >
-            Select up to 3 genres
-          </Text>
-        </View>
-        <Text
-          style={{
-            height: 30,
-            marginTop: 5,
-            color: "white",
-            fontSize: 24,
-            fontWeight: "300",
-          }}
-          numberOfLines={1}
-          adjustsFontSizeToFit
-        >
-          {genreText()}
-        </Text>
-      </View>
       <FlatList
         data={Object.entries(Genres)}
-        numColumns={3}
+        numColumns={4}
         horizontal={false}
         contentContainerStyle={{
           paddingTop: 5,
-          paddingBottom: 200,
-          paddingHorizontal: 5,
+          paddingBottom: 50,
+          paddingHorizontal: 10,
         }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           const genre = item[1];
           return (
-            <View style={{ width: "33%" }} key={`genre-${genre.id}`}>
+            <View style={{ width: "25%" }} key={`genre-${genre.id}`}>
               <GenreButton
                 genre={genre}
                 handleSelect={handleGenreSelect}
@@ -127,48 +75,6 @@ const GenreStep = () => {
           );
         }}
       />
-
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          alignSelf: "center",
-          width: Dimensions.get("window").width,
-        }}
-      >
-        <LinearGradient
-          style={{
-            width: "100%",
-            height: 120,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 10,
-            paddingBottom: 30,
-          }}
-          colors={["transparent", "rgba(21, 24, 45, 0.9)"]}
-        >
-          <TouchableHighlight
-            style={{
-              backgroundColor: "white",
-              width: 150,
-              borderRadius: 30,
-              padding: 10,
-            }}
-            underlayColor="rgba(255,255,255,0.8)"
-            onPress={handleNext}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "500",
-                fontSize: 25,
-              }}
-            >
-              {!!!genres.length ? "Skip" : "Next"}
-            </Text>
-          </TouchableHighlight>
-        </LinearGradient>
-      </View>
     </View>
   );
 };
@@ -193,14 +99,13 @@ const GenreButton = ({
         gap: 5,
         margin: 5,
         justifyContent: "center",
-        borderRadius: 15,
+        borderRadius: 10,
         padding: 5,
-        height: 75,
+        height: 55,
       }}
       disabled={disabled}
       onPress={() => handleSelect(genre.id)}
     >
-      <Text style={{ fontSize: 20 }}>{GenreIcons[genre.id]}</Text>
       <Text
         style={{
           color: isActive ? Colors.background : "#FFF",

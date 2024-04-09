@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef } from "react";
-import PosterButton from "../../Components/PosterButton";
+import PosterButton from "../../components/PosterButton";
 import { RootStackParamList, Movie } from "../../types";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;

@@ -1,6 +1,7 @@
 import { FlatList, View, Text, ScrollView } from "react-native";
 import { Image } from "expo-image";
-import { Colors, Service, imageBasePath } from "../../constants";
+import { Colors, imageBasePath } from "../../constants";
+import { Service } from "../../types";
 
 const StreamingServices = ({
   streamingServices,
