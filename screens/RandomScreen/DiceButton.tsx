@@ -48,7 +48,7 @@ const DiceButton = ({ getRandomMovies }: { getRandomMovies: () => void }) => {
         animatedStyle,
         {
           position: "absolute",
-          bottom: Dimensions.get("window").height * 0.16,
+          bottom: Dimensions.get("window").height * 0.14,
           width: Dimensions.get("window").width,
         },
       ]}

@@ -34,10 +34,16 @@ const useGetRecommendations = () => {
         )
         .join("")}`;
     }
+    return queryString;
+  };
 
+  const getRecommendations = async () => {
+    setLoading(true);
+    const queryString = getQueryString();
+    let providers = "";
     if (!!selectedServices.length) {
-      queryString += `&watch_region=US`;
-      queryString += `&with_watch_providers=${selectedServices
+      providers += `&watch_region=US`;
+      providers += `&with_watch_providers=${selectedServices
         .map((service, index) =>
           index === selectedServices.length - 1
             ? `${service.provider_id}`
@@ -45,21 +51,21 @@ const useGetRecommendations = () => {
         )
         .join("")}`;
     }
-    return queryString;
-  };
-
-  const getRecommendations = async () => {
-    setLoading(true);
-    const queryString = getQueryString();
     const query =
       queryString.length === 0
-        ? BASE_URL + EMPTY_PARAMS + `&page=${Math.ceil(Math.random() * 50)}`
-        : BASE_URL + BASE_PARAMS + queryString;
+        ? BASE_URL + EMPTY_PARAMS + providers
+        : BASE_URL + BASE_PARAMS + queryString + providers;
     try {
       const response = await axios.get(query);
-      setLoading(false);
       if (response && response.data) {
-        return response.data.results as Movie[];
+        const pages = response.data.total_pages || 1;
+        const res = await axios.get(
+          query + `&page=${Math.ceil(Math.random() * pages)}`
+        );
+        setLoading(false);
+        if (res && res.data) {
+          return res.data.results as Movie[];
+        }
       }
     } catch (error) {
       console.log(error);
@@ -71,30 +77,3 @@ const useGetRecommendations = () => {
 };
 
 export default useGetRecommendations;
-
-/*if (!!Object.keys(filters).length) {
-      if (!!filters["year"]) {
-        const { min, max } = filters["year"];
-        queryString += `&release_date.gte=${new Date(
-          min + 1890,
-          0,
-          1
-        ).toISOString()}`;
-        queryString += `&release_date.lte=${new Date(
-          max + 1890,
-          11,
-          31
-        ).toISOString()}`;
-        console.log(queryString);
-      }
-      if (!!filters["length"]) {
-        const { min, max } = filters["length"];
-        queryString += `&with_runtime.gte=${min}`;
-        queryString += `&with_runtime.lte=${max}`;
-      }
-      if (!!filters["rating"]) {
-        const { min, max } = filters["rating"];
-        queryString += `&vote_average.gte=${min / 10}`;
-        queryString += `&vote_average.lte=${max / 10}`;
-      }
-    }*/

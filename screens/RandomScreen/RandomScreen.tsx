@@ -17,7 +17,10 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const { width, height } = Dimensions.get("window");
 
-const ITEM_WIDTH = Dimensions.get("window").width * 0.7;
+const SMALL_SCREEN = width < 380;
+const ITEM_WIDTH = SMALL_SCREEN
+  ? Dimensions.get("window").width * 0.6
+  : Dimensions.get("window").width * 0.7;
 const ITEM_HEIGHT = ITEM_WIDTH * 1.5;
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -30,7 +33,6 @@ const RandomScreen = () => {
       navigation.navigate("Movie", { id: randomMovie?.id });
     }
   };
-
   return (
     <View
       style={{
@@ -50,9 +52,12 @@ const RandomScreen = () => {
               paddingVertical: 20,
               alignItems: "center",
               flex: 1,
-              paddingTop: "25%",
+              justifyContent: "flex-start",
             }}
           >
+            <View
+              style={{ height: SMALL_SCREEN ? height * 0.05 : height * 0.12 }}
+            />
             <View
               style={{
                 position: "absolute",
@@ -97,6 +102,7 @@ const RandomScreen = () => {
               vote_average={randomMovie.vote_average}
               dimensions={{ width: ITEM_WIDTH, height: ITEM_HEIGHT }}
             />
+            <View style={{ height: "30%" }} />
           </View>
         )}
       </View>

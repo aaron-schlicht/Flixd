@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Movie, FullMovie, WatchProvider } from "../constants";
+import { Movie, FullMovie, WatchProvider } from "../types";
 
 interface InitialType {
   selectedMovie: Movie | null;
@@ -52,6 +52,9 @@ export const movieSlice = createSlice({
     onNewSearch: (state) => {
       return (state = initialState);
     },
+    setServices: (state, action) => {
+      state.selectedServices = [...action.payload];
+    },
   },
 });
 
@@ -63,6 +66,7 @@ export const {
   updateSearchResults,
   removeSelectedMovie,
   onNewSearch,
+  setServices,
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

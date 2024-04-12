@@ -86,29 +86,9 @@ export const apiSlice = createApi({
       query: (id) =>
         `person/${id}/movie_credits?api_key=${API_KEY}&language=en-US`,
     }),
-    getPopularStreaming: builder.query<SearchResults, number>({
+    getPopularStreaming: builder.query<SearchResults, string>({
       query: (id) =>
         `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=${id}`,
-    }),
-    getPopularHulu: builder.query<SearchResults, null>({
-      query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=15`,
-    }),
-    getPopularMax: builder.query<SearchResults, null>({
-      query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=1899`,
-    }),
-    getPopularPrime: builder.query<SearchResults, null>({
-      query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=9`,
-    }),
-    getPopularDisney: builder.query<SearchResults, null>({
-      query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=337`,
-    }),
-    getPopularPeacock: builder.query<SearchResults, null>({
-      query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=387`,
     }),
   }),
 });
