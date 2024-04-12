@@ -22,7 +22,6 @@ const DiscoverScreen = () => {
     >
       <SafeAreaView />
       <SearchBar />
-      <ServicesSelect />
       <DiscoverView />
     </View>
   );
@@ -50,26 +49,30 @@ const DiscoverView = () => {
     );
   } else {
     return (
-      <FlatList
-        contentContainerStyle={{
-          gap: 15,
-          paddingBottom: 200,
-        }}
-        data={data}
-        refreshing={isRefreshing}
-        onRefresh={() => setIsRefreshing(true)}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={({ name }) => name}
-        renderItem={({ item }) => {
-          return (
-            <MovieList
-              isRefreshing={isRefreshing}
-              name={item.name}
-              data={item.movies}
-            />
-          );
-        }}
-      />
+      <View>
+        <ServicesSelect />
+        <FlatList
+          contentContainerStyle={{
+            gap: 15,
+            paddingTop: 70,
+            paddingBottom: 250,
+          }}
+          data={data}
+          refreshing={isRefreshing}
+          onRefresh={() => setIsRefreshing(true)}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={({ name }) => name}
+          renderItem={({ item }) => {
+            return (
+              <MovieList
+                isRefreshing={isRefreshing}
+                name={item.name}
+                data={item.movies}
+              />
+            );
+          }}
+        />
+      </View>
     );
   }
 };

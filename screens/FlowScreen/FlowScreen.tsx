@@ -207,12 +207,12 @@ const MainFlow = () => {
         </View>
 
         <Animated.View style={animatedStyle}>
-          <DrawerOptions offset={offset} />
+          <DrawerOptions />
         </Animated.View>
         <Animated.View
           style={{
             flex: 1,
-            backgroundColor: Colors.secondary,
+            backgroundColor: Colors.background,
           }}
         >
           <GestureDetector gesture={pan}>
@@ -253,35 +253,12 @@ const MainFlow = () => {
   );
 };
 
-const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
-
-const DrawerOptions = ({ offset }: { offset: SharedValue<number> }) => {
-  const textOpacity = useAnimatedStyle(() => {
-    const opacity = interpolate(offset.value, [60, 90], [0, 1]);
-    return {
-      opacity,
-    };
-  });
-
+const DrawerOptions = () => {
   return (
     <Tab.Navigator
       sceneContainerStyle={{
         backgroundColor: Colors.background,
       }}
-      /*screenListeners={({ navigation, route }) => ({
-        tabPress: (e) => {
-          if (offset.value === OFFSET) {
-            offset.value = withTiming(350);
-            e.preventDefault();
-            setTimeout(() => {
-              navigation.navigate(route.name);
-            }, 400);
-          } else {
-            e.preventDefault();
-            navigation.navigate(route.name);
-          }
-        },
-      })}*/
       screenOptions={{
         tabBarStyle: {
           backgroundColor: Colors.secondary,

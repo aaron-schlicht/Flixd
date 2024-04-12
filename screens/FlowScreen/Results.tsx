@@ -19,6 +19,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import PosterButton from "./PosterButton";
 
+const SMALL_SCREEN = width < 380;
 const ITEM_SIZE = width * 0.7;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = width * 1.5;
@@ -156,7 +157,7 @@ const Results = ({ movies }: { movies: Movie[] }) => {
         bounces={false}
         decelerationRate={0}
         contentContainerStyle={{
-          paddingTop: "15%",
+          paddingTop: SMALL_SCREEN ? height * 0.05 : height * 0.1,
         }}
         snapToInterval={ITEM_SIZE}
         snapToAlignment="start"
@@ -210,6 +211,7 @@ const Results = ({ movies }: { movies: Movie[] }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.background,
   },
   paragraph: {
     margin: 24,

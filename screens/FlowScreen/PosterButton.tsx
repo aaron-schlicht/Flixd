@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { Image } from "expo-image";
 import { FC, useEffect, useState } from "react";
@@ -75,7 +76,11 @@ const PosterButton: FC<PosterButtonProps> = ({
         }}
       >
         <Text
-          style={{ color: "white", fontSize: 20, fontWeight: "600" }}
+          style={{
+            color: "white",
+            fontSize: 20,
+            fontWeight: "600",
+          }}
           numberOfLines={2}
           adjustsFontSizeToFit
           minimumFontScale={0.7}
@@ -120,7 +125,11 @@ const PosterButton: FC<PosterButtonProps> = ({
             return (
               <View key={`service-${service.provider_id}`}>
                 <Image
-                  style={{ width: 40, height: 40, borderRadius: 10 }}
+                  style={{
+                    width: Dimensions.get("window").width * 0.1,
+                    height: Dimensions.get("window").width * 0.1,
+                    borderRadius: 10,
+                  }}
                   source={{ uri: imageBasePath + service.logo_path }}
                   transition={200}
                 />
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 20,
     margin: 0,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   gradient: {
     zIndex: 2,

@@ -15,13 +15,19 @@ import { WatchProvider } from "../../types";
 
 const ServicesSelect = () => {
   return (
-    <View>
+    <View
+      style={{
+        zIndex: 100,
+        position: "absolute",
+        backgroundColor: "rgba(21, 24, 45, 0.9)",
+      }}
+    >
       <FlatList
         data={Providers}
         horizontal
         contentContainerStyle={{
           alignItems: "center",
-          paddingTop: 10,
+          paddingVertical: 10,
           gap: 5,
         }}
         showsHorizontalScrollIndicator={false}

@@ -6,9 +6,9 @@ import {
   useGetUpcomingMoviesQuery,
 } from "../redux/apiSlice";
 import { RootState } from "../redux/store";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { Movie } from "../types";
+import { Movie, WatchProvider } from "../types";
 
 const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
 const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`;
@@ -31,44 +31,34 @@ const useGetDiscoverMovies = () => {
     .join("");
   const { data: popularStreaming } = useGetPopularStreamingQuery(serviceString);
   const [streamingRecs, setStreamingRecs] = useState<
-    { name: string; movies: Movie[] }[]
+    { name: string; id: number; movies: Movie[] }[]
   >([]);
 
-  const getStreamingRecs = async () => {
-    if (streamingServices.length === 0) {
-      setStreamingRecs([]);
+  const usedServices = streamingRecs.filter(({ id }) =>
+    Boolean(streamingServices.find((service) => service.provider_id === id))
+  );
+  let urls = [];
+  for (const service of streamingServices) {
+    if (!usedServices.find(({ id }) => id === service.provider_id)) {
+      const query =
+        BASE_URL + BASE_PARAMS + `&with_watch_providers=${service.provider_id}`;
+      urls.push({ service, query });
     }
-    for (const service of streamingServices) {
-      try {
-        const query =
-          BASE_URL +
-          BASE_PARAMS +
-          `&with_watch_providers=${service.provider_id}`;
-        const response = await axios.get(query);
-        if (response && response.data) {
-          const movies = response.data.results as Movie[];
-
-          if (
-            movies &&
-            movies.length > 0 &&
-            !streamingRecs.find(
-              (value) => value.name === `Recommended on ${service.name}`
-            )
-          ) {
-            setStreamingRecs([
-              ...streamingRecs,
-              { name: `Recommended on ${service.name}`, movies },
-            ]);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  }
+  const requests = urls.map(({ query }) => axios.get(query));
 
   useEffect(() => {
-    getStreamingRecs();
+    const getSetRecs = async () => {
+      const recs = await getStreamingRecs(urls, requests);
+      let combinedRecs = [...streamingRecs, ...recs];
+      combinedRecs = combinedRecs.filter(
+        ({ id }, index) =>
+          Boolean(streamingServices.find((rec) => rec.provider_id === id)) &&
+          combinedRecs.findIndex((rec) => rec.id === id) === index
+      );
+      setStreamingRecs([...combinedRecs]);
+    };
+    getSetRecs();
   }, [streamingServices]);
 
   return [
@@ -84,7 +74,6 @@ const useGetDiscoverMovies = () => {
           ? popularMovies.results
           : [],
     },
-    ...streamingRecs,
     {
       name: "Now Playing",
       movies: nowPlayingMovies ? nowPlayingMovies.results : [],
@@ -93,7 +82,37 @@ const useGetDiscoverMovies = () => {
       name: "Coming Soon",
       movies: upcomingMovies ? upcomingMovies.results : [],
     },
+    ...streamingRecs,
   ];
 };
 
 export default useGetDiscoverMovies;
+
+const getStreamingRecs = async (
+  urls: { service: WatchProvider; query: string }[],
+  requests: Promise<AxiosResponse<any, any>>[]
+) => {
+  let streamingRecs: { name: string; id: number; movies: Movie[] }[] = [];
+  try {
+    const responses = await axios.all(requests);
+    if (responses && responses.length) {
+      responses.forEach((response, index) => {
+        const movies = response.data.results as Movie[];
+        const thisName = `Recommended on ${urls[index].service.name}`;
+        if (movies && movies.length > 0) {
+          streamingRecs = [
+            ...streamingRecs,
+            {
+              name: thisName,
+              id: urls[index].service.provider_id,
+              movies,
+            },
+          ];
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return streamingRecs;
+};
