@@ -43,16 +43,7 @@ const DiceButton = ({ getRandomMovies }: { getRandomMovies: () => void }) => {
   };
 
   return (
-    <Animated.View
-      style={[
-        animatedStyle,
-        {
-          position: "absolute",
-          bottom: Dimensions.get("window").height * 0.14,
-          width: Dimensions.get("window").width,
-        },
-      ]}
-    >
+    <Animated.View style={[animatedStyle]}>
       <View
         style={{
           shadowColor: "black",

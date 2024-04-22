@@ -156,9 +156,6 @@ const Results = ({ movies }: { movies: Movie[] }) => {
         horizontal
         bounces={false}
         decelerationRate={0}
-        contentContainerStyle={{
-          paddingTop: SMALL_SCREEN ? height * 0.05 : height * 0.1,
-        }}
         snapToInterval={ITEM_SIZE}
         snapToAlignment="start"
         onScroll={Animated.event(
@@ -174,19 +171,21 @@ const Results = ({ movies }: { movies: Movie[] }) => {
             index * ITEM_SIZE,
             (index + 1) * ITEM_SIZE,
           ];
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [15, 0, 15],
-            extrapolate: "clamp",
-          });
           return (
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <View style={{ width: first ? EMPTY_ITEM_SIZE : 0 }} />
               <Animated.View
                 style={{
                   alignItems: "center",
                   width: ITEM_SIZE,
-                  transform: [{ translateY }],
+                  height: IMAGE_WIDTH * 1.5 + 120,
                 }}
               >
                 <PosterButton
@@ -204,6 +203,7 @@ const Results = ({ movies }: { movies: Movie[] }) => {
           );
         }}
       />
+      <View style={{ height: "11%" }} />
     </View>
   );
 };

@@ -17,11 +17,8 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const { width, height } = Dimensions.get("window");
 
-const SMALL_SCREEN = width < 380;
-const ITEM_WIDTH = SMALL_SCREEN
-  ? Dimensions.get("window").width * 0.6
-  : Dimensions.get("window").width * 0.7;
-const ITEM_HEIGHT = ITEM_WIDTH * 1.5;
+const ITEM_HEIGHT = height * 0.5;
+const ITEM_WIDTH = ITEM_HEIGHT * 0.7;
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const RandomScreen = () => {
@@ -52,12 +49,10 @@ const RandomScreen = () => {
               paddingVertical: 20,
               alignItems: "center",
               flex: 1,
-              justifyContent: "flex-start",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
-            <View
-              style={{ height: SMALL_SCREEN ? height * 0.05 : height * 0.12 }}
-            />
             <View
               style={{
                 position: "absolute",
@@ -92,21 +87,22 @@ const RandomScreen = () => {
                 ]}
               />
             </View>
-
-            <PosterButton
-              id={randomMovie.id}
-              posterPath={MEDIUM_POSTER_BASE_URL + randomMovie.poster_path}
-              onPress={() => handleMoviePress()}
-              title={randomMovie.title}
-              release_date={randomMovie.release_date}
-              vote_average={randomMovie.vote_average}
-              dimensions={{ width: ITEM_WIDTH, height: ITEM_HEIGHT }}
-            />
-            <View style={{ height: "30%" }} />
+            <View style={{ height: ITEM_HEIGHT + 80 }}>
+              <PosterButton
+                id={randomMovie.id}
+                posterPath={MEDIUM_POSTER_BASE_URL + randomMovie.poster_path}
+                onPress={() => handleMoviePress()}
+                title={randomMovie.title}
+                release_date={randomMovie.release_date}
+                vote_average={randomMovie.vote_average}
+                dimensions={{ width: ITEM_WIDTH, height: ITEM_HEIGHT }}
+              />
+            </View>
           </View>
         )}
       </View>
       <DiceButton getRandomMovies={getRandomMovies} />
+      <View style={{ height: "13%" }} />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { View, FlatList, SafeAreaView } from "react-native";
+import { View, FlatList, SafeAreaView, Dimensions } from "react-native";
 import useGetDiscoverMovies from "../../hooks/useGetDiscoverMovies";
 import SearchBar from "./SearchBar";
 import { useSelector } from "react-redux";
@@ -54,7 +54,7 @@ const DiscoverView = () => {
         <FlatList
           contentContainerStyle={{
             gap: 15,
-            paddingTop: 70,
+            paddingTop: 75,
             paddingBottom: 250,
           }}
           data={data}

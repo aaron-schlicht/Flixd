@@ -72,7 +72,6 @@ const PosterButton: FC<PosterButtonProps> = ({
           //marginTop: -IMAGE_WIDTH * 0.15,
           zIndex: 100,
           width: dimensions.width,
-          paddingHorizontal: 15,
         }}
       >
         <Text
@@ -126,8 +125,8 @@ const PosterButton: FC<PosterButtonProps> = ({
               <View key={`service-${service.provider_id}`}>
                 <Image
                   style={{
-                    width: Dimensions.get("window").width * 0.1,
-                    height: Dimensions.get("window").width * 0.1,
+                    width: 40,
+                    height: 40,
                     borderRadius: 10,
                   }}
                   source={{ uri: imageBasePath + service.logo_path }}

@@ -52,8 +52,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
     <View>
       <View
         style={{
-          width: Dimensions.get("window").width * 0.15,
-          height: Dimensions.get("window").width * 0.15,
+          width: 60,
+          height: 60,
           alignItems: "center",
         }}
       >
@@ -65,8 +65,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
             justifyContent: "center",
             borderWidth: 1,
             borderColor: selected ? "white" : "transparent",
-            width: Dimensions.get("window").width * 0.12 + 10,
-            height: Dimensions.get("window").width * 0.12 + 10,
+            width: 55,
+            height: 55,
           }}
           underlayColor="transparent"
           onPress={() => {
@@ -77,8 +77,8 @@ const ProviderButton = ({ provider }: { provider: WatchProvider }) => {
           <Image
             source={{ uri: imageBasePath + provider.logo_url }}
             style={{
-              width: Dimensions.get("window").width * 0.12,
-              height: Dimensions.get("window").width * 0.12,
+              width: 45,
+              height: 45,
               borderRadius: 10,
               opacity: selected ? 1 : 0.8,
             }}
