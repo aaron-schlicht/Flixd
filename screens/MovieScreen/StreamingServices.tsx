@@ -12,12 +12,18 @@ const StreamingServices = ({
   return (
     <View
       style={{
-        paddingHorizontal: 20,
         marginVertical: 5,
         paddingVertical: 10,
       }}
     >
-      <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+      <Text
+        style={{
+          color: "white",
+          fontSize: 20,
+          paddingHorizontal: 20,
+          fontWeight: "bold",
+        }}
+      >
         Where to stream
       </Text>
       <View
@@ -25,6 +31,7 @@ const StreamingServices = ({
           flexDirection: "row",
           alignItems: "center",
           gap: 5,
+          paddingHorizontal: 20,
         }}
       >
         <Text style={{ color: Colors.primary }}>Powered by</Text>
@@ -36,7 +43,11 @@ const StreamingServices = ({
       </View>
       <ScrollView
         horizontal
-        contentContainerStyle={{ gap: 10, paddingTop: 15 }}
+        contentContainerStyle={{
+          gap: 10,
+          paddingTop: 15,
+          paddingHorizontal: 20,
+        }}
         showsHorizontalScrollIndicator={false}
       >
         {streamingServices.map((service) => {

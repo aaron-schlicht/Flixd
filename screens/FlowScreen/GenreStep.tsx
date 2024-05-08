@@ -53,7 +53,7 @@ const GenreStep = () => {
         numColumns={4}
         horizontal={false}
         contentContainerStyle={{
-          paddingTop: 5,
+          paddingTop: 15,
           paddingBottom: 50,
           paddingHorizontal: 10,
         }}

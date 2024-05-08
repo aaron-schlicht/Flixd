@@ -12,18 +12,36 @@ const Description = ({
   genres: Genre[];
 }) => {
   return (
-    <View style={{ padding: 20, gap: 5 }}>
-      <Text style={{ color: Colors.primary, fontSize: 20, fontWeight: "bold" }}>
+    <View style={{ paddingVertical: 20, gap: 5 }}>
+      <Text
+        style={{
+          paddingHorizontal: 20,
+          color: Colors.primary,
+          fontSize: 20,
+          fontWeight: "bold",
+        }}
+      >
         {tagline}
       </Text>
-      <Text style={{ color: "white", lineHeight: 20, fontSize: 14 }}>
+      <Text
+        style={{
+          paddingHorizontal: 20,
+          color: "white",
+          lineHeight: 20,
+          fontSize: 14,
+        }}
+      >
         {overview}
       </Text>
       <FlatList
         data={genres}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 15, paddingTop: 10 }}
+        contentContainerStyle={{
+          gap: 15,
+          paddingHorizontal: 20,
+          paddingTop: 10,
+        }}
         renderItem={({ item }) => {
           return (
             <View

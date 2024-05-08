@@ -58,7 +58,7 @@ export const apiSlice = createApi({
     }),
     getPopularMoviesStreaming: builder.query<SearchResults, null>({
       query: () =>
-        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=8%7C9%7C337%7C1899%7C15%7C387%7C350%7C531%7C73%7C300`,
+        `/discover/movie?include_adult=false&api_key=${API_KEY}&include_video=false&language=en-US&page=1&with_original_language=en&sort_by=popularity.desc&vote_count.gte=40.0&watch_region=US&with_watch_providers=8%7C9%7C337%7C1899%7C15%7C386%7C350%7C531%7C73%7C300`,
     }),
     getNowPlayingMovies: builder.query<SearchResults, null>({
       query: () =>

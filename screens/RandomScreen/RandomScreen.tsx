@@ -102,7 +102,7 @@ const RandomScreen = () => {
         )}
       </View>
       <DiceButton getRandomMovies={getRandomMovies} />
-      <View style={{ height: "13%" }} />
+      <View style={{ height: "14%" }} />
     </View>
   );
 };

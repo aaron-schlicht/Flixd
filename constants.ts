@@ -45,7 +45,7 @@ export const Providers: WatchProvider[] = [
     logo_url: "/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg",
   },
   {
-    provider_id: 387,
+    provider_id: 386,
     name: "Peacock",
     logo_url: "/8VCV78prwd9QzZnEm0ReO6bERDa.jpg",
   },
