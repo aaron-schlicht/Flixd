@@ -15,13 +15,16 @@ const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}
 const BASE_PARAMS =
   "&include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_count.gte=300.0&vote_average.gte=7.0&with_original_language=en&without_genres=99,10402&with_runtime.gte=60&watch_region=US";
 
-const useGetDiscoverMovies = () => {
+const useGetDiscoverMovies = (isRefreshing: boolean) => {
   const streamingServices = useSelector(
     (state: RootState) => state.movies.selectedServices
   );
-  const { data: popularMovies } = useGetPopularMoviesQuery(null);
-  const { data: nowPlayingMovies } = useGetNowPlayingMoviesQuery(null);
-  const { data: upcomingMovies } = useGetUpcomingMoviesQuery(null);
+  const { data: popularMovies, refetch: popularMoviesRefetch } =
+    useGetPopularMoviesQuery(null);
+  const { data: nowPlayingMovies, refetch: nowPlayingMoviesRefetch } =
+    useGetNowPlayingMoviesQuery(null);
+  const { data: upcomingMovies, refetch: upcomingMoviesRefetch } =
+    useGetUpcomingMoviesQuery(null);
   const serviceString = streamingServices
     .map((service, index) =>
       index === streamingServices.length - 1
@@ -29,7 +32,8 @@ const useGetDiscoverMovies = () => {
         : `${service.provider_id}|`
     )
     .join("");
-  const { data: popularStreaming } = useGetPopularStreamingQuery(serviceString);
+  const { data: popularStreaming, refetch: popularStreamingRefetch } =
+    useGetPopularStreamingQuery(serviceString);
   const [streamingRecs, setStreamingRecs] = useState<
     { name: string; id: number; movies: Movie[] }[]
   >([]);
@@ -46,6 +50,15 @@ const useGetDiscoverMovies = () => {
     }
   }
   const requests = urls.map(({ query }) => axios.get(query));
+
+  useEffect(() => {
+    if (isRefreshing) {
+      popularMoviesRefetch();
+      nowPlayingMoviesRefetch();
+      upcomingMoviesRefetch();
+      popularStreamingRefetch();
+    }
+  }, [isRefreshing]);
 
   useEffect(() => {
     const getSetRecs = async () => {

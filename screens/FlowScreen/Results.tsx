@@ -1,25 +1,21 @@
 import * as React from "react";
 import {
-  StatusBar,
   Text,
   View,
   StyleSheet,
   FlatList,
   Dimensions,
   Animated,
-  TouchableOpacity,
 } from "react-native";
 const { width, height } = Dimensions.get("window");
 import { LinearGradient } from "expo-linear-gradient";
 import { Movie, RootStackParamList } from "../../types";
-import { Colors, getRatingColor, imageBasePath } from "../../constants";
+import { Colors, imageBasePath } from "../../constants";
 import { Image } from "expo-image";
-import { Ionicons } from "@expo/vector-icons";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import PosterButton from "./PosterButton";
 
-const SMALL_SCREEN = width < 380;
 const ITEM_SIZE = width * 0.7;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = width * 1.5;
@@ -59,14 +55,15 @@ const Backdrop = ({
               }}
             >
               <Image
-                source={{ uri: imageBasePath + item.poster_path }}
+                source={{
+                  uri: "https://image.tmdb.org/t/p/w500/" + item.poster_path,
+                }}
                 style={{
                   width,
                   height: BACKDROP_HEIGHT,
                   position: "absolute",
                 }}
-                transition={200}
-                blurRadius={15}
+                blurRadius={25}
               />
             </Animated.View>
           );

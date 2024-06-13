@@ -51,7 +51,7 @@ const ResultsList = ({ recs }: { recs: Movie[] }) => {
         <FlatList
           data={filteredResults.reverse()}
           keyExtractor={(item) => item.id + "-backdrop"}
-          removeClippedSubviews={false}
+          //removeClippedSubviews={false}
           contentContainerStyle={{
             width: SCREEN_WIDTH,
             height: BACKDROP_HEIGHT,
@@ -64,7 +64,7 @@ const ResultsList = ({ recs }: { recs: Movie[] }) => {
             });
             return (
               <Animated.View
-                removeClippedSubviews={false}
+                //removeClippedSubviews={false}
                 style={{
                   position: "absolute",
                   width: translateX,
@@ -73,7 +73,9 @@ const ResultsList = ({ recs }: { recs: Movie[] }) => {
                 }}
               >
                 <Image
-                  source={{ uri: imageBasePath + item.poster_path }}
+                  source={{
+                    uri: "https://image.tmdb.org/t/p/w342/" + item.poster_path,
+                  }}
                   style={{
                     width: SCREEN_WIDTH,
                     height: BACKDROP_HEIGHT,

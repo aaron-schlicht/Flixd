@@ -29,6 +29,8 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://api.themoviedb.org/3",
   }),
+  refetchOnFocus: true,
+  refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     getSearchResults: builder.query<SearchResults, string>({
       query: (str) =>

@@ -28,12 +28,11 @@ const DiscoverScreen = () => {
 };
 
 const DiscoverView = () => {
-  const data = useGetDiscoverMovies();
-
   const searchResults = useSelector(
     (state: RootState) => state.movies.searchResults
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const data = useGetDiscoverMovies(isRefreshing);
 
   useEffect(() => {
     if (isRefreshing) {
