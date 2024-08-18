@@ -1,19 +1,9 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableHighlight,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateGenre, updateStep } from "../../redux/flowSlice";
-import { Colors, GenreIcons, Genres } from "../../constants";
+import { updateGenre } from "../../redux/flowSlice";
+import { Colors, Genres } from "../../constants";
 import * as Haptics from "expo-haptics";
-import { LinearGradient } from "expo-linear-gradient";
 import { RootState } from "../../redux/store";
-import RecsIcon from "./RecsIcon";
-import { Ionicons } from "@expo/vector-icons";
 import { Genre } from "../../types";
 
 const GenreStep = () => {
@@ -23,27 +13,6 @@ const GenreStep = () => {
   const handleGenreSelect = (selection: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(updateGenre(selection));
-  };
-
-  const handleNext = () => {
-    dispatch(updateStep(1));
-  };
-
-  const genreText = () => {
-    switch (genres.length) {
-      case 1:
-        return Genres[genres[0]].name;
-      case 2:
-        return Genres[genres[0]].name + " & " + Genres[genres[1]].name;
-      case 3:
-        return (
-          Genres[genres[0]].name +
-          ", " +
-          Genres[genres[1]].name +
-          ", & " +
-          Genres[genres[2]].name
-        );
-    }
   };
 
   return (

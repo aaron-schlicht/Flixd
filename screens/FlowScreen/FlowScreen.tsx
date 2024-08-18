@@ -1,26 +1,14 @@
-import {
-  View,
-  SafeAreaView,
-  Dimensions,
-  Text,
-  ActivityIndicator,
-} from "react-native";
+import { View, SafeAreaView, Text, ActivityIndicator } from "react-native";
 import GenreStep from "./GenreStep";
 import { useDispatch, useSelector } from "react-redux";
 import KeywordStep from "./KeywordStep";
-import FilterStep from "./FilterStep";
 import { RootState } from "../../redux/store";
 import StreamingStep from "./StreamingStep";
-import { useEffect, useState } from "react";
 import { Gesture, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
 import { resetFlow } from "../../redux/flowSlice";
 import { Colors } from "../../constants";
-import { Movie, RootStackParamList, Service } from "../../types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import useGetRecommendations from "../../hooks/useGetRecommendations";
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -33,18 +21,11 @@ import Animated, {
 import Results from "./Results";
 import useFindMovies from "../../hooks/useFindMovies";
 
-const ITEM_SIZE = Dimensions.get("window").width * 0.8;
 const OFFSET = 0;
-type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 const Tab = createMaterialTopTabNavigator();
 const MainFlow = () => {
   const keywords = useSelector((state: RootState) => state.flow.keywords);
   const genres = useSelector((state: RootState) => state.flow.genres);
-  const services = useSelector(
-    (state: RootState) => state.movies.selectedServices
-  );
-  const [recs, setRecs] = useState<Movie[]>([]);
-  const [recsServices, setRecsServices] = useState<Service[][]>([]);
   const dispatch = useDispatch();
   const pressed = useSharedValue(0);
   const offset = useSharedValue(OFFSET);

@@ -1,19 +1,10 @@
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  FlatList,
-  TouchableHighlight,
-  Dimensions,
-} from "react-native";
-import { Colors, KeywordMap, Keywords } from "../../constants";
+import { TouchableOpacity, View, Text, FlatList } from "react-native";
+import { Colors, Keywords } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
-import { updateKeywords, updateStep } from "../../redux/flowSlice";
+import { updateKeywords } from "../../redux/flowSlice";
 import { RootState } from "../../redux/store";
 import * as Haptics from "expo-haptics";
 import KeywordSearch from "./KeywordSearch";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
 import { Keyword } from "../../types";
 
 const KeywordStep = () => {

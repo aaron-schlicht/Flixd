@@ -1,9 +1,8 @@
-import { View, FlatList, SafeAreaView, Dimensions } from "react-native";
+import { View, SafeAreaView, Dimensions } from "react-native";
 import useGetDiscoverMovies from "../../hooks/useGetDiscoverMovies";
 import SearchBar from "./SearchBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import SearchResults from "./SearchResults";
 import MovieList from "./MovieList";
 import { Colors } from "../../constants";
 import { useEffect, useState } from "react";

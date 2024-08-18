@@ -1,9 +1,5 @@
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-} from "@reduxjs/toolkit";
-import { Keyword, Genre } from "../types";
+import { createSlice } from "@reduxjs/toolkit";
+import { Keyword } from "../types";
 
 interface Filter {
   [key: string]: {
@@ -30,9 +26,6 @@ export const flowSlice = createSlice({
   name: "flow",
   initialState,
   reducers: {
-    updateStep: (state, action) => {
-      state.step = action.payload;
-    },
     updateGenre: (state, action) => {
       if (!!state.genres.find((id) => id === action.payload)) {
         state.genres = state.genres.filter((id) => id !== action.payload);
@@ -48,11 +41,6 @@ export const flowSlice = createSlice({
       } else {
         state.keywords.push(action.payload);
       }
-    },
-    addKeyword: (state, action) => {
-      /*let currList = state.activeList;
-      state.activeList = [action.payload, ...currList];
-      */
     },
     resetFlow: () => {
       return initialState;
@@ -73,13 +61,7 @@ export const flowSlice = createSlice({
   },
 });
 
-export const {
-  updateStep,
-  updateGenre,
-  updateKeywords,
-  addKeyword,
-  resetFlow,
-  updateFilters,
-} = flowSlice.actions;
+export const { updateGenre, updateKeywords, resetFlow, updateFilters } =
+  flowSlice.actions;
 
 export default flowSlice.reducer;

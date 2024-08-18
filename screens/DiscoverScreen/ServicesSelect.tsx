@@ -1,10 +1,4 @@
-import {
-  View,
-  Image,
-  TouchableHighlight,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { View, Image, TouchableHighlight, FlatList } from "react-native";
 import { Providers, imageBasePath } from "../../constants";
 import * as Haptics from "expo-haptics";
 import { useDispatch, useSelector } from "react-redux";

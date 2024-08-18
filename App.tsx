@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Tabs from "./components/Tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import store from "./redux/store";
-import RecsScreen from "./screens/RecsScreen";
 import MovieScreen from "./screens/MovieScreen";
 import MainFlow from "./screens/FlowScreen/FlowScreen";
 import PersonScreen from "./screens/PersonScreen";
@@ -30,12 +29,6 @@ export default function App() {
               options={{ headerShown: false, gestureEnabled: false }}
               name="Flow"
               component={MainFlow}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Recs"
-              initialParams={{ recs: [] }}
-              component={RecsScreen}
             />
             <Stack.Screen
               options={{ headerShown: false }}

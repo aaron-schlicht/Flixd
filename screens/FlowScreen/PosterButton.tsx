@@ -1,18 +1,9 @@
-import {
-  DimensionValue,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors, getRatingColor, imageBasePath } from "../../constants";
 import { Service } from "../../types";
-import { useGetProvidersQuery } from "../../redux/apiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
 export interface PosterButtonProps {

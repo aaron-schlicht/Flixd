@@ -1,4 +1,4 @@
-import { FlatList, View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { Colors, imageBasePath } from "../../constants";
 import { Service } from "../../types";

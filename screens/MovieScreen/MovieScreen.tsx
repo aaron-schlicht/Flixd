@@ -1,9 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
@@ -16,7 +15,6 @@ import People from "./People";
 import SimilarMovies from "./SimilarMovies";
 import { Colors, imageBasePath } from "../../constants";
 import Animated, {
-  Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -44,12 +42,7 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   });
 
   const headerOpacity = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [210, 215],
-      [0, 1]
-      //Extrapolate.CLAMP
-    );
+    const opacity = interpolate(scrollY.value, [210, 215], [0, 1]);
 
     return {
       opacity: opacity,

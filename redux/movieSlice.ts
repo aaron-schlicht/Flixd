@@ -48,14 +48,8 @@ export const movieSlice = createSlice({
     updateSearchResultServices: (state, action) => {
       return { ...state, searchResultServices: action.payload };
     },
-    updateFocus: (state, action) => {
-      return { ...state, focus: action.payload };
-    },
     removeSelectedMovie: (state) => {
       return { ...state, selectedMovie: null };
-    },
-    onNewSearch: (state) => {
-      return (state = initialState);
     },
     setServices: (state, action) => {
       state.selectedServices = [...action.payload];
@@ -67,11 +61,9 @@ export const {
   updateSelectedMovie,
   updateSimilarMovies,
   updateSelectedServices,
-  updateFocus,
   updateSearchResults,
   removeSelectedMovie,
   updateSearchResultServices,
-  onNewSearch,
   setServices,
 } = movieSlice.actions;
 
