@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Movie, FullMovie, WatchProvider } from "../types";
+import { Movie, FullMovie, WatchProvider, Service } from "../types";
 
 interface InitialType {
   selectedMovie: Movie | null;
   similarMovies: FullMovie[];
   selectedServices: WatchProvider[];
   searchResults: Movie[];
+  searchResultServices: Service[][];
   focus: "home" | "lucky" | "search";
 }
 
@@ -14,6 +15,7 @@ const initialState: InitialType = {
   similarMovies: [],
   selectedServices: [],
   searchResults: [],
+  searchResultServices: [[]],
   focus: "home",
 };
 
@@ -43,6 +45,9 @@ export const movieSlice = createSlice({
     updateSearchResults: (state, action) => {
       return { ...state, searchResults: action.payload };
     },
+    updateSearchResultServices: (state, action) => {
+      return { ...state, searchResultServices: action.payload };
+    },
     updateFocus: (state, action) => {
       return { ...state, focus: action.payload };
     },
@@ -65,6 +70,7 @@ export const {
   updateFocus,
   updateSearchResults,
   removeSelectedMovie,
+  updateSearchResultServices,
   onNewSearch,
   setServices,
 } = movieSlice.actions;

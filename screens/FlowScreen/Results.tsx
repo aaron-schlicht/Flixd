@@ -1,97 +1,26 @@
 import * as React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  Animated,
-} from "react-native";
+import { Text, View, StyleSheet, Dimensions, Animated } from "react-native";
 const { width, height } = Dimensions.get("window");
-import { LinearGradient } from "expo-linear-gradient";
-import { Movie, RootStackParamList } from "../../types";
+import { Movie, RootStackParamList, Service } from "../../types";
 import { Colors, imageBasePath } from "../../constants";
-import { Image } from "expo-image";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import PosterButton from "./PosterButton";
+import { FlashList } from "@shopify/flash-list";
 
 const ITEM_SIZE = width * 0.7;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
-const BACKDROP_HEIGHT = width * 1.5;
-const IMAGE_WIDTH = Dimensions.get("window").width * 0.55;
-
-const Backdrop = ({
-  movies,
-  scrollX,
-}: {
-  movies: Movie[];
-  scrollX: Animated.Value;
-}) => {
-  return (
-    <View
-      style={{
-        height: BACKDROP_HEIGHT,
-        width,
-        position: "absolute",
-      }}
-    >
-      <FlatList
-        data={movies}
-        keyExtractor={(item) => item.id + "-backdrop"}
-        contentContainerStyle={{ width, height: BACKDROP_HEIGHT }}
-        renderItem={({ item, index }) => {
-          const translateX = scrollX.interpolate({
-            inputRange: [(index - 1) * ITEM_SIZE, index * ITEM_SIZE],
-            outputRange: [0, width + 10],
-          });
-          return (
-            <Animated.View
-              style={{
-                position: "absolute",
-                width: translateX,
-                height,
-                overflow: "hidden",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://image.tmdb.org/t/p/w500/" + item.poster_path,
-                }}
-                style={{
-                  width,
-                  height: BACKDROP_HEIGHT,
-                  position: "absolute",
-                }}
-                blurRadius={25}
-              />
-            </Animated.View>
-          );
-        }}
-      />
-      <LinearGradient
-        style={[
-          styles.gradient,
-          {
-            width: width,
-            height: BACKDROP_HEIGHT,
-          },
-        ]}
-        colors={[
-          "rgba(21, 24, 45, 0)",
-          "rgba(21, 24, 45, 0.8)",
-          "rgba(21, 24, 45, 1)",
-        ]}
-      />
-    </View>
-  );
-};
-
+const IMAGE_WIDTH = Dimensions.get("window").width * 0.65;
 type homeScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
-const Results = ({ movies }: { movies: Movie[] }) => {
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-  const ref = React.useRef<FlatList>(null);
+const Results = ({
+  movies,
+  providers,
+}: {
+  movies: Movie[];
+  providers: Service[][];
+}) => {
+  const ref = React.useRef<FlashList<Movie>>(null);
   const navigation = useNavigation<homeScreenProp>();
 
   const resetPosition = () => {
@@ -144,62 +73,64 @@ const Results = ({ movies }: { movies: Movie[] }) => {
 
   return (
     <View style={styles.container}>
-      <Backdrop movies={movies} scrollX={scrollX} />
-      <Animated.FlatList
-        showsHorizontalScrollIndicator={false}
-        data={movies}
-        ref={ref}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        bounces={false}
-        decelerationRate={0}
-        snapToInterval={ITEM_SIZE}
-        snapToAlignment="start"
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}
-        renderItem={({ item, index }) => {
-          const first = index === 0;
-          const last = index === movies.length - 1;
-          const inputRange = [
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-            (index + 1) * ITEM_SIZE,
-          ];
-          return (
-            <View
-              style={{
-                flexDirection: "row",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <View style={{ width: first ? EMPTY_ITEM_SIZE : 0 }} />
-              <Animated.View
+      <View
+        style={{
+          minHeight: height * 0.8,
+          height: height * 0.8,
+        }}
+      >
+        <FlashList
+          showsHorizontalScrollIndicator={false}
+          data={movies}
+          ref={ref}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          bounces={false}
+          decelerationRate={0}
+          snapToInterval={ITEM_SIZE}
+          estimatedItemSize={400}
+          snapToAlignment="start"
+          scrollEventThrottle={16}
+          renderItem={({ item, index }) => {
+            const first = index === 0;
+            const last = index === movies.length - 1;
+            return (
+              <View
                 style={{
+                  flexDirection: "row",
+                  height: "100%",
+                  justifyContent: "center",
                   alignItems: "center",
-                  width: ITEM_SIZE,
-                  height: IMAGE_WIDTH * 1.5 + 120,
                 }}
               >
-                <PosterButton
-                  id={item.id}
-                  title={item.title}
-                  posterPath={imageBasePath + item.poster_path}
-                  dimensions={{ width: IMAGE_WIDTH, height: IMAGE_WIDTH * 1.5 }}
-                  onPress={() => handleMoviePress(item.id)}
-                  release_date={item.release_date}
-                  vote_average={item.vote_average}
-                />
-              </Animated.View>
-              <View style={{ width: last ? EMPTY_ITEM_SIZE : 0 }} />
-            </View>
-          );
-        }}
-      />
+                <View style={{ width: first ? EMPTY_ITEM_SIZE : 0 }} />
+                <Animated.View
+                  style={{
+                    alignItems: "center",
+                    width: ITEM_SIZE,
+                    height: IMAGE_WIDTH * 1.5 + 120,
+                  }}
+                >
+                  <PosterButton
+                    id={item.id}
+                    title={item.title}
+                    providers={providers[index]}
+                    posterPath={imageBasePath + item.poster_path}
+                    dimensions={{
+                      width: IMAGE_WIDTH,
+                      height: IMAGE_WIDTH * 1.5,
+                    }}
+                    onPress={() => handleMoviePress(item.id)}
+                    release_date={item.release_date}
+                    vote_average={item.vote_average}
+                  />
+                </Animated.View>
+                <View style={{ width: last ? EMPTY_ITEM_SIZE : 0 }} />
+              </View>
+            );
+          }}
+        />
+      </View>
       <View style={{ height: "11%" }} />
     </View>
   );

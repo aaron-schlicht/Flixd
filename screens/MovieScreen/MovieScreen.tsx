@@ -47,8 +47,8 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
     const opacity = interpolate(
       scrollY.value,
       [210, 215],
-      [0, 1],
-      Extrapolate.CLAMP
+      [0, 1]
+      //Extrapolate.CLAMP
     );
 
     return {

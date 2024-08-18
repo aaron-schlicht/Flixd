@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef } from "react";
 import PosterButton from "../../components/PosterButton";
 import { RootStackParamList, Movie } from "../../types";
+import { FlashList } from "@shopify/flash-list";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
@@ -22,7 +23,7 @@ const MovieList = React.memo(
     const handleMoviePress = (id: number) => {
       navigation.push("Movie", { id: id });
     };
-    const ref = useRef<FlatList>(null);
+    const ref = useRef<FlashList<Movie>>(null);
 
     useEffect(() => {
       if (isRefreshing && ref.current && Boolean(data.length)) {
@@ -44,13 +45,13 @@ const MovieList = React.memo(
         >
           {name}
         </Text>
-        <FlatList
+        <FlashList
           data={data}
           ref={ref}
           horizontal
+          estimatedItemSize={200}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 10, height: 160 }}
-          initialNumToRender={5}
+          contentContainerStyle={{ paddingBottom: 10 }}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => {
             return (

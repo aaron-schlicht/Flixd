@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   Dimensions,
   Text,
-  FlatList,
   ActivityIndicator,
 } from "react-native";
 import GenreStep from "./GenreStep";
@@ -12,74 +11,48 @@ import KeywordStep from "./KeywordStep";
 import FilterStep from "./FilterStep";
 import { RootState } from "../../redux/store";
 import StreamingStep from "./StreamingStep";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Gesture, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { resetFlow } from "../../redux/flowSlice";
-import { Colors, imageBasePath } from "../../constants";
-import { Movie, RootStackParamList } from "../../types";
+import { Colors } from "../../constants";
+import { Movie, RootStackParamList, Service } from "../../types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import useGetRecommendations from "../../hooks/useGetRecommendations";
 import {
   GestureDetector,
   GestureHandlerRootView,
-  PanGestureHandler,
 } from "react-native-gesture-handler";
 import Animated, {
-  SharedValue,
-  interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { Image } from "expo-image";
-import LargePosterButton from "../../components/LargePosterButton";
-import SearchResults from "../DiscoverScreen/SearchResults";
-import ResultsList from "./ResultsList";
 import Results from "./Results";
+import useFindMovies from "../../hooks/useFindMovies";
 
 const ITEM_SIZE = Dimensions.get("window").width * 0.8;
-const EMPTY_ITEM_SIZE = (Dimensions.get("window").width - ITEM_SIZE) / 2;
-const IMAGE_WIDTH = Dimensions.get("window").width * 0.75;
-const ITEM_HEIGHT = Dimensions.get("window").height * 0.55;
 const OFFSET = 0;
-
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
 const Tab = createMaterialTopTabNavigator();
 const MainFlow = () => {
-  const step = useSelector((state: RootState) => state.flow.step);
   const keywords = useSelector((state: RootState) => state.flow.keywords);
   const genres = useSelector((state: RootState) => state.flow.genres);
   const services = useSelector(
     (state: RootState) => state.movies.selectedServices
   );
   const [recs, setRecs] = useState<Movie[]>([]);
-  const { getRecommendations, loading } = useGetRecommendations();
+  const [recsServices, setRecsServices] = useState<Service[][]>([]);
   const dispatch = useDispatch();
   const pressed = useSharedValue(0);
   const offset = useSharedValue(OFFSET);
-
-  const navigation = useNavigation<recsScreenProp>();
-
   const hasChanged = genres.length || keywords.length;
-
-  const getRecs = async () => {
-    const res = await getRecommendations();
-    if (res) {
-      setRecs(res.filter((value) => value.poster_path));
-    }
-  };
-
+  const { movies, movieServices, loading } = useFindMovies();
   const handleReset = () => {
     dispatch(resetFlow());
   };
-
-  useEffect(() => {
-    getRecs();
-  }, [services, keywords, genres]);
 
   const pan = Gesture.Pan()
     .onBegin(() => {
@@ -245,7 +218,7 @@ const MainFlow = () => {
               <ActivityIndicator size="large" color="white" />
             </View>
           ) : (
-            <Results movies={recs} />
+            <Results movies={movies} providers={movieServices} />
           )}
         </Animated.View>
       </GestureHandlerRootView>

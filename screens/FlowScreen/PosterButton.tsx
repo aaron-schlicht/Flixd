@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors, getRatingColor, imageBasePath } from "../../constants";
 import { Service } from "../../types";
 import { useGetProvidersQuery } from "../../redux/apiSlice";
+import { LinearGradient } from "expo-linear-gradient";
 
 export interface PosterButtonProps {
   dimensions?: { width: number; height: number };
@@ -22,6 +23,7 @@ export interface PosterButtonProps {
   title: string;
   release_date: string;
   vote_average: number;
+  providers: Service[];
 }
 
 const PosterButton: FC<PosterButtonProps> = ({
@@ -32,33 +34,27 @@ const PosterButton: FC<PosterButtonProps> = ({
   title,
   release_date,
   vote_average,
+  providers,
 }) => {
-  const [services, setServices] = useState<Service[]>([]);
-
-  const { data: providersData, isLoading: isProvidersLoading } =
-    useGetProvidersQuery(id);
-
-  const getStreamingServices = () => {
-    try {
-      if (
-        providersData &&
-        providersData.results["US"] &&
-        providersData.results["US"].flatrate
-      ) {
-        return providersData.results["US"].flatrate as Service[];
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return [];
-  };
-
-  useEffect(() => {
-    setServices(getStreamingServices());
-  }, [providersData]);
-
   return (
     <TouchableOpacity onPress={onPress} style={{ paddingHorizontal: 10 }}>
+      <LinearGradient
+        style={[
+          {
+            zIndex: 2,
+            marginHorizontal: 10,
+            borderRadius: 20,
+            width: dimensions.width,
+            height: dimensions.height,
+            position: "absolute",
+          },
+        ]}
+        colors={[
+          "rgba(21, 24, 45, 0)",
+          "rgba(21, 24, 45, 0.2)",
+          "rgba(21, 24, 45, 0.7)",
+        ]}
+      />
       <Image
         source={{ uri: posterPath }}
         contentFit="cover"
@@ -67,6 +63,34 @@ const PosterButton: FC<PosterButtonProps> = ({
           { width: dimensions.width, height: dimensions.height },
         ]}
       />
+
+      <View
+        style={{
+          position: "absolute",
+          flexDirection: "row",
+          gap: 5,
+          left: 15,
+          top: dimensions.height * 0.88,
+          zIndex: 3,
+        }}
+      >
+        {Boolean(providers) &&
+          providers.slice(0, 3).map((service) => {
+            return (
+              <View key={`service-${service.provider_id}`}>
+                <Image
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
+                  }}
+                  source={{ uri: imageBasePath + service.logo_path }}
+                  transition={200}
+                />
+              </View>
+            );
+          })}
+      </View>
       <View
         style={{
           //marginTop: -IMAGE_WIDTH * 0.15,
@@ -118,23 +142,6 @@ const PosterButton: FC<PosterButtonProps> = ({
           >
             {vote_average.toPrecision(3)}
           </Text>
-        </View>
-        <View style={{ flexDirection: "row", gap: 5, paddingTop: 10 }}>
-          {services.slice(0, 3).map((service) => {
-            return (
-              <View key={`service-${service.provider_id}`}>
-                <Image
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                  }}
-                  source={{ uri: imageBasePath + service.logo_path }}
-                  transition={200}
-                />
-              </View>
-            );
-          })}
         </View>
       </View>
     </TouchableOpacity>

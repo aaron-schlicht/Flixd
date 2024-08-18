@@ -10,7 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useGetSearchResultsQuery } from "../../redux/apiSlice";
-import { updateSearchResults } from "../../redux/movieSlice";
+import {
+  updateSearchResults,
+  updateSearchResultServices,
+} from "../../redux/movieSlice";
 import Animated, {
   Extrapolation,
   FadeOutRight,
@@ -20,6 +23,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Colors } from "../../constants";
+import { Movie, Service } from "../../types";
+import axios from "axios";
 
 const useDebounce = (value: string) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -35,6 +40,28 @@ const useDebounce = (value: string) => {
   return debouncedValue;
 };
 
+const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
+const fetchServices = async (id: number) => {
+  const res = await axios.get(
+    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${API_KEY}&language=en-US`
+  );
+  if (
+    res &&
+    res.data.results &&
+    res.data.results["US"] &&
+    res.data.results["US"].flatrate
+  ) {
+    return res.data.results["US"].flatrate as Service[];
+  }
+  return [];
+};
+
+const getResultServices = async (results: Movie[]) => {
+  const servicePromises = results.map((movie) => fetchServices(movie.id));
+  const resultServices = await Promise.all(servicePromises);
+  return resultServices;
+};
+
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -44,9 +71,15 @@ const SearchBar = () => {
   const { data } = useGetSearchResultsQuery(debouncedValue);
 
   useEffect(() => {
-    if (data) {
-      dispatch(updateSearchResults(data.results));
-    }
+    const updateResults = async () => {
+      if (data) {
+        dispatch(updateSearchResults(data.results));
+        const resultServices = await getResultServices(data.results);
+        dispatch(updateSearchResultServices(resultServices));
+      }
+    };
+
+    updateResults();
   }, [data]);
 
   useEffect(() => {
