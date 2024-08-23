@@ -1,14 +1,15 @@
 import { View, SafeAreaView, Dimensions } from "react-native";
 import useGetDiscoverMovies from "../../hooks/useGetDiscoverMovies";
-import SearchBar from "./SearchBar";
+import SearchBar from "../../components/SearchBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import MovieList from "./MovieList";
+import MovieList from "../../components/MovieList";
 import { Colors } from "../../constants";
 import { useEffect, useState } from "react";
 import Results from "../FlowScreen/Results";
-import ServicesSelect from "./ServicesSelect";
+import ServicesSelect from "../../components/ServicesSelect";
 import { FlashList } from "@shopify/flash-list";
+import useDiscoverMovies from "../../hooks/useDiscoverMovies";
 const { height, width } = Dimensions.get("window");
 
 const DiscoverScreen = () => {
@@ -37,7 +38,8 @@ const DiscoverView = () => {
   );
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const data = useGetDiscoverMovies(isRefreshing);
+  //const data = useGetDiscoverMovies(isRefreshing);
+  const data = useDiscoverMovies(isRefreshing);
 
   useEffect(() => {
     if (isRefreshing) {
@@ -67,10 +69,19 @@ const DiscoverView = () => {
             }}
             data={data}
             refreshing={isRefreshing}
-            estimatedItemSize={200}
+            estimatedItemSize={220}
             onRefresh={() => setIsRefreshing(true)}
             showsVerticalScrollIndicator={false}
             keyExtractor={({ name }) => name}
+            ListEmptyComponent={() => (
+              <View>
+                <View
+                  style={{ width: 100, height: 150, backgroundColor: "purple" }}
+                >
+                  {" "}
+                </View>
+              </View>
+            )}
             renderItem={({ item }) => {
               return (
                 <MovieList

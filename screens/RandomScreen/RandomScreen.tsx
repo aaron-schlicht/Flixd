@@ -8,7 +8,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { Colors, MEDIUM_POSTER_BASE_URL, imageBasePath } from "../../constants";
 import useGetRandomMovies from "../../hooks/useGetRandomMovie";
-import LargePosterButton from "../../components/LargePosterButton";
 import DiceButton from "./DiceButton";
 import { RootStackParamList, Service } from "../../types";
 import PosterButton from "../FlowScreen/PosterButton";
@@ -52,7 +51,7 @@ const RandomScreen = () => {
 
   const handleMoviePress = () => {
     if (randomMovie) {
-      navigation.navigate("Movie", { id: randomMovie?.id });
+      navigation.navigate("Movie", { movie: randomMovie });
     }
   };
   return (

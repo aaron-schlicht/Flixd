@@ -11,8 +11,8 @@ const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
     (movie) => movie.poster_path && movie.popularity > 20.0
   );
   const navigation = useNavigation<recsScreenProp>();
-  const handleMoviePress = (id: number) => {
-    navigation.push("Movie", { id: id });
+  const handleMoviePress = (movie: Movie) => {
+    navigation.push("Movie", { movie });
   };
   if (!validMovies.length) return null;
   return (
@@ -45,7 +45,7 @@ const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
                 posterPath={
                   "https://image.tmdb.org/t/p/w342/" + movie.poster_path
                 }
-                onPress={() => handleMoviePress(movie.id)}
+                onPress={() => handleMoviePress(movie)}
               />
             </View>
           );

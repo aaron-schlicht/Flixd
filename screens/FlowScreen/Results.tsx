@@ -32,8 +32,8 @@ const Results = ({
     resetPosition();
   }, [movies]);
 
-  const handleMoviePress = (id: number) => {
-    navigation.navigate("Movie", { id: id });
+  const handleMoviePress = (movie: Movie) => {
+    navigation.navigate("Movie", { movie });
   };
 
   if (movies.length === 0) {
@@ -120,7 +120,7 @@ const Results = ({
                       width: IMAGE_WIDTH,
                       height: IMAGE_WIDTH * 1.5,
                     }}
-                    onPress={() => handleMoviePress(item.id)}
+                    onPress={() => handleMoviePress(item)}
                     release_date={item.release_date}
                     vote_average={item.vote_average}
                   />

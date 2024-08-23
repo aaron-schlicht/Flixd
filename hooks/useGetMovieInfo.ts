@@ -1,100 +1,51 @@
 import { useEffect, useState } from "react";
-import { CastMember, CrewMember, Movie, Service } from "../types";
-import {
-  useGetMovieCreditsQuery,
-  useGetMovieInfoQuery,
-  useGetMovieRatingQuery,
-  useGetProvidersQuery,
-  useGetSimilarMoviesQuery,
-} from "../redux/apiSlice";
+import { FullMovie } from "../types";
+import { get } from "../api";
 
-const DIRECTOR = "DIRECTOR";
-
+//TODO: Put this behind loading state (block page rendering until backdrop is settled)
 const useGetMovieInfo = (id: number) => {
-  const { data, isLoading: isMovieDataLoading } = useGetMovieInfoQuery(id);
-  const genres =
-    [data?.genres?.map((genre) => genre.id.toString())].join(",") || "";
-  const { data: movieRatingData, isLoading: isMovieRatingLoading } =
-    useGetMovieRatingQuery(id);
-  const { data: providersData, isLoading: isProvidersLoading } =
-    useGetProvidersQuery(id);
-  const { data: similarMovieData, isLoading: isSimilarMoviesLoading } =
-    useGetSimilarMoviesQuery(genres);
-  const { data: credits, isLoading: isCreditsLoading } =
-    useGetMovieCreditsQuery(id);
   const [rating, setRating] = useState("");
-  const [streamingServices, setStreamingServices] = useState<Service[]>([]);
-  const [topCast, setTopCast] = useState<CastMember[]>([]);
-  const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
-  const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
+  const [backdrop, setBackdrop] = useState<string | undefined>(undefined);
+  const [tagline, setTagline] = useState<string | undefined>(undefined);
+  const [runtime, setRuntime] = useState<number>(0);
 
-  const getMovieRating = () => {
-    let rating = "";
-    if (movieRatingData && movieRatingData.results) {
-      let usRelease = movieRatingData.results.find(
+  const getMovieRating = async () => {
+    const { data } = await get<any>(`movie/${id}/release_dates`);
+    if (data && data.results) {
+      let usRelease = data.results.find(
         (value: any) => value.iso_3166_1 === "US"
       );
-      if (usRelease && usRelease.release_dates.length) {
+      if (usRelease && Boolean(usRelease.release_dates.length)) {
         if (usRelease.release_dates.length > 1) {
-          rating =
+          const rting =
             usRelease.release_dates[usRelease.release_dates.length - 1]
               .certification;
+          setRating(rting);
         } else {
-          rating = usRelease.release_dates[0].certification;
+          const rting = usRelease.release_dates[0].certification;
+          setRating(rting);
         }
       }
     }
-    return rating;
   };
 
-  const getStreamingServices = () => {
-    try {
-      if (
-        providersData &&
-        providersData.results["US"] &&
-        providersData.results["US"].flatrate
-      ) {
-        return providersData.results["US"].flatrate as Service[];
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return [];
-  };
-
-  const getTopCast = () => {
-    if (credits) {
-      setTopCast(credits.cast);
-      const directorOrDirectors = credits.crew.filter(
-        (crew) => crew.job.toLocaleUpperCase() === DIRECTOR
-      );
-      setTopCrew(directorOrDirectors);
-    }
-  };
-
-  const getSimilarMovies = () => {
-    if (similarMovieData) {
-      setSimilarMovies(
-        similarMovieData.results.filter((movie) => movie.id !== id)
-      );
-    }
+  const getBackdropAndTagline = async () => {
+    const { data } = await get<FullMovie>(`movie/${id}`);
+    setBackdrop(data.backdrop_path);
+    setTagline(data.tagline);
+    setRuntime(data.runtime || 0);
   };
 
   useEffect(() => {
-    setRating(getMovieRating());
-    setStreamingServices(getStreamingServices());
-    getTopCast();
-    getSimilarMovies();
-  }, [providersData, movieRatingData, credits, similarMovieData]);
+    getMovieRating();
+    getBackdropAndTagline();
+  }, []);
 
   return {
-    isLoading: isMovieDataLoading || isMovieRatingLoading || isProvidersLoading,
-    movie: data,
-    similarMovies,
     rating,
-    topCast,
-    topCrew,
-    streamingServices,
+    backdrop,
+    tagline,
+    runtime,
   };
 };
 

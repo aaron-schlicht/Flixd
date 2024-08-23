@@ -3,9 +3,9 @@ import { RootState } from "../redux/store";
 import axios from "axios";
 import { Keyword, Movie, Service, WatchProvider } from "../types";
 import { useEffect, useState } from "react";
+import { fetchMovieServices } from "../api";
 
-const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
-const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`;
+const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.EXPO_PUBLIC_API_KEY}`;
 const BASE_PARAMS =
   "&include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.desc";
 const EMPTY_PARAMS =
@@ -34,7 +34,9 @@ const useFindMovies = () => {
     const movieRes: Movie[] = res.data.results.filter(
       (value: Movie) => value.poster_path
     );
-    const getServicePromises = movieRes.map((value) => fetchServices(value.id));
+    const getServicePromises = movieRes.map((value) =>
+      fetchMovieServices(value.id)
+    );
     const services = await Promise.all(getServicePromises);
     setMovies(movieRes);
     setMovieServices(services);
@@ -46,21 +48,6 @@ const useFindMovies = () => {
   }, [genres, keywords, selectedServices]);
 
   return { movies, movieServices, loading };
-};
-
-const fetchServices = async (id: number) => {
-  const res = await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${API_KEY}&language=en-US`
-  );
-  if (
-    res &&
-    res.data.results &&
-    res.data.results["US"] &&
-    res.data.results["US"].flatrate
-  ) {
-    return res.data.results["US"].flatrate as Service[];
-  }
-  return [];
 };
 
 const buildGenres = (genres: number[]) => {

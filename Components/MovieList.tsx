@@ -2,8 +2,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef } from "react";
-import PosterButton from "../../components/PosterButton";
-import { RootStackParamList, Movie } from "../../types";
+import PosterButton from "./PosterButton";
+import { RootStackParamList, Movie } from "../types";
 import { FlashList } from "@shopify/flash-list";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
@@ -20,8 +20,8 @@ const MovieList = React.memo(
     isRefreshing: boolean;
   }) => {
     const navigation = useNavigation<recsScreenProp>();
-    const handleMoviePress = (id: number) => {
-      navigation.push("Movie", { id: id });
+    const handleMoviePress = (movie: Movie) => {
+      navigation.push("Movie", { movie });
     };
     const ref = useRef<FlashList<Movie>>(null);
 
@@ -31,7 +31,7 @@ const MovieList = React.memo(
       }
     }, [isRefreshing]);
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <Text
           style={{
             fontWeight: "bold",
@@ -45,23 +45,29 @@ const MovieList = React.memo(
         >
           {name}
         </Text>
-        <FlashList
-          data={data}
-          ref={ref}
-          horizontal
-          estimatedItemSize={200}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 10 }}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => {
-            return (
-              <PosterButton
-                onPress={() => handleMoviePress(item.id)}
-                posterPath={SMALL_POSTER_BASE_PATH + item.poster_path}
-              />
-            );
+        <View
+          style={{
+            minHeight: 170,
+            flexDirection: "row",
           }}
-        />
+        >
+          <FlashList
+            data={data}
+            ref={ref}
+            horizontal
+            estimatedItemSize={170}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => {
+              return (
+                <PosterButton
+                  onPress={() => handleMoviePress(item)}
+                  posterPath={SMALL_POSTER_BASE_PATH + item.poster_path}
+                />
+              );
+            }}
+          />
+        </View>
       </View>
     );
   }

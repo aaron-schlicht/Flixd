@@ -12,7 +12,15 @@ const getColor = (rating: number) => {
   }
 };
 
-const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
+const Header = ({
+  movie,
+  runtime,
+  rating,
+}: {
+  movie: FullMovie;
+  runtime: number;
+  rating: string;
+}) => {
   return (
     <View>
       <View
@@ -89,7 +97,7 @@ const Header = ({ movie, rating }: { movie: FullMovie; rating: string }) => {
               </Text>
             ) : null}
             <Text style={{ color: Colors.primary, fontSize: 18 }}>
-              {movie.runtime} mins
+              {runtime} mins
             </Text>
             <Text
               style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}

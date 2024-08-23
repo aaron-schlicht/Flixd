@@ -43,6 +43,7 @@ const Description = ({
           paddingTop: 10,
         }}
         renderItem={({ item }) => {
+          if (!item || !item.name) return null;
           return (
             <View
               style={{

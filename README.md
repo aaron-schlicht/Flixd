@@ -7,7 +7,6 @@ Check it out on the iOS App store here: https://apps.apple.com/us/app/reelrecs/i
 
 ## Screenshots
 
-
 <img src="https://github.com/aaron-schlicht/Flixd/assets/135870355/44ea64c2-c52c-4b66-8282-49844d2f4b1a" width=250 />
 
 <img src="https://github.com/aaron-schlicht/Flixd/assets/135870355/296518a5-fab5-4baa-9185-4abca9788b9b" width=250 />
@@ -18,14 +17,13 @@ Check it out on the iOS App store here: https://apps.apple.com/us/app/reelrecs/i
 
 <img src="https://github.com/aaron-schlicht/Flixd/assets/135870355/4af909a2-7088-4901-a199-a9633365f2a2" width=250  />
 
-
 ## Demo
-![flixdflow](https://github.com/aaron-schlicht/Flixd/assets/135870355/3115c6f3-b029-4e7c-935a-23e190fb09cc)
 
+![flixdflow](https://github.com/aaron-schlicht/Flixd/assets/135870355/3115c6f3-b029-4e7c-935a-23e190fb09cc)
 
 ## About
 
-Flixd was developed using Expo and EAS, with additional tools such as Redux Toolkit/RTK Query, Axios, React Native Reanimated, React Navigation, etc.
+Flixd was developed using Expo and EAS, with additional tools including Redux Toolkit/RTK Query, Axios, React Native Reanimated, React Navigation, etc.
 
 ### Features
 
@@ -37,12 +35,8 @@ Flixd was developed using Expo and EAS, with additional tools such as Redux Tool
 
 ## Improvements/TODO
 
-There are many things that are not perfect about this application and many features that would be nice to add
 - **Improvements to Code Quality:** In the process of getting this app out as fast as possible and experimenting with things such as animation and getting the right suggestions, parts of the code got overlooked and could definitely be improved to enhance performance, code cleanliness, best practices, and error handling/unit testing. Before I add any additional features, I will prioritize making improvements to the code.
-- **Quality of Content Improvements:** A lot of the challenge with TMDB is finding consistency in the quality of the data returned, from recommendations to search results. Some of the features took a lot of tinkering with TMDB API endpoints to ensure the results were what I was looking for, and could still be improved to provide the best data for the user.
+- **Quality of Content Improvements:** A major challenge with TMDB is finding consistency in the quality of the data returned, from recommendations to search results. Some of the features took a lot of tinkering with TMDB API endpoints to ensure the results were what I was looking for, and could still be improved to provide the best data for the user.
 - **More Information on Movie and Person Screens:** One of my goals for the app was to provide a one-stop-shop for finding all the movie information you could want about a particular movie, and with the Movie screen, I want to add additional information that could be useful to users such as movie trailers, IMDB rating, all crew members, filming locations, studios, etc. The Person screen could be expanded as well to have information such as biography, and "known-for" designation.
 - **Movie Journal and Watchlist:** A later goal for Flixd is to include the ability for users to add movies as "seen" to track the movies that they have seen and eliminate them from features that recommend movies, as well as adding movies they would like to watch to a "Watchlist".
-- **Personalized Recommendations:** A stretch goal for Flix is to include the ability for users to rate movies on top of marking them "seen" to add to a system for personalizing recommendations based on movies that they enjoy. It would be really cool to train an AI model that would provide recommendations, but that is something to look into.
-
-
-
+- **Personalized Recommendations:** A stretch goal for Flixd is to include the ability for users to rate movies on top of marking them "seen" to add to a system for personalizing recommendations based on movies that they enjoy. It would be really cool to train an AI model that would provide recommendations, but that is something to look into.

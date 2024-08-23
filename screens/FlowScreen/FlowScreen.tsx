@@ -20,6 +20,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Results from "./Results";
 import useFindMovies from "../../hooks/useFindMovies";
+import useGetRecommendations from "../../hooks/useGetRecommendations";
 
 const OFFSET = 0;
 const Tab = createMaterialTopTabNavigator();
@@ -30,7 +31,7 @@ const MainFlow = () => {
   const pressed = useSharedValue(0);
   const offset = useSharedValue(OFFSET);
   const hasChanged = genres.length || keywords.length;
-  const { movies, movieServices, loading } = useFindMovies();
+  const { movies, movieServices, loading } = useGetRecommendations();
   const handleReset = () => {
     dispatch(resetFlow());
   };

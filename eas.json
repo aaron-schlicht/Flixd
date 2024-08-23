@@ -9,6 +9,9 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "f03e1c9e7d2633ef0b20ab2c36cddb39"
       }
     },
     "development-simulator": {
@@ -16,6 +19,9 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "f03e1c9e7d2633ef0b20ab2c36cddb39"
       }
     },
     "preview": {
@@ -23,11 +29,17 @@
       "ios": {
         "resourceClass": "m-medium",
         "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "f03e1c9e7d2633ef0b20ab2c36cddb39"
       }
     },
     "production": {
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "f03e1c9e7d2633ef0b20ab2c36cddb39"
       }
     }
   },

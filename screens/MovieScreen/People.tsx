@@ -5,6 +5,9 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CastMember, CrewMember, RootStackParamList } from "../../types";
+import { get } from "../../api";
+import { CastResults } from "../../redux/apiSlice";
+import { useEffect, useState } from "react";
 
 const People = ({
   topCast,
@@ -180,4 +183,35 @@ const Person = ({
   );
 };
 
-export default People;
+const fetchTopCredits = async (id: number) => {
+  const { data } = await get<CastResults>(`movie/${id}/credits`);
+  if (data) {
+    return {
+      cast: data.cast,
+      crew: data.crew.filter(
+        (crew) => crew.job.toLocaleUpperCase() === "DIRECTOR"
+      ),
+    };
+  } else {
+    return { cast: [], crew: [] };
+  }
+};
+
+const ConnectedPeople = ({ id }: { id: number }) => {
+  const [topCast, setTopCast] = useState<CastMember[]>([]);
+  const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
+
+  const getTopCredits = async () => {
+    const { cast, crew } = await fetchTopCredits(id);
+    setTopCast(cast);
+    setTopCrew(crew);
+  };
+
+  useEffect(() => {
+    getTopCredits();
+  }, []);
+
+  return <People topCast={topCast} topCrew={topCrew} />;
+};
+
+export default ConnectedPeople;

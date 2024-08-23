@@ -10,7 +10,7 @@ import {
 import { useGetKeywordSearchResultsQuery } from "../../redux/apiSlice";
 import { Colors } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addKeyword, updateKeywords } from "../../redux/flowSlice";
+import { updateKeywords } from "../../redux/flowSlice";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { Keyword } from "../../types";
@@ -67,7 +67,6 @@ const KeywordSearch = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     console.log(selectedValue);
     dispatch(updateKeywords(selectedValue));
-    dispatch(addKeyword(selectedValue));
   };
 
   useEffect(() => {

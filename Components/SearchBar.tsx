@@ -9,11 +9,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useGetSearchResultsQuery } from "../../redux/apiSlice";
+import { useGetSearchResultsQuery } from "../redux/apiSlice";
 import {
   updateSearchResults,
   updateSearchResultServices,
-} from "../../redux/movieSlice";
+} from "../redux/movieSlice";
 import Animated, {
   Extrapolation,
   FadeOutRight,
@@ -22,8 +22,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Colors } from "../../constants";
-import { Movie, Service } from "../../types";
+import { Colors } from "../constants";
+import { Movie, Service } from "../types";
 import axios from "axios";
 
 const useDebounce = (value: string) => {
@@ -40,10 +40,9 @@ const useDebounce = (value: string) => {
   return debouncedValue;
 };
 
-const API_KEY = "f03e1c9e7d2633ef0b20ab2c36cddb39";
 const fetchServices = async (id: number) => {
   const res = await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${API_KEY}&language=en-US`
+    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${process.env.EXPO_PUBLIC_API_KEY}&language=en-US`
   );
   if (
     res &&

@@ -1,11 +1,11 @@
 import { View, Image, TouchableHighlight, FlatList } from "react-native";
-import { Providers, imageBasePath } from "../../constants";
+import { Providers, imageBasePath } from "../constants";
 import * as Haptics from "expo-haptics";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSelectedServices } from "../../redux/movieSlice";
-import { RootState } from "../../redux/store";
+import { updateSelectedServices } from "../redux/movieSlice";
+import { RootState } from "../redux/store";
 import { Ionicons } from "@expo/vector-icons";
-import { WatchProvider } from "../../types";
+import { WatchProvider } from "../types";
 
 const ServicesSelect = () => {
   return (

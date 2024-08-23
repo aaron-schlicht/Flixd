@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import Description from "./Description";
 import StreamingServices from "./StreamingServices";
 import People from "./People";
 import SimilarMovies from "./SimilarMovies";
-import { Colors, imageBasePath } from "../../constants";
+import { Colors, Genres, imageBasePath } from "../../constants";
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
@@ -25,14 +25,14 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import { Image } from "expo-image";
 import ImageHeader from "./ImageHeader";
-import { RootStackParamList } from "../../types";
+import { Genre, RootStackParamList } from "../../types";
 
 const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.5;
 const HEADER_COLLAPSED_HEIGHT = 100;
 interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
 
 const MovieScreen: React.FC<Props> = ({ route }) => {
-  const { id } = route.params;
+  const { movie } = route.params;
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -49,29 +49,17 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
     };
   });
 
+  const { backdrop, rating, runtime, tagline } = useGetMovieInfo(movie.id);
+
+  const genres = movie.genre_ids
+    ? movie.genre_ids.map((genre: number) => Genres[genre])
+    : [];
+
   const navigation = useNavigation();
 
   const handleBack = () => {
     navigation.goBack();
   };
-  const {
-    isLoading,
-    movie,
-    rating,
-    topCast,
-    topCrew,
-    streamingServices,
-    similarMovies,
-  } = useGetMovieInfo(id);
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <BackButton onPress={handleBack} />
-        <ActivityIndicator color="white" size="large" />
-      </View>
-    );
-  }
 
   if (!movie) {
     return (
@@ -91,11 +79,8 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   } else {
     return (
       <View style={styles.container}>
-        {!movie.backdrop_path ? null : (
-          <ImageHeader
-            sv={scrollY}
-            posterPath={imageBasePath + movie.backdrop_path}
-          />
+        {!backdrop ? null : (
+          <ImageHeader sv={scrollY} posterPath={imageBasePath + backdrop} />
         )}
         <BackButton onPress={handleBack} />
         <Animated.View style={[styles.movieTitleContainer, headerOpacity]}>
@@ -119,7 +104,7 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
           style={[
             styles.scrollView,
             {
-              paddingTop: !movie.backdrop_path
+              paddingTop: !backdrop
                 ? Dimensions.get("window").height * 0.2
                 : HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT,
             },
@@ -128,15 +113,15 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
           onScroll={scrollHandler}
           scrollEventThrottle={16}
         >
-          <Header movie={movie} rating={rating} />
+          <Header movie={movie} runtime={runtime} rating={rating} />
           <Description
-            tagline={movie.tagline || ""}
+            tagline={tagline || ""}
             overview={movie.overview || ""}
-            genres={movie.genres || []}
+            genres={genres}
           />
-          <StreamingServices streamingServices={streamingServices} />
-          <People topCast={topCast} topCrew={topCrew} />
-          <SimilarMovies similarMovies={similarMovies} />
+          <StreamingServices id={movie.id} />
+          <People id={movie.id} />
+          {/*<SimilarMovies similarMovies={similarMovies} />*/}
           <PoweredLogo />
           <View style={{ paddingBottom: HEADER_EXPANDED_HEIGHT }} />
         </Animated.ScrollView>

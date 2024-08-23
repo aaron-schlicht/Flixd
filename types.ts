@@ -61,7 +61,7 @@ export type RootStackParamList = {
   Home: undefined;
   Flow: undefined;
   Recs: { recs: Movie[] };
-  Movie: { id: number };
+  Movie: { movie: Movie };
   Person: { person: Person };
 };
 
