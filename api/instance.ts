@@ -7,6 +7,7 @@ const instance = axios.create({
   },
   params: {
     api_key: process.env.EXPO_PUBLIC_API_KEY,
+    include_adult: false,
   },
 });
 

@@ -13,8 +13,6 @@ import { RootStackParamList, Service } from "../../types";
 import PosterButton from "../FlowScreen/PosterButton";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
-import { useGetProvidersQuery } from "../../redux/apiSlice";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,31 +21,8 @@ const ITEM_WIDTH = ITEM_HEIGHT * 0.7;
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const RandomScreen = () => {
-  const { getRandomMovies, randomMovie } = useGetRandomMovies();
+  const { getRandomMovie, randomMovie, services } = useGetRandomMovies();
   const navigation = useNavigation<recsScreenProp>();
-  const [services, setServices] = useState<Service[]>([]);
-
-  const { data: providersData, isLoading: isProvidersLoading } =
-    useGetProvidersQuery(randomMovie?.id || 0, { skip: !randomMovie });
-
-  const getStreamingServices = () => {
-    try {
-      if (
-        providersData &&
-        providersData.results["US"] &&
-        providersData.results["US"].flatrate
-      ) {
-        return providersData.results["US"].flatrate as Service[];
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return [];
-  };
-
-  useEffect(() => {
-    setServices(getStreamingServices());
-  }, [providersData]);
 
   const handleMoviePress = () => {
     if (randomMovie) {
@@ -129,7 +104,7 @@ const RandomScreen = () => {
               vote_average={randomMovie.vote_average}
               dimensions={{ width: ITEM_WIDTH, height: ITEM_HEIGHT }}
             />
-            <DiceButton getRandomMovies={getRandomMovies} />
+            <DiceButton getRandomMovies={getRandomMovie} />
           </SafeAreaView>
         </View>
       )}

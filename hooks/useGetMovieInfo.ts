@@ -8,6 +8,7 @@ const useGetMovieInfo = (id: number) => {
   const [backdrop, setBackdrop] = useState<string | undefined>(undefined);
   const [tagline, setTagline] = useState<string | undefined>(undefined);
   const [runtime, setRuntime] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
 
   const getMovieRating = async () => {
     const { data } = await get<any>(`movie/${id}/release_dates`);
@@ -30,15 +31,17 @@ const useGetMovieInfo = (id: number) => {
   };
 
   const getBackdropAndTagline = async () => {
+    setLoading(true);
     const { data } = await get<FullMovie>(`movie/${id}`);
     setBackdrop(data.backdrop_path);
+    setLoading(false);
     setTagline(data.tagline);
     setRuntime(data.runtime || 0);
   };
 
   useEffect(() => {
-    getMovieRating();
     getBackdropAndTagline();
+    getMovieRating();
   }, []);
 
   return {
@@ -46,6 +49,7 @@ const useGetMovieInfo = (id: number) => {
     backdrop,
     tagline,
     runtime,
+    loading,
   };
 };
 

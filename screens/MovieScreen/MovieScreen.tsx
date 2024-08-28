@@ -49,7 +49,9 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
     };
   });
 
-  const { backdrop, rating, runtime, tagline } = useGetMovieInfo(movie.id);
+  const { backdrop, rating, runtime, tagline, loading } = useGetMovieInfo(
+    movie.id
+  );
 
   const genres = movie.genre_ids
     ? movie.genre_ids.map((genre: number) => Genres[genre])
@@ -60,6 +62,23 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   const handleBack = () => {
     navigation.goBack();
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      </View>
+    );
+  }
 
   if (!movie) {
     return (

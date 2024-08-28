@@ -1,4 +1,10 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { Colors, imageBasePath } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -8,6 +14,7 @@ import { CastMember, CrewMember, RootStackParamList } from "../../types";
 import { get } from "../../api";
 import { CastResults } from "../../redux/apiSlice";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@rneui/themed";
 
 const People = ({
   topCast,
@@ -197,20 +204,45 @@ const fetchTopCredits = async (id: number) => {
   }
 };
 
+const PeopleSkeleton = () => (
+  <View
+    style={{
+      width: Dimensions.get("window").width,
+      alignItems: "center",
+      paddingTop: 10,
+    }}
+  >
+    <Skeleton
+      style={{ backgroundColor: "#373D63", borderRadius: 10 }}
+      skeletonStyle={{
+        backgroundColor: "#252942",
+      }}
+      width={Dimensions.get("window").width * 0.91}
+      height={220}
+    />
+  </View>
+);
+
 const ConnectedPeople = ({ id }: { id: number }) => {
   const [topCast, setTopCast] = useState<CastMember[]>([]);
   const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getTopCredits = async () => {
+    setLoading(true);
     const { cast, crew } = await fetchTopCredits(id);
     setTopCast(cast);
     setTopCrew(crew);
+    setLoading(false);
   };
 
   useEffect(() => {
     getTopCredits();
   }, []);
 
+  if (loading) {
+    return <PeopleSkeleton />;
+  }
   return <People topCast={topCast} topCrew={topCrew} />;
 };
 

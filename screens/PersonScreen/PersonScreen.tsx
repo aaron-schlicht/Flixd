@@ -16,12 +16,13 @@ import useGetPersonInfo from "../../hooks/useGetPersonInfo";
 import MovieList from "../../components/MovieList";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types";
+import { FlashList } from "@shopify/flash-list";
 
 interface Props extends StackScreenProps<RootStackParamList, "Person"> {}
 
 const PersonScreen: FC<Props> = ({ route }) => {
   const { person } = route.params;
-  const { data, isLoading } = useGetPersonInfo(person.id);
+  const { credits, loading } = useGetPersonInfo(person.id);
 
   const navigation = useNavigation();
 
@@ -65,17 +66,19 @@ const PersonScreen: FC<Props> = ({ route }) => {
           {person.name}
         </Text>
       </View>
-      {isLoading ? (
-        <View style={{ flex: 1, alignItems: "center" }}>
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <ActivityIndicator size="large" color="white" />
         </View>
       ) : (
-        <FlatList
+        <FlashList
           contentContainerStyle={{
-            gap: 15,
             paddingBottom: 200,
           }}
-          data={data}
+          data={credits}
+          estimatedItemSize={200}
           showsVerticalScrollIndicator={false}
           keyExtractor={({ name }) => name}
           renderItem={({ item }) => {

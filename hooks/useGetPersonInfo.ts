@@ -1,67 +1,85 @@
 import { Movie } from "../types";
-import { useGetPersonCreditsQuery } from "../redux/apiSlice";
+import {
+  PersonCreditResults,
+  useGetPersonCreditsQuery,
+} from "../redux/apiSlice";
+import { get } from "../api";
+import { useEffect, useState } from "react";
 
 const DIRECTOR = "DIRECTOR";
 const PRODUCER = "PRODUCER";
 const WRITER = "WRITER";
+const SCREENPLAY = "SCREENPLAY";
 
 const useGetPersonInfo = (id: number) => {
-  const { data: credits, isLoading } = useGetPersonCreditsQuery(id);
+  const [credits, setCredits] = useState<{ name: string; movies: Movie[] }[]>(
+    []
+  );
+  const [loading, setLoading] = useState(false);
+  const getPersonInfo = async () => {
+    setLoading(true);
+    const { data } = await get<PersonCreditResults>(
+      `person/${id}/movie_credits`
+    );
+    let results = [];
 
-  let data: { name: string; movies: Movie[] }[] = [];
+    if (data) {
+      const directing = data.crew.filter(
+        (m, index) =>
+          m.job &&
+          m.job.toLocaleUpperCase().includes(DIRECTOR) &&
+          Boolean(m.poster_path) &&
+          data.crew.findIndex((item) => item.id === m.id) === index
+      );
+      if (directing.length) {
+        results.push({
+          name: "Director",
+          movies: directing,
+        });
+      }
+      const writing = data.crew.filter(
+        (m, index) =>
+          m.job &&
+          (m.job.toLocaleUpperCase().includes(WRITER) ||
+            m.job.toLocaleUpperCase().includes(SCREENPLAY)) &&
+          Boolean(m.poster_path) &&
+          data.crew.findIndex((item) => item.id === m.id) === index
+      );
+      if (writing.length) {
+        results.push({
+          name: "Writer",
+          movies: writing,
+        });
+      }
+      const producing = data.crew.filter(
+        (m, index) =>
+          m.job &&
+          m.job.toLocaleUpperCase().includes(PRODUCER) &&
+          Boolean(m.poster_path) &&
+          data.crew.findIndex((item) => item.id === m.id) === index
+      );
+      if (producing.length) {
+        results.push({ name: "Producer", movies: producing });
+      }
+      const acting = data.cast.filter((m) => Boolean(m.poster_path));
+      if (acting.length) {
+        results.push({
+          name: "Actor",
+          movies: acting,
+        });
+      }
+    }
+    setCredits(results);
+    setLoading(false);
+  };
 
-  if (credits) {
-    const acting = credits.cast.filter((m) => Boolean(m.poster_path));
-    const director = credits.crew.filter(
-      (m, index) =>
-        m.job &&
-        m.job.toLocaleUpperCase().includes(DIRECTOR) &&
-        Boolean(m.poster_path) &&
-        credits.crew.findIndex((item) => item.id === m.id) === index
-    );
-    const producer = credits.crew.filter(
-      (m, index) =>
-        m.job &&
-        m.job.toLocaleUpperCase().includes(PRODUCER) &&
-        Boolean(m.poster_path) &&
-        credits.crew.findIndex((item) => item.id === m.id) === index
-    );
-    const writer = credits.crew.filter(
-      (m, index) =>
-        m.job &&
-        m.job.toLocaleUpperCase().includes(WRITER) &&
-        Boolean(m.poster_path) &&
-        credits.crew.findIndex((item) => item.id === m.id) === index
-    );
-    if (Boolean(acting.length)) {
-      data.push({
-        name: "Actor",
-        movies: acting.sort((a, b) => b.popularity - a.popularity),
-      });
-    }
-    if (Boolean(director.length)) {
-      data.push({
-        name: "Director",
-        movies: director.sort((a, b) => b.popularity - a.popularity),
-      });
-    }
-    if (Boolean(producer.length)) {
-      data.push({
-        name: "Producer",
-        movies: producer.sort((a, b) => b.popularity - a.popularity),
-      });
-    }
-    if (Boolean(writer.length)) {
-      data.push({
-        name: "Writer",
-        movies: writer.sort((a, b) => b.popularity - a.popularity),
-      });
-    }
-  }
+  useEffect(() => {
+    getPersonInfo();
+  }, []);
 
   return {
-    data,
-    isLoading,
+    credits,
+    loading,
   };
 };
 
