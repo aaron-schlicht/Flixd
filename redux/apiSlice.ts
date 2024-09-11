@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CastMember, CrewMember, FullMovie, Keyword, Movie } from "../types";
+import { CastMember, CrewMember, Keyword, Movie } from "../types";
 
 export interface SearchResults {
   results: Movie[];
@@ -36,7 +36,7 @@ export const apiSlice = createApi({
       query: (str) =>
         `/search/movie?api_key=${process.env.EXPO_PUBLIC_API_KEY}&query=${str}&include_adult=false&language=en-US&page=1`,
     }),
-    getMovieInfo: builder.query<FullMovie, number>({
+    getMovieInfo: builder.query<Movie, number>({
       query: (id) =>
         `/movie/${id}?api_key=${process.env.EXPO_PUBLIC_API_KEY}&adult=false&language=en-US`,
     }),

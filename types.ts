@@ -2,26 +2,14 @@ export interface Movie {
   id: number;
   title: string;
   overview?: string;
-  poster_path: string;
-  popularity: number;
-  vote_average: number;
-  release_date: string;
-  serviceIds?: number[];
-  genre_ids?: number[];
-}
-
-export interface FullMovie {
-  id: number;
-  title: string;
-  overview?: string;
-  poster_path: string;
+  poster_path?: string;
   popularity: number;
   vote_average: number;
   release_date: string;
   runtime?: number;
   tagline?: string;
-  services?: Service[];
   backdrop_path?: string;
+  genre_ids?: number[];
   genres?: Genre[];
 }
 

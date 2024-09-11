@@ -1,16 +1,9 @@
 import { useFetchList } from "../api";
 
-const POPULAR_MOVIES_URL = "/trending/movie/week";
 const NOW_PLAYING_URL = "/movie/now_playing?region=US";
 const UPCOMING_MOVIES_URL = `/discover/movie`;
 
 const useDiscoverMovies = (isRefreshing: boolean) => {
-  const {
-    list: popularMovies,
-    loading: popularMoviesLoading,
-    error: popularMoviesError,
-  } = useFetchList(POPULAR_MOVIES_URL, isRefreshing);
-
   const {
     list: nowPlayingMovies,
     loading: nowPlayingMoviesLoading,
@@ -29,10 +22,6 @@ const useDiscoverMovies = (isRefreshing: boolean) => {
   });
 
   return [
-    {
-      name: "Trending",
-      movies: popularMovies,
-    },
     {
       name: "Now Playing",
       movies: nowPlayingMovies,

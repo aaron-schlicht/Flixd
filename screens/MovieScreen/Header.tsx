@@ -1,6 +1,6 @@
 import { View, Text, Dimensions } from "react-native";
 import { Colors } from "../../constants";
-import { FullMovie } from "../../types";
+import { Movie } from "../../types";
 
 const getColor = (rating: number) => {
   if (rating < 5) {
@@ -17,7 +17,7 @@ const Header = ({
   runtime,
   rating,
 }: {
-  movie: FullMovie;
+  movie: Movie;
   runtime: number;
   rating: string;
 }) => {

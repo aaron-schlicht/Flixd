@@ -41,10 +41,10 @@ const useGetRecommendations = () => {
       const validMovies: Movie[] = data.results.filter((value: Movie) =>
         Boolean(value.poster_path)
       );
-      const getServicePromises = validMovies.map(({ id }) =>
+      const servicePromises = validMovies.map(({ id }) =>
         fetchMovieServices(id)
       );
-      const services = await Promise.all(getServicePromises);
+      const services = await Promise.all(servicePromises);
       setMovies(validMovies);
       setMovieServices(services);
     }

@@ -66,3 +66,10 @@ export const fetchMovieServices = async (id: number) => {
   }
   return [];
 };
+
+export const fetchMovieDetails = async (id: number) => {
+  const { data } = await get<any>(`movie/${id}`, {
+    params: { language: "en-US" },
+  });
+  return data || [];
+};

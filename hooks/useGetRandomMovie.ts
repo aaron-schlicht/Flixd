@@ -12,7 +12,7 @@ const useGetRandomMovie = () => {
     const page = generateRandomPage();
     const config = {
       params: {
-        sort_by: "vote_avgerage.desc",
+        sort_by: "vote_average.desc",
         "vote_count.gte": "300.0",
         "vote_average.gte": "7.0",
         without_genres: "99,10402",

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { FullMovie } from "../types";
+import { Movie } from "../types";
 import { get } from "../api";
 
-//TODO: Put this behind loading state (block page rendering until backdrop is settled)
 const useGetMovieInfo = (id: number) => {
   const [rating, setRating] = useState("");
   const [backdrop, setBackdrop] = useState<string | undefined>(undefined);
@@ -32,7 +31,7 @@ const useGetMovieInfo = (id: number) => {
 
   const getBackdropAndTagline = async () => {
     setLoading(true);
-    const { data } = await get<FullMovie>(`movie/${id}`);
+    const { data } = await get<Movie>(`movie/${id}`);
     setBackdrop(data.backdrop_path);
     setLoading(false);
     setTagline(data.tagline);

@@ -1,16 +1,18 @@
-import { View, SafeAreaView, Dimensions } from "react-native";
-import useGetDiscoverMovies from "../../hooks/useGetDiscoverMovies";
-import SearchBar from "../../components/SearchBar";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import MovieList from "../../components/MovieList";
+import {
+  View,
+  SafeAreaView,
+  Dimensions,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
+import MovieList from "../../components/ui/MovieList";
 import { Colors } from "../../constants";
 import { useEffect, useState } from "react";
-import Results from "../FlowScreen/Results";
-import ServicesSelect from "../../components/ServicesSelect";
 import { FlashList } from "@shopify/flash-list";
 import useDiscoverMovies from "../../hooks/useDiscoverMovies";
 const { height, width } = Dimensions.get("window");
+import useGetTrendingMovies from "../../hooks/useGetTrendingMovies";
+import Carousel from "../../components/ui/Carousel";
 
 const DiscoverScreen = () => {
   return (
@@ -18,70 +20,57 @@ const DiscoverScreen = () => {
       style={{
         flex: 1,
         backgroundColor: Colors.background,
-        gap: 10,
-        paddingVertical: 10,
       }}
     >
       <SafeAreaView />
-      <SearchBar />
       <DiscoverView />
     </View>
   );
 };
 
 const DiscoverView = () => {
-  const searchResults = useSelector(
-    (state: RootState) => state.movies.searchResults
-  );
-  const searchResultServices = useSelector(
-    (state: RootState) => state.movies.searchResultServices
-  );
-
   const [isRefreshing, setIsRefreshing] = useState(false);
-  //const data = useGetDiscoverMovies(isRefreshing);
   const data = useDiscoverMovies(isRefreshing);
+  const { trendingMovies, trendingMovieServices, loading } =
+    useGetTrendingMovies();
 
   useEffect(() => {
     if (isRefreshing) {
       var timeout = setTimeout(() => {
         setIsRefreshing(false);
-      }, 1000);
+      }, 500);
       return () => clearTimeout(timeout);
     }
   }, [isRefreshing]);
-
-  if (searchResults.length) {
-    return (
-      <Results
-        providers={searchResultServices || [[]]}
-        movies={searchResults.filter((value) => value.poster_path)}
-      />
-    );
-  } else {
-    return (
-      <View>
-        <ServicesSelect />
-        <View style={{ flex: 1, minHeight: height, width: width }}>
+  return (
+    <View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={() => setIsRefreshing(true)}
+          />
+        }
+        showsVerticalScrollIndicator={false}
+      >
+        <Carousel
+          movies={trendingMovies}
+          services={trendingMovieServices}
+          loading={loading}
+          isRefreshing={isRefreshing}
+          title="Trending"
+        />
+        <View style={{ flex: 1, minHeight: 600, width: width }}>
           <FlashList
             contentContainerStyle={{
-              paddingTop: 75,
+              paddingTop: 5,
               paddingBottom: 250,
             }}
             data={data}
-            refreshing={isRefreshing}
             estimatedItemSize={220}
-            onRefresh={() => setIsRefreshing(true)}
+            refreshing={isRefreshing}
             showsVerticalScrollIndicator={false}
             keyExtractor={({ name }) => name}
-            ListEmptyComponent={() => (
-              <View>
-                <View
-                  style={{ width: 100, height: 150, backgroundColor: "purple" }}
-                >
-                  {" "}
-                </View>
-              </View>
-            )}
             renderItem={({ item }) => {
               return (
                 <MovieList
@@ -93,9 +82,9 @@ const DiscoverView = () => {
             }}
           />
         </View>
-      </View>
-    );
-  }
+      </ScrollView>
+    </View>
+  );
 };
 
 export default DiscoverScreen;

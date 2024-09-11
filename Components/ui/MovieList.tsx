@@ -2,8 +2,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef } from "react";
-import PosterButton from "./PosterButton";
-import { RootStackParamList, Movie } from "../types";
+import PosterButton from "../PosterButton";
+import { RootStackParamList, Movie } from "../../types";
 import { FlashList } from "@shopify/flash-list";
 
 type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
@@ -48,6 +48,7 @@ const MovieList = React.memo(
         <View
           style={{
             minHeight: 170,
+            height: 170,
             flexDirection: "row",
           }}
         >

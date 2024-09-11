@@ -13,7 +13,7 @@ import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { imageBasePath, Colors } from "../../constants";
 import useGetPersonInfo from "../../hooks/useGetPersonInfo";
-import MovieList from "../../components/MovieList";
+import MovieList from "../../components/ui/MovieList";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types";
 import { FlashList } from "@shopify/flash-list";

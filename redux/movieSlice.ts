@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Movie, FullMovie, WatchProvider, Service } from "../types";
+import { Movie, WatchProvider, Service } from "../types";
 
 interface InitialType {
   selectedMovie: Movie | null;
-  similarMovies: FullMovie[];
+  similarMovies: Movie[];
   selectedServices: WatchProvider[];
   searchResults: Movie[];
   searchResultServices: Service[][];
