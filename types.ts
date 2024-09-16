@@ -5,6 +5,7 @@ export interface Movie {
   poster_path?: string;
   popularity: number;
   vote_average: number;
+  vote_count: number;
   release_date: string;
   runtime?: number;
   tagline?: string;
@@ -48,6 +49,7 @@ export interface Person {
 export type RootStackParamList = {
   Home: undefined;
   Flow: undefined;
+  Search: undefined;
   Recs: { recs: Movie[] };
   Movie: { movie: Movie };
   Person: { person: Person };

@@ -7,6 +7,7 @@ interface InitialType {
   selectedServices: WatchProvider[];
   searchResults: Movie[];
   searchResultServices: Service[][];
+  isResultsLoading: boolean;
   focus: "home" | "lucky" | "search";
 }
 
@@ -16,6 +17,7 @@ const initialState: InitialType = {
   selectedServices: [],
   searchResults: [],
   searchResultServices: [[]],
+  isResultsLoading: false,
   focus: "home",
 };
 
@@ -28,6 +30,9 @@ export const movieSlice = createSlice({
     },
     updateSimilarMovies: (state, action) => {
       state.similarMovies = [...action.payload];
+    },
+    updateResultsLoading: (state, action) => {
+      state.isResultsLoading = action.payload;
     },
     updateSelectedServices: (state, action) => {
       if (
@@ -62,6 +67,7 @@ export const {
   updateSimilarMovies,
   updateSelectedServices,
   updateSearchResults,
+  updateResultsLoading,
   removeSelectedMovie,
   updateSearchResultServices,
   setServices,

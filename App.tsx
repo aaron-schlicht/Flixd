@@ -10,6 +10,7 @@ import PersonScreen from "./screens/PersonScreen";
 import { RootStackParamList } from "./types";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import SearchScreen from "./screens/SearchScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 let persistor = persistStore(store);
@@ -27,13 +28,13 @@ export default function App() {
             />
             <Stack.Screen
               options={{ headerShown: false, gestureEnabled: false }}
-              name="Flow"
-              component={MainFlow}
+              name="Search"
+              component={SearchScreen}
             />
             <Stack.Screen
               options={{ headerShown: false }}
               name="Movie"
-              initialParams={{ id: 0 }}
+              initialParams={{ movie: undefined }}
               component={MovieScreen}
             />
             <Stack.Screen

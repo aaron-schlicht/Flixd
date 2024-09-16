@@ -1,32 +1,19 @@
 import { View, StatusBar, Text } from "react-native";
 import Discover from "../../screens/DiscoverScreen";
-import { SafeAreaView } from "react-native";
 import Lucky from "../../screens/RandomScreen/RandomScreen";
 import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
-import { setServices, updateSearchResults } from "../../redux/movieSlice";
+import { updateSearchResults } from "../../redux/movieSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../../constants";
-import FlowScreen from "../../screens/FlowScreen";
 import { styles } from "./Home.styled";
-import { useEffect } from "react";
-import { WatchProvider } from "../../types";
+import SearchScreen from "../../screens/SearchScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
   const dispatch = useDispatch();
-
-  /*useEffect(() => {
-    const storedServices = "";
-    if (storedServices) {
-      const services: WatchProvider[] = JSON.parse(storedServices);
-      dispatch(setServices(services));
-    }
-  });*/
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -84,8 +71,8 @@ export default function Tabs() {
           })}
         />
         <Tab.Screen
-          name="Recs"
-          component={FlowScreen}
+          name="Search"
+          component={SearchScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <View
@@ -97,7 +84,7 @@ export default function Tabs() {
                 }}
               >
                 <Ionicons
-                  name={focused ? "filter-circle" : "filter-circle-outline"}
+                  name={focused ? "search-circle" : "search-circle-outline"}
                   color={focused ? "white" : Colors.primary}
                   size={40}
                 />
@@ -109,7 +96,7 @@ export default function Tabs() {
                     fontWeight: "bold",
                   }}
                 >
-                  Filter
+                  Search
                 </Text>
               </View>
             ),
