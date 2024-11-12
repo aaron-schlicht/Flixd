@@ -18,6 +18,7 @@ export interface Service {
   logo_path: string;
   provider_id: number;
   provider_name: string;
+  isRental?: boolean;
 }
 
 export interface WatchProvider {

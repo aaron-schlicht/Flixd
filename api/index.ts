@@ -53,18 +53,23 @@ export const useFetchList = (
 };
 
 export const fetchMovieServices = async (id: number) => {
-  const { data } = await get<any>(`movie/${id}/watch/providers`, {
+  const { data } = await get<{
+    results: { US?: { rent?: Service[]; flatrate?: Service[] } };
+  }>(`movie/${id}/watch/providers`, {
     params: { language: "en-US" },
   });
-  if (
-    data &&
-    data.results &&
-    data.results["US"] &&
-    data.results["US"].flatrate
-  ) {
-    return data.results["US"].flatrate as Service[];
+  let services: Service[] = [];
+  if (data.results && data.results["US"] && data.results["US"].flatrate) {
+    services = data.results["US"].flatrate as Service[];
   }
-  return [];
+  if (data.results && data.results.US && data.results.US?.rent) {
+    let rentals = data.results.US.rent;
+    for (let rental of rentals) {
+      rental.isRental = true;
+    }
+    services = [...services, ...rentals];
+  }
+  return services;
 };
 
 export const fetchMovieDetails = async (id: number) => {

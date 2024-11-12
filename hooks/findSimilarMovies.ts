@@ -21,7 +21,6 @@ const findSimilarMovies = async (id: number) => {
   const genreStr = buildIdString(
     (movie.genres.map((value: any) => value.id) || []).slice(0, 2)
   );
-  console.log(genreStr);
   const genreMoviePromises = [1, 2].map((value) =>
     get<any>(`/discover/movie`, {
       params: { with_genres: genreStr, page: value },

@@ -1,21 +1,26 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { Movie, RootStackParamList, Service } from "../../types";
 import { fetchMovieServices, get } from "../../api";
-import { Colors, imageBasePath, MEDIUM_POSTER_BASE_URL } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Image } from "expo-image";
+import { FlashList } from "@shopify/flash-list";
+import { Dimensions } from "react-native";
+import SkeletonList from "./SkeletonList";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import ResultItem from "./ResultItem";
+const { width, height } = Dimensions.get("screen");
 const BASE_URL = "/search/movie";
-
 type searchScreenProp = StackNavigationProp<RootStackParamList, "Search">;
 
 const SearchResults = ({ query }: { query: string }) => {
   const [results, setResults] = useState<Movie[]>([]);
   const [services, setServices] = useState<Service[][]>([]);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<searchScreenProp>();
 
   const fetchMoviesAndServices = async (query: string) => {
+    setLoading(true);
     const { data } = await get<{ results: Movie[] }>(
       BASE_URL + `?query=${query}`
     );
@@ -24,93 +29,48 @@ const SearchResults = ({ query }: { query: string }) => {
     const servicePromises = movies.map(({ id }) => fetchMovieServices(id));
     const serviceResults = await Promise.all(servicePromises);
     setServices(serviceResults);
+    setLoading(false);
   };
   useEffect(() => {
     fetchMoviesAndServices(query);
   }, [query]);
 
-  const handlePosterPress = (movie: Movie) => {
-    navigation.navigate("Movie", { movie: movie });
-  };
+  const renderResult = ({ item, index }: { item: Movie; index: number }) => (
+    <ResultItem
+      item={item}
+      service={services?.at(index)?.at(0)}
+      handlePosterPress={() => {
+        navigation.navigate("Movie", { movie: item });
+      }}
+    />
+  );
 
   return (
     <View>
       <View
         style={{
           minHeight: 2,
+          height: height,
+          width: width,
           paddingBottom: 200,
         }}
       >
-        <FlatList
-          data={results}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => {
-            if (!item.poster_path) return null;
-            return (
-              <View
-                style={{
-                  width: "97%",
-                  alignSelf: "center",
-                  padding: 5,
-                  borderBottomColor: Colors.secondary,
-                  borderBottomWidth: 1,
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    padding: 10,
-                    borderRadius: 10,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
-                  onPress={() => handlePosterPress(item)}
-                >
-                  <Image
-                    source={{ uri: MEDIUM_POSTER_BASE_URL + item.poster_path }}
-                    style={{ width: 50, height: 75, borderRadius: 10 }}
-                  />
-                  <Text
-                    style={{
-                      color: Colors.primary,
-                      fontSize: 18,
-                      width: "70%",
-                    }}
-                    numberOfLines={2}
-                    adjustsFontSizeToFit
-                  >
-                    {item.title}{" "}
-                    {item.release_date
-                      ? `(${new Date(item.release_date).getFullYear()})`
-                      : ""}
-                  </Text>
-                  {services.length > 0 && services[index].length > 0 && (
-                    <View
-                      style={{
-                        padding: 10,
-                        display: "flex",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Image
-                        style={{
-                          width: 30,
-                          height: 30,
-                          borderRadius: 5,
-                        }}
-                        source={{
-                          uri: imageBasePath + services[index][0].logo_path,
-                        }}
-                        transition={200}
-                      />
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-        />
+        {loading ? (
+          <SkeletonList />
+        ) : (
+          <Animated.View
+            entering={FadeIn.duration(300)}
+            exiting={FadeOut.duration(300)}
+            style={{ height: height, width: width }}
+          >
+            <FlashList
+              data={results}
+              estimatedItemSize={100}
+              showsVerticalScrollIndicator={false}
+              renderItem={renderResult}
+            />
+          </Animated.View>
+        )}
       </View>
     </View>
   );

@@ -27,8 +27,8 @@ import { Image } from "expo-image";
 import ImageHeader from "./ImageHeader";
 import { Genre, RootStackParamList } from "../../types";
 
-const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.5;
-const HEADER_COLLAPSED_HEIGHT = 100;
+const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.45;
+const HEADER_COLLAPSED_HEIGHT = 60;
 interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
 
 const MovieScreen: React.FC<Props> = ({ route }) => {
@@ -42,7 +42,7 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   });
 
   const headerOpacity = useAnimatedStyle(() => {
-    const opacity = interpolate(scrollY.value, [210, 215], [0, 1]);
+    const opacity = interpolate(scrollY.value, [230, 245], [0, 1]);
 
     return {
       opacity: opacity,
@@ -59,8 +59,10 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
 
   const navigation = useNavigation();
 
-  const handleBack = () => {
-    navigation.goBack();
+  const handleClose = () => {
+    if (navigation.getParent()) {
+      navigation.getParent()?.goBack();
+    }
   };
 
   if (loading) {
@@ -83,7 +85,7 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   if (!movie) {
     return (
       <View style={styles.container}>
-        <BackButton onPress={handleBack} />
+        <CloseButton onPress={handleClose} />
         <View style={{ width: "100%", alignItems: "center", gap: 10 }}>
           <Text style={{ color: "white", fontSize: 25, fontWeight: "600" }}>
             Something went wrong
@@ -101,7 +103,7 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
         {!backdrop ? null : (
           <ImageHeader sv={scrollY} posterPath={imageBasePath + backdrop} />
         )}
-        <BackButton onPress={handleBack} />
+        <CloseButton onPress={handleClose} />
         <Animated.View style={[styles.movieTitleContainer, headerOpacity]}>
           <View
             style={{
@@ -167,7 +169,7 @@ const PoweredLogo = () => (
   </View>
 );
 
-const BackButton = ({ onPress }: { onPress: () => void }) => (
+const CloseButton = ({ onPress }: { onPress: () => void }) => (
   <TouchableOpacity
     style={{
       padding: 10,
@@ -175,8 +177,8 @@ const BackButton = ({ onPress }: { onPress: () => void }) => (
       width: 50,
       height: 50,
       position: "absolute",
-      top: 50,
-      left: 15,
+      top: 5,
+      right: 15,
       zIndex: 200,
       justifyContent: "center",
       alignItems: "center",
@@ -184,7 +186,7 @@ const BackButton = ({ onPress }: { onPress: () => void }) => (
     }}
     onPress={onPress}
   >
-    <Ionicons name="chevron-back" color="white" size={30} />
+    <Ionicons name="close" color="white" size={30} />
   </TouchableOpacity>
 );
 

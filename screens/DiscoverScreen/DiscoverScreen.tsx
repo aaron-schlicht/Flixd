@@ -13,6 +13,8 @@ import useDiscoverMovies from "../../hooks/useDiscoverMovies";
 const { height, width } = Dimensions.get("window");
 import useGetTrendingMovies from "../../hooks/useGetTrendingMovies";
 import Carousel from "../../components/ui/Carousel";
+import ServicesSelect from "../../components/ServicesSelect";
+import useFindStreamingMovies from "../../hooks/useFindStreamingMovies";
 
 const DiscoverScreen = () => {
   return (
@@ -31,6 +33,7 @@ const DiscoverScreen = () => {
 const DiscoverView = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const data = useDiscoverMovies(isRefreshing);
+  const streamingMovieData = useFindStreamingMovies(isRefreshing);
   const { trendingMovies, trendingMovieServices, loading } =
     useGetTrendingMovies();
 
@@ -45,6 +48,7 @@ const DiscoverView = () => {
   return (
     <View>
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 200 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
@@ -60,11 +64,10 @@ const DiscoverView = () => {
           isRefreshing={isRefreshing}
           title="Trending"
         />
-        <View style={{ flex: 1, minHeight: 600, width: width }}>
+        <View style={{ flex: 1, minHeight: 300, width: width }}>
           <FlashList
             contentContainerStyle={{
               paddingTop: 5,
-              paddingBottom: 250,
             }}
             data={data}
             estimatedItemSize={220}
@@ -76,6 +79,27 @@ const DiscoverView = () => {
                 <MovieList
                   isRefreshing={isRefreshing}
                   name={item.name}
+                  data={item.movies}
+                />
+              );
+            }}
+          />
+        </View>
+        <ServicesSelect />
+        <View style={{ flex: 1, minHeight: 300, width: width }}>
+          <FlashList
+            contentContainerStyle={{
+              paddingTop: 5,
+            }}
+            data={streamingMovieData}
+            estimatedItemSize={220}
+            refreshing={isRefreshing}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => {
+              return (
+                <MovieList
+                  isRefreshing={isRefreshing}
+                  name={"Trending on " + item.name}
                   data={item.movies}
                 />
               );
