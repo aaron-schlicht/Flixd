@@ -4,7 +4,7 @@ import { Movie, WatchProvider, Service } from "../types";
 interface InitialType {
   selectedMovie: Movie | null;
   similarMovies: Movie[];
-  selectedServices: WatchProvider[];
+  selectedServices: Service[];
   searchResults: Movie[];
   searchResultServices: Service[][];
   isResultsLoading: boolean;

@@ -1,7 +1,7 @@
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { Movie, Service } from "../../../types";
 import { Image } from "expo-image";
-import { imageBasePath } from "../../../constants";
+import { Colors, imageBasePath } from "../../../constants";
 import {
   CarouselImage,
   CarouselItemContainer,
@@ -40,18 +40,31 @@ const CarouselItem = ({
         />
         <ServiceImageView>
           {!!service && (
-            <View key={`service-${service.provider_id}`}>
-              <Image
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 10,
-                }}
-                source={{
-                  uri: imageBasePath + service.logo_path,
-                }}
-                transition={200}
-              />
+            <View>
+              {service.isRental ? (
+                <View
+                  style={{
+                    backgroundColor: Colors.secondary,
+                    padding: 5,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text style={{ color: Colors.primary }}>RENTAL</Text>
+                </View>
+              ) : (
+                <Image
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
+                  }}
+                  source={{
+                    uri: imageBasePath + service.logo_path,
+                  }}
+                  recyclingKey={movie.title}
+                  transition={200}
+                />
+              )}
             </View>
           )}
         </ServiceImageView>

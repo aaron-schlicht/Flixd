@@ -1,4 +1,4 @@
-import { DimensionValue, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { FC } from "react";
 

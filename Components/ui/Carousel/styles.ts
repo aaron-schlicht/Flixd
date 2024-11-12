@@ -13,10 +13,7 @@ export const Title = styled.Text`
 export const CarouselView = styled.View`
   min-height: 200px;
   height: 200px;
-  width: ${width}px;
-  flex: 1;
-  flex-grow: 1;
-  align-items: flex-start;
+  flex-direction: row;
 `;
 
 export const CarouselItemContainer = styled.View`

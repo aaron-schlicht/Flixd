@@ -1,4 +1,4 @@
-import { Genre, Keyword, WatchProvider } from "./types";
+import { Genre, Keyword, Service, WatchProvider } from "./types";
 
 export const Colors = {
   background: "#15182D",
@@ -18,81 +18,199 @@ export const getRatingColor = (rating: number) => {
 
 export const MEDIUM_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500/";
 
-export const Providers: WatchProvider[] = [
+export const Providers = [
   {
     provider_id: 8,
-    name: "Netflix",
-    logo_url: "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+    provider_name: "Netflix",
+    logo_path: "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
   },
   {
     provider_id: 9,
-    name: "Prime Video",
-    logo_url: "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
+    provider_name: "Prime Video",
+    logo_path: "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
   },
   {
     provider_id: 337,
-    name: "Disney Plus",
-    logo_url: "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+    provider_name: "Disney Plus",
+    logo_path: "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
   },
   {
     provider_id: 1899,
-    name: "Max",
-    logo_url: "/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg",
+    provider_name: "Max",
+    logo_path: "/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg",
   },
   {
     provider_id: 15,
-    name: "Hulu",
-    logo_url: "/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg",
+    provider_name: "Hulu",
+    logo_path: "/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg",
   },
   {
     provider_id: 386,
-    name: "Peacock",
-    logo_url: "/8VCV78prwd9QzZnEm0ReO6bERDa.jpg",
+    provider_name: "Peacock",
+    logo_path: "/8VCV78prwd9QzZnEm0ReO6bERDa.jpg",
   },
   {
     provider_id: 350,
-    name: "Apple TV Plus",
-    logo_url: "/6uhKBfmtzFqOcLousHwZuzcrScK.jpg",
+    provider_name: "Apple TV Plus",
+    logo_path: "/6uhKBfmtzFqOcLousHwZuzcrScK.jpg",
   },
   {
     provider_id: 531,
-    name: "Paramount Plus",
-    logo_url: "/xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg",
+    provider_name: "Paramount Plus",
+    logo_path: "/xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg",
   },
   {
     provider_id: 526,
-    name: "AMC+",
-    logo_url: "/xlonQMSmhtA2HHwK3JKF9ghx7M8.jpg",
+    provider_name: "AMC+",
+    logo_path: "/xlonQMSmhtA2HHwK3JKF9ghx7M8.jpg",
   },
   {
     provider_id: 43,
-    name: "Starz",
-    logo_url: "/eWp5LdR4p4uKL0wACBBXapDV2lB.jpg",
+    provider_name: "Starz",
+    logo_path: "/eWp5LdR4p4uKL0wACBBXapDV2lB.jpg",
   },
   {
     provider_id: 37,
-    name: "Showtime",
-    logo_url: "/4kL33LoKd99YFIaSOoOPMQOSw1A.jpg",
+    provider_name: "Showtime",
+    logo_path: "/4kL33LoKd99YFIaSOoOPMQOSw1A.jpg",
   },
   {
     provider_id: 73,
-    name: "Tubi TV",
-    logo_url: "/w2TDH9TRI7pltf5LjN3vXzs7QbN.jpg",
+    provider_name: "Tubi TV",
+    logo_path: "/w2TDH9TRI7pltf5LjN3vXzs7QbN.jpg",
   },
   {
     provider_id: 300,
-    name: "Pluto TV",
-    logo_url: "/t6N57S17sdXRXmZDAkaGP0NHNG0.jpg",
+    provider_name: "Pluto TV",
+    logo_path: "/t6N57S17sdXRXmZDAkaGP0NHNG0.jpg",
   },
   {
     provider_id: 258,
-    name: "Criterion Channel",
-    logo_url: "/scMgbnNpkzdvhhqlQV3EjmByBXF.jpg",
+    provider_name: "Criterion Channel",
+    logo_path: "/scMgbnNpkzdvhhqlQV3EjmByBXF.jpg",
   },
   {
     provider_id: 191,
-    name: "Kanopy",
-    logo_url: "/wbCleYwRFpUtWcNi7BLP3E1f6VI.jpg",
+    provider_name: "Kanopy",
+    logo_path: "/wbCleYwRFpUtWcNi7BLP3E1f6VI.jpg",
+  },
+];
+
+export const MainProviders: Service[] = [
+  {
+    provider_id: 8,
+    provider_name: "Netflix",
+    logo_path: "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+  },
+  {
+    provider_id: 9,
+    provider_name: "Prime Video",
+    logo_path: "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
+  },
+  {
+    provider_id: 337,
+    provider_name: "Disney Plus",
+    logo_path: "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+  },
+  {
+    provider_id: 1899,
+    provider_name: "Max",
+    logo_path: "/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg",
+  },
+  {
+    provider_id: 15,
+    provider_name: "Hulu",
+    logo_path: "/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg",
+  },
+  {
+    provider_id: 386,
+    provider_name: "Peacock Premium",
+    logo_path: "/8VCV78prwd9QzZnEm0ReO6bERDa.jpg",
+  },
+  {
+    provider_id: 350,
+    provider_name: "Apple TV Plus",
+    logo_path: "/6uhKBfmtzFqOcLousHwZuzcrScK.jpg",
+  },
+  {
+    provider_id: 531,
+    provider_name: "Paramount Plus",
+    logo_path: "/xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg",
+  },
+  {
+    provider_id: 526,
+    provider_name: "AMC+",
+    logo_path: "/xlonQMSmhtA2HHwK3JKF9ghx7M8.jpg",
+  },
+  {
+    provider_id: 43,
+    provider_name: "Starz",
+    logo_path: "/eWp5LdR4p4uKL0wACBBXapDV2lB.jpg",
+  },
+  {
+    provider_id: 37,
+    provider_name: "Showtime",
+    logo_path: "/4kL33LoKd99YFIaSOoOPMQOSw1A.jpg",
+  },
+  {
+    provider_id: 73,
+    provider_name: "Tubi TV",
+    logo_path: "/w2TDH9TRI7pltf5LjN3vXzs7QbN.jpg",
+  },
+  {
+    provider_id: 300,
+    provider_name: "Pluto TV",
+    logo_path: "/t6N57S17sdXRXmZDAkaGP0NHNG0.jpg",
+  },
+  {
+    provider_id: 258,
+    provider_name: "Criterion Channel",
+    logo_path: "/scMgbnNpkzdvhhqlQV3EjmByBXF.jpg",
+  },
+  {
+    provider_id: 191,
+    provider_name: "Kanopy",
+    logo_path: "/wbCleYwRFpUtWcNi7BLP3E1f6VI.jpg",
+  },
+  {
+    logo_path: "/9BgaNQRMDvVlji1JBZi6tcfxpKx.jpg",
+    provider_id: 257,
+    provider_name: "fuboTV",
+  },
+  {
+    logo_path: "/rMb93u1tBeErSYLv79zSTR07UdO.jpg",
+    provider_id: 188,
+    provider_name: "YouTube Premium",
+  },
+  {
+    logo_path: "/iLjStQKQwzyxXJb3jyNpvDmW9mx.jpg",
+    provider_id: 209,
+    provider_name: "PBS",
+  },
+  {
+    logo_path: "/m4KUe3UoTnLgN4g6txYMnBqeUI5.jpg",
+    provider_id: 123,
+    provider_name: "FXNow",
+  },
+  {
+    logo_path: "/ctiRpS16dlaTXQBSsiFncMrgWmh.jpg",
+    provider_id: 34,
+    provider_name: "MGM Plus",
+  },
+  {
+    logo_path: "/4cHGd32hhEHmFjDGJcjVEAwFQg0.jpg",
+    provider_id: 211,
+    provider_name: "Freeform",
+  },
+  {
+    logo_path: "/vEtdiYRPRbDCp1Tcn3BEPF1Ni76.jpg",
+    provider_id: 99,
+    provider_name: "Shudder",
+  },
+  {
+    logo_path: "/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg",
+    provider_id: 11,
+    provider_name: "MUBI",
   },
 ];
 
