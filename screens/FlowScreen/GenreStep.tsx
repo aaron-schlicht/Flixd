@@ -5,6 +5,7 @@ import { Colors, Genres } from "../../constants";
 import * as Haptics from "expo-haptics";
 import { RootState } from "../../redux/store";
 import { Genre } from "../../types";
+import { FlashList } from "@shopify/flash-list";
 
 const GenreStep = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
@@ -16,21 +17,20 @@ const GenreStep = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <FlatList
+    <View style={{ height: 300 }}>
+      <FlashList
         data={Object.entries(Genres)}
         numColumns={4}
+        estimatedItemSize={55}
         horizontal={false}
         contentContainerStyle={{
-          paddingTop: 15,
-          paddingBottom: 50,
           paddingHorizontal: 10,
         }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           const genre = item[1];
           return (
-            <View style={{ width: "25%" }} key={`genre-${genre.id}`}>
+            <View style={{ width: "100%" }} key={`genre-${genre.id}`}>
               <GenreButton
                 genre={genre}
                 handleSelect={handleGenreSelect}

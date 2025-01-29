@@ -1,19 +1,26 @@
-import { TouchableOpacity, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { FC } from "react";
+import { Movie } from "../../types";
+import { Link, router } from "expo-router";
 
 export interface PosterButtonProps {
   dimensions?: { width: number; height: number };
-  onPress: () => void;
+  movie: Movie;
+  onPress?: () => void;
   posterPath: string;
 }
 
 const PosterButton: FC<PosterButtonProps> = ({
   dimensions = { width: 100, height: 150 },
   onPress,
+  movie,
   posterPath,
 }) => (
-  <TouchableOpacity onPress={onPress} style={{ paddingHorizontal: 10 }}>
+  <TouchableOpacity
+    style={{ paddingHorizontal: 10 }}
+    onPress={() => router.push(`/modal/movie?id=${movie.id}`)}
+  >
     <View
       style={{
         shadowColor: "black",

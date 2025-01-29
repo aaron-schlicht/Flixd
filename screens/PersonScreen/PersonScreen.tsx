@@ -1,11 +1,8 @@
-import { StackScreenProps } from "@react-navigation/stack";
-import { FC } from "react";
 import {
   SafeAreaView,
   View,
   Text,
   Dimensions,
-  FlatList,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
@@ -14,26 +11,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { imageBasePath, Colors } from "../../constants";
 import useGetPersonInfo from "../../hooks/useGetPersonInfo";
 import MovieList from "../../components/ui/MovieList";
-import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../types";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
 
-interface Props extends StackScreenProps<RootStackParamList, "Person"> {}
-
-const PersonScreen: FC<Props> = ({ route }) => {
-  const { person } = route.params;
-  const { credits, loading } = useGetPersonInfo(person.id);
-
-  const navigation = useNavigation();
-
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
+const PersonScreen = ({ id }: { id: string }) => {
+  const { credits, person, loading } = useGetPersonInfo(id);
   return (
     <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <SafeAreaView style={{ backgroundColor: Colors.secondary }} />
-      <BackButton onPress={handleBack} />
+      <BackButton onPress={() => router.back()} />
       <View
         style={{
           paddingVertical: 15,
@@ -43,7 +29,7 @@ const PersonScreen: FC<Props> = ({ route }) => {
           backgroundColor: Colors.secondary,
         }}
       >
-        {person.profile_path ? (
+        {person && person.profile_path ? (
           <Image
             source={{ uri: imageBasePath + person.profile_path }}
             style={{ width: 125, height: 125, borderRadius: 20 }}
@@ -63,7 +49,7 @@ const PersonScreen: FC<Props> = ({ route }) => {
           numberOfLines={1}
           adjustsFontSizeToFit
         >
-          {person.name}
+          {person && person.name}
         </Text>
       </View>
       {loading ? (

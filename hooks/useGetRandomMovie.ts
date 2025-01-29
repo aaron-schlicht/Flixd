@@ -5,7 +5,7 @@ import { fetchMovieServices, get } from "../api";
 const generateRandomPage = () => Math.ceil(Math.random() * 98);
 
 const useGetRandomMovie = () => {
-  const [randomMovie, setRandomMovie] = useState<Movie | null>(null);
+  const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
   const [services, setServices] = useState<Service[]>([]);
 
   const getRandomMovie = async () => {
@@ -26,19 +26,15 @@ const useGetRandomMovie = () => {
       const length = movies.length;
       if (length) {
         const index = Math.floor(Math.random() * length);
-        setRandomMovie(movies[index]);
+        setRandomMovies([...randomMovies, movies[index]]);
         const movieServices = await fetchMovieServices(movies[index].id);
         setServices(movieServices);
       }
     }
   };
 
-  useEffect(() => {
-    getRandomMovie();
-  }, []);
-
   return {
-    randomMovie,
+    randomMovies,
     services,
     getRandomMovie,
   };

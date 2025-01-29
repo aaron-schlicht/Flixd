@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Animated, {
-  Extrapolate,
+  Extrapolation,
   interpolate,
   useAnimatedStyle,
   SharedValue,
@@ -16,7 +16,7 @@ import Animated, {
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const AnimatedImage = Animated.createAnimatedComponent(Image);
-const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.3; //TODO: Change this value now that movie page is modal
+const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.35;
 const HEADER_COLLAPSED_HEIGHT = 100;
 
 const ImageHeader = ({
@@ -31,7 +31,7 @@ const ImageHeader = ({
       sv.value,
       [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
       [1, 0],
-      Extrapolate.CLAMP
+      Extrapolation.CLAMP
     );
 
     return {
@@ -44,7 +44,7 @@ const ImageHeader = ({
       sv.value,
       [-120, -30],
       [1.3, 1],
-      Extrapolate.CLAMP
+      Extrapolation.CLAMP
     );
 
     return {
@@ -68,7 +68,12 @@ const ImageHeader = ({
       </Animated.View>
       <AnimatedLinearGradient
         style={[styles.gradient, heightStyle]}
-        colors={["transparent", "rgba(21, 24, 45, 0.6)", "rgba(21, 24, 45, 1)"]}
+        colors={[
+          "transparent",
+          "rgba(21, 24, 45, 0.1)",
+          "rgba(21, 24, 45, 0.8)",
+          "rgba(21, 24, 45, 1)",
+        ]}
       />
     </View>
   );

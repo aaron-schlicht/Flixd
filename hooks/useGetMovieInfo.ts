@@ -6,6 +6,7 @@ const useGetMovieInfo = (id: number) => {
   const [rating, setRating] = useState("");
   const [backdrop, setBackdrop] = useState<string | undefined>(undefined);
   const [tagline, setTagline] = useState<string | undefined>(undefined);
+  const [movie, setMovie] = useState<Movie | null>(null);
   const [runtime, setRuntime] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
@@ -32,6 +33,7 @@ const useGetMovieInfo = (id: number) => {
   const getBackdropAndTagline = async () => {
     setLoading(true);
     const { data } = await get<Movie>(`movie/${id}`);
+    setMovie(data);
     setBackdrop(data.backdrop_path);
     setLoading(false);
     setTagline(data.tagline);
@@ -49,6 +51,7 @@ const useGetMovieInfo = (id: number) => {
     tagline,
     runtime,
     loading,
+    movie,
   };
 };
 

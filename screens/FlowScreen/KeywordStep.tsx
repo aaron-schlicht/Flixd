@@ -6,6 +6,7 @@ import { RootState } from "../../redux/store";
 import * as Haptics from "expo-haptics";
 import KeywordSearch from "./KeywordSearch";
 import { Keyword } from "../../types";
+import { FlashList } from "@shopify/flash-list";
 
 const KeywordStep = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
@@ -24,18 +25,19 @@ const KeywordStep = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <KeywordSearch />
+      {/*<KeywordSearch />*/}
       <View
         style={{
-          flex: 1,
           paddingTop: 0,
-          borderTopColor: Colors.secondary,
-          borderTopWidth: 2,
+          //borderTopColor: Colors.secondary,
+          //borderTopWidth: 2,
+          height: 500,
         }}
       >
-        <FlatList
+        <FlashList
           data={keywordArray}
           numColumns={3}
+          estimatedItemSize={55}
           contentContainerStyle={{
             paddingTop: 10,
             paddingBottom: 200,
@@ -44,7 +46,7 @@ const KeywordStep = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             return (
-              <View style={{ width: "33%" }} key={`keyword-${item.id}`}>
+              <View style={{ width: "100%" }} key={`keyword-${item.id}`}>
                 <KeywordButton
                   keyword={item}
                   handleSelect={handlePress}

@@ -1,19 +1,11 @@
 import { View, Text, ScrollView } from "react-native";
-import { Movie, RootStackParamList } from "../../types";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { Movie } from "../../types";
 import PosterButton from "../../components/ui/PosterButton";
-
-type recsScreenProp = StackNavigationProp<RootStackParamList, "Movie">;
 
 const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
   const validMovies = similarMovies.filter(
     (movie) => movie.poster_path && movie.popularity > 20.0
   );
-  const navigation = useNavigation<recsScreenProp>();
-  const handleMoviePress = (movie: Movie) => {
-    navigation.push("Movie", { movie });
-  };
   if (!validMovies.length) return null;
   return (
     <View style={{ paddingTop: 30 }}>
@@ -45,7 +37,8 @@ const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
                 posterPath={
                   "https://image.tmdb.org/t/p/w342/" + movie.poster_path
                 }
-                onPress={() => handleMoviePress(movie)}
+                movie={movie}
+                onPress={() => {}}
               />
             </View>
           );

@@ -1,17 +1,15 @@
 import * as React from "react";
 import { Text, View, StyleSheet, Dimensions, Animated } from "react-native";
 const { width, height } = Dimensions.get("window");
-import { Movie, RootStackParamList, Service } from "../../types";
+import { Movie, Service } from "../../types";
 import { Colors, imageBasePath } from "../../constants";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
 import PosterButton from "./PosterButton";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
 
 const ITEM_SIZE = width * 0.7;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const IMAGE_WIDTH = Dimensions.get("window").width * 0.65;
-type homeScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const Results = ({
   movies,
@@ -21,7 +19,6 @@ const Results = ({
   providers: Service[][];
 }) => {
   const ref = React.useRef<FlashList<Movie>>(null);
-  const navigation = useNavigation<homeScreenProp>();
 
   const resetPosition = () => {
     if (ref.current && Boolean(movies.length)) {
@@ -33,7 +30,7 @@ const Results = ({
   }, [movies]);
 
   const handleMoviePress = (movie: Movie) => {
-    navigation.navigate("Movie", { movie });
+    router.push(`/modal/movie?id=${movie.id}`);
   };
 
   if (movies.length === 0) {

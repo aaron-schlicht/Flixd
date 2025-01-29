@@ -8,7 +8,7 @@ interface InitialType {
   searchResults: Movie[];
   searchResultServices: Service[][];
   isResultsLoading: boolean;
-  focus: "home" | "lucky" | "search";
+  tab: "home" | "search" | "discover";
 }
 
 const initialState: InitialType = {
@@ -18,7 +18,7 @@ const initialState: InitialType = {
   searchResults: [],
   searchResultServices: [[]],
   isResultsLoading: false,
-  focus: "home",
+  tab: "home",
 };
 
 export const movieSlice = createSlice({
@@ -59,6 +59,9 @@ export const movieSlice = createSlice({
     setServices: (state, action) => {
       state.selectedServices = [...action.payload];
     },
+    setCurrentTab: (state, action) => {
+      state.tab = action.payload;
+    },
   },
 });
 
@@ -71,6 +74,7 @@ export const {
   removeSelectedMovie,
   updateSearchResultServices,
   setServices,
+  setCurrentTab,
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

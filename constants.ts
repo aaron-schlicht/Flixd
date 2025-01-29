@@ -32,7 +32,7 @@ export const Providers = [
   {
     provider_id: 337,
     provider_name: "Disney Plus",
-    logo_path: "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+    logo_path: "/97yvRBw1GzX7fXprcF80er19ot.jpg",
   },
   {
     provider_id: 1899,
@@ -110,7 +110,7 @@ export const MainProviders: Service[] = [
   {
     provider_id: 337,
     provider_name: "Disney Plus",
-    logo_path: "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+    logo_path: "/97yvRBw1GzX7fXprcF80er19ot.jpg",
   },
   {
     provider_id: 1899,

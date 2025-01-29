@@ -1,12 +1,11 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import { View, Text, FlatList } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useRef, useState } from "react";
+import { View, Text } from "react-native";
+import React, { useEffect, useRef } from "react";
 import PosterButton from "./PosterButton";
-import { RootStackParamList, Movie } from "../../types";
+import { Movie } from "../../types";
 import { FlashList } from "@shopify/flash-list";
-
-type recsScreenProp = StackNavigationProp<RootStackParamList, "Recs">;
+import { H2 } from "./Typography";
+import { Flex } from "./Layouts";
+import { Image } from "expo-image";
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 
 const MovieList = React.memo(
@@ -14,15 +13,13 @@ const MovieList = React.memo(
     name,
     data,
     isRefreshing,
+    imagePath,
   }: {
     name: string;
     data: Movie[];
     isRefreshing: boolean;
+    imagePath?: string;
   }) => {
-    const navigation = useNavigation<recsScreenProp>();
-    const handleMoviePress = (movie: Movie) => {
-      navigation.push("Movie", { movie });
-    };
     const ref = useRef<FlashList<Movie>>(null);
 
     useEffect(() => {
@@ -32,43 +29,60 @@ const MovieList = React.memo(
     }, [isRefreshing]);
     return (
       <View style={{ flex: 1 }}>
-        <Text
+        <Flex
           style={{
-            fontWeight: "bold",
-            fontSize: 25,
-            color: "white",
-            paddingLeft: 15,
-            padding: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            paddingBottom: 15,
           }}
-          numberOfLines={1}
-          adjustsFontSizeToFit
         >
-          {name}
-        </Text>
-        <View
+          {imagePath && (
+            <Image
+              source={{ uri: SMALL_POSTER_BASE_PATH + imagePath }}
+              style={{
+                width: 30,
+                height: 30,
+                marginLeft: 15,
+                marginRight: 10,
+                borderRadius: 5,
+              }}
+            />
+          )}
+          <H2
+            style={{
+              paddingLeft: imagePath ? 0 : 15,
+              fontSize: imagePath ? 20 : 24,
+            }}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {name}
+          </H2>
+        </Flex>
+        <Flex
           style={{
             minHeight: 170,
             height: 170,
-            flexDirection: "row",
           }}
         >
           <FlashList
             data={data}
             ref={ref}
             horizontal
+            contentContainerStyle={{ paddingLeft: 5 }}
             estimatedItemSize={170}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => `${item.id}`}
             renderItem={({ item }) => {
               return (
                 <PosterButton
-                  onPress={() => handleMoviePress(item)}
+                  movie={item}
                   posterPath={SMALL_POSTER_BASE_PATH + item.poster_path}
                 />
               );
             }}
           />
-        </View>
+        </Flex>
       </View>
     );
   }

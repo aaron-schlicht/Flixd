@@ -28,7 +28,9 @@ const useDiscoverMovies = (isRefreshing: boolean) => {
     },
     {
       name: "Coming Soon",
-      movies: upcomingMovies,
+      movies: upcomingMovies.sort((a, b) =>
+        a.release_date.localeCompare(b.release_date)
+      ),
     },
   ];
 };

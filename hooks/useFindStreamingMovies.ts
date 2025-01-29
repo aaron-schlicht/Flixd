@@ -10,7 +10,9 @@ const useFindStreamingMovies = (isRefreshing: boolean) => {
   const selectedServices = useSelector(
     (state: RootState) => state.movies.selectedServices
   );
-  const [data, setData] = useState<{ name: string; movies: Movie[] }[]>([]);
+  const [data, setData] = useState<
+    { name: string; movies: Movie[]; imagePath?: string }[]
+  >([]);
 
   const fetchStreamingMovies = async () => {
     if (selectedServices.length > 0) {
@@ -29,6 +31,7 @@ const useFindStreamingMovies = (isRefreshing: boolean) => {
           allData.push({
             name: service.provider_name,
             movies: serviceData.results,
+            imagePath: service.logo_path,
           });
         }
       }

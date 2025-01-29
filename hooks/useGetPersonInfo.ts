@@ -1,4 +1,4 @@
-import { Movie } from "../types";
+import { CastMember, CrewMember, Movie } from "../types";
 import {
   PersonCreditResults,
   useGetPersonCreditsQuery,
@@ -11,16 +11,23 @@ const PRODUCER = "PRODUCER";
 const WRITER = "WRITER";
 const SCREENPLAY = "SCREENPLAY";
 
-const useGetPersonInfo = (id: number) => {
+const useGetPersonInfo = (id: string) => {
   const [credits, setCredits] = useState<{ name: string; movies: Movie[] }[]>(
     []
   );
+  const [person, setPerson] = useState<CastMember | CrewMember | null>(null);
   const [loading, setLoading] = useState(false);
   const getPersonInfo = async () => {
     setLoading(true);
     const { data } = await get<PersonCreditResults>(
       `person/${id}/movie_credits`
     );
+
+    const { data: personDetails } = await get(`person/${id}`);
+
+    if (personDetails) {
+      setPerson(personDetails as CastMember | CrewMember);
+    }
     let results = [];
 
     if (data) {
@@ -79,6 +86,7 @@ const useGetPersonInfo = (id: number) => {
 
   return {
     credits,
+    person,
     loading,
   };
 };

@@ -1,5 +1,11 @@
-import { View, Image, TouchableHighlight, FlatList, Text } from "react-native";
-import { MainProviders, imageBasePath } from "../constants";
+import {
+  View,
+  Image,
+  TouchableHighlight,
+  FlatList,
+  Dimensions,
+} from "react-native";
+import { Colors, MainProviders, imageBasePath } from "../constants";
 import * as Haptics from "expo-haptics";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelectedServices } from "../redux/movieSlice";
@@ -7,6 +13,9 @@ import { RootState } from "../redux/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Service } from "../types";
 import { memo } from "react";
+import { H4, Paragraph } from "./ui/Typography";
+import { Flex } from "./ui/Layouts";
+const { width } = Dimensions.get("screen");
 
 const ServicesSelect = () => {
   return (
@@ -16,29 +25,25 @@ const ServicesSelect = () => {
         backgroundColor: "rgba(21, 24, 45, 0.9)",
       }}
     >
-      <Text
+      <H4
         style={{
-          fontWeight: "bold",
-          fontSize: 20,
-          color: "white",
           paddingLeft: 15,
-          padding: 10,
+          paddingVertical: 20,
+          width: width * 0.8,
         }}
         numberOfLines={1}
         adjustsFontSizeToFit
       >
         Select your streaming services
-      </Text>
+      </H4>
       <FlatList
         data={MainProviders}
-        horizontal
         contentContainerStyle={{
-          alignItems: "center",
-          paddingVertical: 10,
-          paddingHorizontal: 10,
-          gap: 2,
+          paddingVertical: 20,
+          paddingBottom: 150,
+          width: width,
         }}
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         keyExtractor={({ provider_id }) => `provider-${provider_id}`}
         renderItem={({ item }) => {
           return <ProviderButton provider={item} />;
@@ -57,44 +62,61 @@ const ProviderButton = memo(({ provider }: { provider: Service }) => {
       )
   );
   return (
-    <View>
-      <View
+    <View
+      style={{
+        padding: 10,
+        backgroundColor: selected ? Colors.secondary : "transparent",
+        borderBottomColor: selected ? Colors.primary : Colors.secondary,
+        borderBottomWidth: 1,
+      }}
+    >
+      <TouchableHighlight
         style={{
-          width: 56,
-          height: 56,
+          display: "flex",
+          flexDirection: "row",
           alignItems: "center",
         }}
+        underlayColor="transparent"
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          dispatch(updateSelectedServices(provider));
+        }}
       >
-        <TouchableHighlight
-          style={{
-            padding: 5,
-            borderRadius: 10,
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: 1,
-            borderColor: selected ? "white" : "transparent",
-            width: 50,
-            height: 50,
-          }}
-          underlayColor="transparent"
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            dispatch(updateSelectedServices(provider));
-          }}
-        >
-          <Image
-            source={{ uri: imageBasePath + provider.logo_path }}
+        <Flex style={{ width: "100%", gap: 15 }}>
+          <View
             style={{
-              width: 45,
-              height: 45,
-              borderRadius: 8,
-              opacity: selected ? 1 : 0.8,
+              padding: 5,
+              borderRadius: 10,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 1,
+              borderColor: selected ? "white" : "transparent",
+              width: 50,
+              height: 50,
             }}
-          />
-        </TouchableHighlight>
-      </View>
+          >
+            <Image
+              source={{ uri: imageBasePath + provider.logo_path }}
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 8,
+                opacity: selected ? 1 : 0.8,
+              }}
+            />
+          </View>
+          <H4
+            style={{
+              color: selected ? "white" : Colors.primary,
+              fontWeight: selected ? "bold" : "normal",
+            }}
+          >
+            {provider.provider_name}
+          </H4>
+        </Flex>
+      </TouchableHighlight>
       {selected ? (
-        <View style={{ position: "absolute", top: -9, right: -4 }}>
+        <View style={{ position: "absolute", top: 2, left: 51 }}>
           <Ionicons name="checkmark-circle" color="white" size={17} />
         </View>
       ) : null}

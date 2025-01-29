@@ -1,4 +1,3 @@
-import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import {
   View,
@@ -20,19 +19,14 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
 import { Image } from "expo-image";
 import ImageHeader from "./ImageHeader";
-import { Genre, RootStackParamList } from "../../types";
-
-const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.45;
+import { H2 } from "../../components/ui/Typography";
+const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.37;
 const HEADER_COLLAPSED_HEIGHT = 60;
-interface Props extends StackScreenProps<RootStackParamList, "Movie"> {}
 
-const MovieScreen: React.FC<Props> = ({ route }) => {
-  const { movie } = route.params;
+const MovieScreen = ({ id }: { id: string }) => {
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -49,21 +43,13 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
     };
   });
 
-  const { backdrop, rating, runtime, tagline, loading } = useGetMovieInfo(
-    movie.id
-  );
+  const { movie, backdrop, rating, runtime, tagline, loading } =
+    useGetMovieInfo(parseInt(id));
 
-  const genres = movie.genre_ids
-    ? movie.genre_ids.map((genre: number) => Genres[genre])
-    : [];
-
-  const navigation = useNavigation();
-
-  const handleClose = () => {
-    if (navigation.getParent()) {
-      navigation.getParent()?.goBack();
-    }
-  };
+  const genres =
+    movie && movie.genre_ids
+      ? movie.genre_ids.map((genre: number) => Genres[genre])
+      : [];
 
   if (loading) {
     return (
@@ -85,11 +71,8 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
   if (!movie) {
     return (
       <View style={styles.container}>
-        <CloseButton onPress={handleClose} />
         <View style={{ width: "100%", alignItems: "center", gap: 10 }}>
-          <Text style={{ color: "white", fontSize: 25, fontWeight: "600" }}>
-            Something went wrong
-          </Text>
+          <H2>Something went wrong</H2>
           <Text style={{ fontSize: 60 }}>😔</Text>
           <Text style={{ color: Colors.primary, fontSize: 20 }}>
             Please try again
@@ -103,7 +86,6 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
         {!backdrop ? null : (
           <ImageHeader sv={scrollY} posterPath={imageBasePath + backdrop} />
         )}
-        <CloseButton onPress={handleClose} />
         <Animated.View style={[styles.movieTitleContainer, headerOpacity]}>
           <View
             style={{
@@ -140,8 +122,8 @@ const MovieScreen: React.FC<Props> = ({ route }) => {
             overview={movie.overview || ""}
             genres={genres}
           />
-          <StreamingServices id={movie.id} />
-          <People id={movie.id} />
+          <StreamingServices id={parseInt(id)} />
+          <People id={parseInt(id)} />
           {/*<SimilarMovies similarMovies={similarMovies} />*/}
           <PoweredLogo />
           <View style={{ paddingBottom: HEADER_EXPANDED_HEIGHT }} />
@@ -167,27 +149,6 @@ const PoweredLogo = () => (
       source={require("../../assets/tmdb.png")}
     />
   </View>
-);
-
-const CloseButton = ({ onPress }: { onPress: () => void }) => (
-  <TouchableOpacity
-    style={{
-      padding: 10,
-      borderRadius: 360,
-      width: 50,
-      height: 50,
-      position: "absolute",
-      top: 5,
-      right: 15,
-      zIndex: 200,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "rgba(21, 24, 45, 0.3)",
-    }}
-    onPress={onPress}
-  >
-    <Ionicons name="close" color="white" size={30} />
-  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
