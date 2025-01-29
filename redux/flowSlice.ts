@@ -19,7 +19,10 @@ const initialState: InitialFlowType = {
   step: 0,
   genres: [],
   keywords: [],
-  filters: {},
+  filters: {
+    rating: { min: 0, max: 100 },
+    releaseDate: { min: 1900, max: new Date().getFullYear() },
+  },
 };
 
 export const flowSlice = createSlice({
@@ -58,10 +61,18 @@ export const flowSlice = createSlice({
         },
       };
     },
+    resetFilter: (state, action) => {
+      state.filters[action.payload] = initialState.filters[action.payload];
+    },
   },
 });
 
-export const { updateGenre, updateKeywords, resetFlow, updateFilters } =
-  flowSlice.actions;
+export const {
+  updateGenre,
+  updateKeywords,
+  resetFlow,
+  updateFilters,
+  resetFilter,
+} = flowSlice.actions;
 
 export default flowSlice.reducer;

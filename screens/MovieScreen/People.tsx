@@ -8,13 +8,12 @@ import {
 import { Colors, imageBasePath } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { CastMember, CrewMember, RootStackParamList } from "../../types";
 import { get } from "../../api";
 import { CastResults } from "../../redux/apiSlice";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@rneui/themed";
+import { Link, router } from "expo-router";
 
 const People = ({
   topCast,
@@ -112,7 +111,6 @@ const CastView = ({ cast }: { cast: CastMember[] }) => {
   );
 };
 
-type movieScreenProp = StackNavigationProp<RootStackParamList, "Movie">;
 const Person = ({
   name,
   id,
@@ -124,13 +122,9 @@ const Person = ({
   profile_path?: string;
   character?: string;
 }) => {
-  const navigation = useNavigation<movieScreenProp>();
-  const handlePress = () => {
-    navigation.push("Person", { person: { name, id, profile_path } });
-  };
   return (
     <TouchableOpacity
-      onPress={handlePress}
+      onPress={() => router.push(`/modal/person?id=${id}`)}
       style={{ width: 110, alignItems: "center" }}
     >
       <View

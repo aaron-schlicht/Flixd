@@ -2,22 +2,19 @@ import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { Movie, RootStackParamList, Service } from "../../types";
 import { fetchMovieServices, get } from "../../api";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { FlashList } from "@shopify/flash-list";
 import { Dimensions } from "react-native";
 import SkeletonList from "./SkeletonList";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import ResultItem from "./ResultItem";
+import { router } from "expo-router";
 const { width, height } = Dimensions.get("screen");
 const BASE_URL = "/search/movie";
-type searchScreenProp = StackNavigationProp<RootStackParamList, "Search">;
 
 const SearchResults = ({ query }: { query: string }) => {
   const [results, setResults] = useState<Movie[]>([]);
   const [services, setServices] = useState<Service[][]>([]);
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation<searchScreenProp>();
 
   const fetchMoviesAndServices = async (query: string) => {
     setLoading(true);
@@ -39,9 +36,7 @@ const SearchResults = ({ query }: { query: string }) => {
     <ResultItem
       item={item}
       service={services?.at(index)?.at(0)}
-      handlePosterPress={() => {
-        navigation.navigate("Movie", { movie: item });
-      }}
+      handlePosterPress={() => router.push(`/modal/movie?id=${item.id}`)}
     />
   );
 
