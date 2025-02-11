@@ -51,6 +51,7 @@ export type RootStackParamList = {
   Home: undefined;
   Flow: undefined;
   Search: undefined;
+  MoviesByGenre: { genre: { url: string; name: string } };
   Recs: { recs: Movie[] };
   Movie: { movie: Movie };
   Person: { person: Person };

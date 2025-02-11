@@ -52,32 +52,24 @@ const PersonScreen = ({ id }: { id: string }) => {
           {person && person.name}
         </Text>
       </View>
-      {loading ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <ActivityIndicator size="large" color="white" />
-        </View>
-      ) : (
-        <FlashList
-          contentContainerStyle={{
-            paddingBottom: 200,
-          }}
-          data={credits}
-          estimatedItemSize={200}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={({ name }) => name}
-          renderItem={({ item }) => {
-            return (
-              <MovieList
-                isRefreshing={false}
-                name={item.name}
-                data={item.movies}
-              />
-            );
-          }}
-        />
-      )}
+      <FlashList
+        contentContainerStyle={{
+          paddingBottom: 200,
+        }}
+        data={credits}
+        estimatedItemSize={200}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={({ name }) => name}
+        renderItem={({ item }) => {
+          return (
+            <MovieList
+              isRefreshing={false}
+              name={item.name}
+              data={item.movies}
+            />
+          );
+        }}
+      />
     </View>
   );
 };

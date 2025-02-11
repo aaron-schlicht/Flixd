@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Movie, Service } from "../types";
 import { fetchMovieDetails, fetchMovieServices, get } from "../api";
 
-const POPULAR_MOVIES_URL = "/trending/movie/week";
+const POPULAR_MOVIES_URL = "/discover/movie";
 const useGetTrendingMovies = () => {
   const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
   const [trendingMovieServices, setTrendingMovieServices] = useState<
@@ -12,7 +12,13 @@ const useGetTrendingMovies = () => {
 
   const fetchMoviesAndServices = async () => {
     setLoading(true);
-    const { data } = await get<any>(POPULAR_MOVIES_URL);
+    const { data } = await get<any>(POPULAR_MOVIES_URL, {
+      params: {
+        with_original_language: "en",
+        sort_by: "popularity.desc",
+        "vote_count.gte": 300,
+      },
+    });
     if (data) {
       const popularMovies = data.results as Movie[];
       const moviePromises = popularMovies.map(({ id }) =>

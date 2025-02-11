@@ -61,6 +61,7 @@ const SearchResults = ({ query }: { query: string }) => {
             <FlashList
               data={results}
               estimatedItemSize={100}
+              contentContainerStyle={{ paddingBottom: 300 }}
               showsVerticalScrollIndicator={false}
               renderItem={renderResult}
             />

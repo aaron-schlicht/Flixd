@@ -17,10 +17,7 @@ const PosterButton: FC<PosterButtonProps> = ({
   movie,
   posterPath,
 }) => (
-  <TouchableOpacity
-    style={{ paddingHorizontal: 10 }}
-    onPress={() => router.push(`/modal/movie?id=${movie.id}`)}
-  >
+  <TouchableOpacity onPress={() => router.push(`/modal/movie?id=${movie.id}`)}>
     <View
       style={{
         shadowColor: "black",

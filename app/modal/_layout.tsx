@@ -54,8 +54,9 @@ export default function Layout() {
         initialParams={{ id: "" }}
         //options={{ headerShown: false }}
       />
-      <Stack.Screen name="filter" options={{ headerShown: false }} />
+      <Stack.Screen name="filter" />
       <Stack.Screen name="services" />
+      <Stack.Screen name="sort" />
     </Stack>
   );
 }

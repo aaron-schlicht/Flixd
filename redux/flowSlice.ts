@@ -13,6 +13,9 @@ export interface InitialFlowType {
   genres: number[];
   keywords: Keyword[];
   filters: Filter;
+  useStreamingServices: boolean;
+  sortBy: string;
+  certifications: string[]; // Add certifications
 }
 
 const initialState: InitialFlowType = {
@@ -23,6 +26,9 @@ const initialState: InitialFlowType = {
     rating: { min: 0, max: 100 },
     releaseDate: { min: 1900, max: new Date().getFullYear() },
   },
+  useStreamingServices: false,
+  sortBy: "popularity.desc",
+  certifications: [],
 };
 
 export const flowSlice = createSlice({
@@ -49,6 +55,15 @@ export const flowSlice = createSlice({
       return initialState;
     },
     updateFilters: (state, action) => {
+      if (typeof action.payload.value === "boolean") {
+        return {
+          ...state,
+          filters: {
+            ...state.filters,
+            [action.payload.name]: action.payload.value,
+          },
+        };
+      }
       return {
         ...state,
         filters: {
@@ -64,6 +79,21 @@ export const flowSlice = createSlice({
     resetFilter: (state, action) => {
       state.filters[action.payload] = initialState.filters[action.payload];
     },
+    updateServiceSelect: (state, action) => {
+      state.useStreamingServices = action.payload;
+    },
+    updateSort: (state, action) => {
+      state.sortBy = action.payload;
+    },
+    updateCertifications: (state, action) => {
+      if (!!state.certifications.find((cert) => cert === action.payload)) {
+        state.certifications = state.certifications.filter(
+          (cert) => cert !== action.payload
+        );
+      } else {
+        state.certifications.push(action.payload);
+      }
+    },
   },
 });
 
@@ -73,6 +103,9 @@ export const {
   resetFlow,
   updateFilters,
   resetFilter,
+  updateServiceSelect, // Export new action
+  updateSort, // Export new action
+  updateCertifications, // Export new action
 } = flowSlice.actions;
 
 export default flowSlice.reducer;

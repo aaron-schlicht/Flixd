@@ -11,8 +11,6 @@ import { Title } from "./styles";
 
 const { width } = Dimensions.get("screen");
 const ITEM_WIDTH = width;
-const SPACING = 0;
-const CENTER_HEIGHT = 200;
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
@@ -77,8 +75,6 @@ const Carousel = ({
       style={{
         paddingBottom: 15,
         flex: 1,
-        height: "100%",
-        position: "relative",
       }}
     >
       <Title

@@ -23,7 +23,7 @@ import Header from "./Header";
 import { Image } from "expo-image";
 import ImageHeader from "./ImageHeader";
 import { H2 } from "../../components/ui/Typography";
-const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.37;
+const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.3;
 const HEADER_COLLAPSED_HEIGHT = 60;
 
 const MovieScreen = ({ id }: { id: string }) => {

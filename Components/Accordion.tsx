@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -11,24 +11,23 @@ const Accordion = ({
   title,
   h = 100,
   children,
+  isExpanded,
+  onPress,
 }: {
   title: string;
   h?: number;
   children: JSX.Element;
+  isExpanded: boolean;
+  onPress: () => void;
 }) => {
-  const [expanded, setExpanded] = useState(false);
-  const height = useSharedValue(0);
+  const height = useSharedValue(isExpanded ? h : 0);
 
   const animatedStyle = useAnimatedStyle(() => {
+    height.value = withTiming(isExpanded ? h : 0, { duration: 300 });
     return {
-      height: withTiming(height.value, { duration: 300 }),
+      height: height.value,
     };
   });
-
-  const toggleAccordion = () => {
-    setExpanded(!expanded);
-    height.value = expanded ? 0 : h;
-  };
 
   return (
     <View>
@@ -38,14 +37,18 @@ const Accordion = ({
           justifyContent: "center",
           alignItems: "center",
           padding: 20,
-          backgroundColor: expanded ? Colors.primary : Colors.secondary,
+          backgroundColor: isExpanded ? Colors.primary : Colors.secondary,
           opacity: 0.8,
           margin: 10,
           borderRadius: 10,
         }}
-        onPress={toggleAccordion}
+        onPress={onPress}
       >
-        <Text style={{ color: "white" }}>{title}</Text>
+        <Text
+          style={{ color: isExpanded ? Colors.background : Colors.primary }}
+        >
+          {title}
+        </Text>
       </TouchableOpacity>
       <Animated.View style={[{ overflow: "hidden" }, animatedStyle]}>
         {children}

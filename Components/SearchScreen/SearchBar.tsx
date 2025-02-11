@@ -49,7 +49,7 @@ const SearchBar = ({
 
   const searchBoxAnimatedStyle = useAnimatedStyle(() => {
     const interpolatedWidth = interpolate(width.value, [0, 1], [85, 100], {
-      extrapolateRight: Extrapolation.CLAMP,
+      extrapolateRight: "clamp",
     });
     return {
       width: withTiming(`${interpolatedWidth}%`, {
@@ -72,6 +72,8 @@ const SearchBar = ({
           searchBoxAnimatedStyle,
           {
             backgroundColor: Colors.secondary,
+            borderColor: Colors.primary,
+            borderWidth: 1,
             borderRadius: 10,
             height: 50,
             flexDirection: "row",

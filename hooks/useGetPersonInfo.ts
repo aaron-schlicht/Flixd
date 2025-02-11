@@ -77,11 +77,10 @@ const useGetPersonInfo = (id: string) => {
       }
     }
     setCredits(results);
-    setLoading(false);
   };
 
   useEffect(() => {
-    getPersonInfo();
+    getPersonInfo().finally(() => setLoading(false));
   }, []);
 
   return {

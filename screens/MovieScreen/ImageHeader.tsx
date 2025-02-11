@@ -16,7 +16,7 @@ import Animated, {
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const AnimatedImage = Animated.createAnimatedComponent(Image);
-const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.35;
+const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.3;
 const HEADER_COLLAPSED_HEIGHT = 100;
 
 const ImageHeader = ({

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Movie, WatchProvider, Service } from "../types";
+import { Movie, Service } from "../types";
 
 interface InitialType {
   selectedMovie: Movie | null;
@@ -8,7 +8,6 @@ interface InitialType {
   searchResults: Movie[];
   searchResultServices: Service[][];
   isResultsLoading: boolean;
-  tab: "home" | "search" | "discover";
 }
 
 const initialState: InitialType = {
@@ -18,7 +17,6 @@ const initialState: InitialType = {
   searchResults: [],
   searchResultServices: [[]],
   isResultsLoading: false,
-  tab: "home",
 };
 
 export const movieSlice = createSlice({
@@ -59,9 +57,6 @@ export const movieSlice = createSlice({
     setServices: (state, action) => {
       state.selectedServices = [...action.payload];
     },
-    setCurrentTab: (state, action) => {
-      state.tab = action.payload;
-    },
   },
 });
 
@@ -74,7 +69,6 @@ export const {
   removeSelectedMovie,
   updateSearchResultServices,
   setServices,
-  setCurrentTab,
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

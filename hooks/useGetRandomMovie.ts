@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
-import { Movie, Service } from "../types";
-import { fetchMovieServices, get } from "../api";
+import { Movie } from "../types";
+import { get } from "../api";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
-const generateRandomPage = () => Math.ceil(Math.random() * 98);
+const generateRandomPage = (totalPages: number | undefined) =>
+  Math.ceil(Math.random() * (totalPages || 1));
 
 const useGetRandomMovie = () => {
-  const [randomMovies, setRandomMovies] = useState<Movie[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  const isStreamingSelected = useSelector(
+    (state: RootState) => state.flow.useStreamingServices
+  );
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
 
   const getRandomMovie = async () => {
-    const page = generateRandomPage();
+    const page = generateRandomPage(totalPages);
     const config = {
       params: {
         sort_by: "vote_average.desc",
@@ -18,24 +27,28 @@ const useGetRandomMovie = () => {
         without_genres: "99,10402",
         "with_runtime.gte": 60,
         page,
+        watch_region: "US",
+        with_watch_providers: isStreamingSelected
+          ? selectedServices.map((service) => service.provider_id).join("|")
+          : undefined,
       },
     };
     const { data } = await get<any>(`/discover/movie`, config);
     if (data && data.results) {
-      const movies = data.results as Movie[];
-      const length = movies.length;
-      if (length) {
-        const index = Math.floor(Math.random() * length);
-        setRandomMovies([...randomMovies, movies[index]]);
-        const movieServices = await fetchMovieServices(movies[index].id);
-        setServices(movieServices);
+      if (data.total_pages) {
+        setTotalPages(data.total_pages);
       }
+      const movies = data.results as Movie[];
+      return movies;
     }
+    return [];
   };
 
+  useEffect(() => {
+    setTotalPages(1);
+  }, [isStreamingSelected]);
+
   return {
-    randomMovies,
-    services,
     getRandomMovie,
   };
 };

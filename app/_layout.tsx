@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 export default function Layout() {
   let persistor = persistStore(store);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -14,6 +15,10 @@ export default function Layout() {
           <Stack.Screen
             name="modal"
             options={{ headerShown: false, presentation: "modal" }}
+          />
+          <Stack.Screen
+            name="movies/[genre]"
+            options={{ headerShown: false }}
           />
         </Stack>
       </PersistGate>

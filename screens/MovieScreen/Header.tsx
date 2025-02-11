@@ -26,7 +26,7 @@ const Header = ({
       <View
         style={{
           flex: 1,
-          marginTop: -Dimensions.get("window").height * 0.06,
+          marginTop: 0,
           zIndex: 90,
         }}
       >

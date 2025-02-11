@@ -3,16 +3,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Tabs } from "expo-router";
 import { Colors } from "../../constants";
 import { View, Text } from "react-native";
-import { useDispatch } from "react-redux";
-import { setCurrentTab } from "../../redux/movieSlice";
 
 export default function TabLayout() {
-  const dispatch = useDispatch();
-
-  const handleTabPress = (tab: "home" | "search" | "discover") => {
-    dispatch(setCurrentTab(tab));
-  };
-
   return (
     <Tabs
       screenOptions={{
@@ -68,9 +60,6 @@ export default function TabLayout() {
             </View>
           ),
         }}
-        listeners={{
-          tabPress: () => handleTabPress("home"),
-        }}
       />
       <Tabs.Screen
         name="search"
@@ -104,9 +93,6 @@ export default function TabLayout() {
             </View>
           ),
         }}
-        listeners={{
-          tabPress: () => handleTabPress("search"),
-        }}
       />
       <Tabs.Screen
         name="discover"
@@ -132,9 +118,6 @@ export default function TabLayout() {
               </Text>
             </View>
           ),
-        }}
-        listeners={{
-          tabPress: () => handleTabPress("discover"),
         }}
       />
     </Tabs>

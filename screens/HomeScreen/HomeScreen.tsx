@@ -21,9 +21,18 @@ import Animated, {
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { MainProviders, imageBasePath } from "../../constants";
+import MovieList from "../../components/ui/MovieList";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const TopServiceLogos = () => {
-  const firstThreeProviders = MainProviders.slice(0, 3);
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
+  const firstThreeProviders =
+    selectedServices.length > 0
+      ? selectedServices.slice(0, 3)
+      : MainProviders.slice(0, 3);
 
   return (
     <View
@@ -141,15 +150,32 @@ const HomeView = () => {
           scrollY={scrollY}
           title="Trending"
         />
-        <MovieLists data={data} isRefreshing={isRefreshing} />
+        {data.map((list) => {
+          return (
+            <MovieList
+              key={`list-${list.name}`}
+              name={list.name}
+              data={list.movies}
+              loading={list.movies.length === 0}
+              isRefreshing={isRefreshing}
+            />
+          );
+        })}
         <H3 style={{ marginLeft: 15, marginTop: 15, marginBottom: 10 }}>
           Trending on your services
         </H3>
-        <MovieLists
-          data={streamingMovieData}
-          isRefreshing={isRefreshing}
-          namePrefix=""
-        />
+        {streamingMovieData.map((service) => {
+          return (
+            <MovieList
+              key={`service-${service.name}`}
+              name={`${service.name}`}
+              data={service.movies}
+              imagePath={service.imagePath}
+              loading={service.movies.length === 0}
+              isRefreshing={isRefreshing}
+            />
+          );
+        })}
       </Animated.ScrollView>
     </View>
   );

@@ -4,6 +4,7 @@ import {
   TouchableHighlight,
   FlatList,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { Colors, MainProviders, imageBasePath } from "../constants";
 import * as Haptics from "expo-haptics";
@@ -18,24 +19,77 @@ import { Flex } from "./ui/Layouts";
 const { width } = Dimensions.get("screen");
 
 const ServicesSelect = () => {
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
+  const dispatch = useDispatch();
+
+  const handleRemoveService = (provider: Service) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    dispatch(updateSelectedServices(provider));
+  };
+
+  const SelectedServiceItem = ({ service }: { service: Service }) => {
+    if (!service) return null;
+
+    return (
+      <View style={{ marginRight: 15, position: "relative" }}>
+        <TouchableOpacity onPress={() => handleRemoveService(service)}>
+          <Image
+            source={{ uri: `${imageBasePath}${service.logo_path}` }}
+            style={{ width: 30, height: 30, borderRadius: 5 }}
+          />
+          <View
+            style={{
+              position: "absolute",
+              top: -5,
+              right: -5,
+              backgroundColor: "red",
+              borderRadius: 360,
+              width: 12,
+              height: 12,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="close" size={10} color="white" />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
-    <View
-      style={{
-        zIndex: 100,
-        backgroundColor: "rgba(21, 24, 45, 0.9)",
-      }}
-    >
-      <H4
+    <View>
+      <View
         style={{
-          paddingLeft: 15,
-          paddingVertical: 20,
-          width: width * 0.8,
+          width,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#11142A",
+          gap: 10,
         }}
-        numberOfLines={1}
-        adjustsFontSizeToFit
       >
-        Select your streaming services
-      </H4>
+        <H4
+          style={{
+            width: width * 0.8,
+            marginLeft: 10,
+            marginTop: 10,
+          }}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          Select your streaming services
+        </H4>
+        <FlatList
+          horizontal
+          data={selectedServices}
+          keyExtractor={(service) => `selected-${service.provider_id}`}
+          renderItem={({ item }) => <SelectedServiceItem service={item} />}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 10 }}
+        />
+      </View>
       <FlatList
         data={MainProviders}
         contentContainerStyle={{
@@ -65,8 +119,10 @@ const ProviderButton = memo(({ provider }: { provider: Service }) => {
     <View
       style={{
         padding: 10,
-        backgroundColor: selected ? Colors.secondary : "transparent",
-        borderBottomColor: selected ? Colors.primary : Colors.secondary,
+        paddingLeft: 15,
+        borderBottomColor: Colors.secondary,
+        width: width * 0.95,
+        alignSelf: "center",
         borderBottomWidth: 1,
       }}
     >
@@ -116,7 +172,7 @@ const ProviderButton = memo(({ provider }: { provider: Service }) => {
         </Flex>
       </TouchableHighlight>
       {selected ? (
-        <View style={{ position: "absolute", top: 2, left: 51 }}>
+        <View style={{ position: "absolute", top: 2, left: 57 }}>
           <Ionicons name="checkmark-circle" color="white" size={17} />
         </View>
       ) : null}

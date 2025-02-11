@@ -19,18 +19,20 @@ const MovieLists = ({
         paddingTop: 5,
       }}
       data={data}
-      estimatedItemSize={220}
+      estimatedItemSize={300}
       refreshing={isRefreshing}
       showsVerticalScrollIndicator={false}
       keyExtractor={({ name }) => name}
       renderItem={({ item }) => {
         return (
-          <MovieList
-            isRefreshing={isRefreshing}
-            name={namePrefix ? `${namePrefix}${item.name}` : item.name}
-            data={item.movies}
-            imagePath={item.imagePath}
-          />
+          <View style={{ marginBottom: 20 }}>
+            <MovieList
+              isRefreshing={isRefreshing}
+              name={namePrefix ? `${namePrefix}${item.name}` : item.name}
+              data={item.movies}
+              imagePath={item.imagePath}
+            />
+          </View>
         );
       }}
     />
