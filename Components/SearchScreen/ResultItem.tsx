@@ -14,7 +14,9 @@ import {
   TextBox,
   Title,
 } from "./styles";
-import { Ionicons } from "@expo/vector-icons";
+import { useCallback } from "react";
+import { H3 } from "../ui/Typography";
+const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 
 const ResultItem = ({
   item,
@@ -54,39 +56,56 @@ const ResultItem = ({
             </Text>
           )}
         </TextBox>
-        {service && (
-          <View style={{ alignItems: "center", width: 60 }}>
-            {service.isRental ? (
-              <View
-                style={{
-                  backgroundColor: Colors.secondary,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 5,
-                  width: 35,
-                  height: 35,
-                }}
-              >
-                <Ionicons name="logo-usd" color={Colors.primary} size={20} />
-              </View>
-            ) : (
-              <Image
-                style={{
-                  width: 35,
-                  height: 35,
-                  borderRadius: 5,
-                }}
-                source={{
-                  uri: imageBasePath + service.logo_path,
-                }}
-                recyclingKey={item.title}
-                transition={200}
-              />
-            )}
-          </View>
-        )}
+        <ServiceIcon recyclingKey={item.title} service={service} />
       </ItemButton>
     </ResultItemContainer>
+  );
+};
+
+const ServiceIcon = ({
+  service,
+  recyclingKey,
+}: {
+  service?: Service;
+  recyclingKey: string;
+}) => {
+  const renderServiceIcon = useCallback(() => {
+    if (service) {
+      return (
+        <Image
+          style={{
+            width: 35,
+            height: 35,
+            borderRadius: 5,
+          }}
+          source={{
+            uri: SMALL_POSTER_BASE_PATH + service.logo_path,
+          }}
+          recyclingKey={recyclingKey}
+          transition={200}
+        />
+      );
+    } else {
+      return (
+        <View
+          style={{
+            backgroundColor: Colors.secondary,
+            width: 35,
+            height: 35,
+            borderRadius: 5,
+            justifyContent: "center",
+          }}
+        >
+          <H3 style={{ color: Colors.primary, textAlign: "center" }}>$</H3>
+        </View>
+      );
+    }
+  }, [service]);
+
+  return (
+    <View style={{ alignItems: "center", width: 60 }}>
+      {renderServiceIcon()}
+    </View>
   );
 };
 

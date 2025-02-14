@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Colors } from "../../constants";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useDiscoverMovies from "../../hooks/useDiscoverMovies";
 import useGetTrendingMovies from "../../hooks/useGetTrendingMovies";
 import Carousel from "../../components/ui/Carousel";
@@ -72,10 +72,14 @@ const HomeScreen = () => {
   );
 };
 
+const STREAMING_BASE_URL = "/discover/movie";
 const HomeView = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const data = useDiscoverMovies(isRefreshing);
-  const streamingMovieData = useFindStreamingMovies(isRefreshing);
+  const { data: streamingMovieData, loadMore } = useFindStreamingMovies(
+    isRefreshing,
+    STREAMING_BASE_URL
+  );
   const { trendingMovies, trendingMovieServices, loading } =
     useGetTrendingMovies();
   const scrollY = useSharedValue(0);
@@ -94,6 +98,14 @@ const HomeView = () => {
       return () => clearTimeout(timeout);
     }
   }, [isRefreshing]);
+
+  const loadMoreMovies = useCallback(
+    (serviceName: string) => {
+      loadMore(serviceName);
+    },
+    [loadMore]
+  );
+
   return (
     <View>
       <SafeAreaView
@@ -122,7 +134,7 @@ const HomeView = () => {
           <Link
             href="modal/services"
             asChild
-            style={{ position: "absolute", top: 0, right: 20 }}
+            style={{ position: "absolute", top: 0, right: 15 }}
           >
             <TouchableOpacity>
               <TopServiceLogos />
@@ -173,6 +185,7 @@ const HomeView = () => {
               imagePath={service.imagePath}
               loading={service.movies.length === 0}
               isRefreshing={isRefreshing}
+              onEndReached={() => loadMoreMovies(service.name)}
             />
           );
         })}

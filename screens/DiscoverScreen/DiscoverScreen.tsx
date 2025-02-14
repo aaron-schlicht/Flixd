@@ -307,7 +307,7 @@ const DiscoverScreen = () => {
               width: width * 0.3,
               justifyContent: "flex-end",
               gap: 8,
-              paddingRight: 10,
+              paddingRight: 15,
             }}
           >
             <TouchableOpacity onPress={handleServicePress}>

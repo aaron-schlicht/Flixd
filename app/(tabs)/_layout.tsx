@@ -1,8 +1,80 @@
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Tabs } from "expo-router";
+import { Tabs } from "expo-router"; // Remove useRouter
 import { Colors } from "../../constants";
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  Animated,
+  Pressable,
+  GestureResponderEvent,
+} from "react-native";
+import * as Haptics from "expo-haptics";
+import { useRef } from "react";
+
+interface TabButtonProps {
+  focused: boolean;
+  iconName: keyof typeof Ionicons.glyphMap;
+  iconOutlineName: keyof typeof Ionicons.glyphMap;
+  label: string;
+  onPress?: (e: GestureResponderEvent) => void;
+}
+
+const TabButton = ({
+  focused,
+  iconName,
+  iconOutlineName,
+  label,
+  onPress,
+}: TabButtonProps) => {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const handlePress = (e: GestureResponderEvent) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Animated.sequence([
+      Animated.spring(scale, {
+        toValue: 0.9,
+        speed: 100,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: 1,
+        speed: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    onPress?.(e);
+  };
+
+  return (
+    <Pressable onPress={handlePress} style={{ flex: 1 }}>
+      <Animated.View
+        style={{
+          alignItems: "center",
+          gap: 2,
+          paddingTop: 2,
+          transform: [{ scale }],
+        }}
+      >
+        <Ionicons
+          name={focused ? iconName : iconOutlineName}
+          color={focused ? "white" : Colors.primary}
+          size={iconName === "search-circle" ? 40 : 35}
+        />
+        <Text
+          style={{
+            color: focused ? "white" : Colors.primary,
+            textAlign: "center",
+            fontSize: 12,
+            fontWeight: "bold",
+          }}
+        >
+          {label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
+};
 
 export default function TabLayout() {
   return (
@@ -33,31 +105,14 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: "Home",
-          tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                gap: 2,
-                paddingTop: 2,
-                width: 70,
-              }}
-            >
-              <Ionicons
-                name={focused ? "home" : "home-outline"}
-                color={focused ? "white" : Colors.primary}
-                size={35}
-              />
-              <Text
-                style={{
-                  color: focused ? "white" : Colors.primary,
-                  textAlign: "center",
-                  fontSize: 12,
-                  fontWeight: "bold",
-                }}
-              >
-                Home
-              </Text>
-            </View>
+          tabBarButton: (props) => (
+            <TabButton
+              {...props}
+              focused={props.accessibilityState?.selected ?? false}
+              iconName="home"
+              iconOutlineName="home-outline"
+              label="Home"
+            />
           ),
         }}
       />
@@ -66,31 +121,14 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: "Search",
-          tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                gap: 2,
-                paddingTop: 2,
-                width: 70,
-              }}
-            >
-              <Ionicons
-                name={focused ? "search-circle" : "search-circle-outline"}
-                color={focused ? "white" : Colors.primary}
-                size={40}
-              />
-              <Text
-                style={{
-                  color: focused ? "white" : Colors.primary,
-                  textAlign: "center",
-                  fontSize: 12,
-                  fontWeight: "bold",
-                }}
-              >
-                Search
-              </Text>
-            </View>
+          tabBarButton: (props) => (
+            <TabButton
+              {...props}
+              focused={props.accessibilityState?.selected ?? false}
+              iconName="search-circle"
+              iconOutlineName="search-circle-outline"
+              label="Search"
+            />
           ),
         }}
       />
@@ -99,24 +137,14 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: "Discover",
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: "center", paddingTop: 2, width: 70 }}>
-              <Ionicons
-                name={focused ? "compass" : "compass-outline"}
-                color={focused ? "white" : Colors.primary}
-                size={40}
-              />
-              <Text
-                style={{
-                  color: focused ? "white" : Colors.primary,
-                  textAlign: "center",
-                  fontSize: 12,
-                  fontWeight: "bold",
-                }}
-              >
-                Discover
-              </Text>
-            </View>
+          tabBarButton: (props) => (
+            <TabButton
+              {...props}
+              focused={props.accessibilityState?.selected ?? false}
+              iconName="compass"
+              iconOutlineName="compass-outline"
+              label="Discover"
+            />
           ),
         }}
       />

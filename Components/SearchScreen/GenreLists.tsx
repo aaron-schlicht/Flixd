@@ -127,7 +127,7 @@ const GenreLists = () => {
       style={styles.genreButton}
       onPress={() => {
         router.push({
-          pathname: "/movies/[genre]",
+          pathname: `/movies/${item.name}`,
           params: { name: item.name, url: item.url },
         });
       }}

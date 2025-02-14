@@ -12,6 +12,17 @@ const getColor = (rating: number) => {
   }
 };
 
+const formatRuntime = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  if (hours === 0) {
+    return `${minutes}m`;
+  }
+
+  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+};
+
 const Header = ({
   movie,
   runtime,
@@ -97,7 +108,7 @@ const Header = ({
               </Text>
             ) : null}
             <Text style={{ color: Colors.primary, fontSize: 18 }}>
-              {runtime} mins
+              {formatRuntime(runtime)}
             </Text>
             <Text
               style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}

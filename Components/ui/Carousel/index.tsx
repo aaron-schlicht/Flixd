@@ -1,6 +1,6 @@
 import { Dimensions, FlatList, View } from "react-native";
 import { Movie, Service } from "../../../types";
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback, memo } from "react";
 import { Skeleton } from "@rneui/themed";
 import CarouselItem from "./CarouselItem";
 import { useRouter } from "expo-router";
@@ -8,11 +8,15 @@ import { FlashList, ListRenderItem } from "@shopify/flash-list";
 import Animated, { useSharedValue, SharedValue } from "react-native-reanimated";
 import Pagination from "./Pagination";
 import { Title } from "./styles";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const { width } = Dimensions.get("screen");
 const ITEM_WIDTH = width;
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
+
+const MemoizedCarouselItem = memo(CarouselItem);
 
 const Carousel = ({
   isRefreshing,
@@ -32,6 +36,9 @@ const Carousel = ({
   const scrollX = useSharedValue(0);
   const ref = useRef<FlashList<any>>(null);
   const router = useRouter();
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
 
   useEffect(() => {
     if (isRefreshing && ref.current && Boolean(movies.length)) {
@@ -46,10 +53,22 @@ const Carousel = ({
     item: Movie;
     index: number;
   }) => {
+    const availableServices = services[index];
+    const personalizedService =
+      availableServices?.find((service) =>
+        selectedServices.some(
+          (selectedService: Service) =>
+            selectedService.provider_id === service.provider_id
+        )
+      ) || undefined;
+
+    const isRental = !!availableServices && !!availableServices.length;
+
     return (
-      <CarouselItem
+      <MemoizedCarouselItem
         movie={item}
-        service={services[index]?.[0]}
+        service={personalizedService}
+        isRental={isRental}
         onPress={() => router.push(`/modal/movie?id=${item.id}`)}
         scrollX={scrollX}
         sv={scrollY}
@@ -57,6 +76,11 @@ const Carousel = ({
       />
     );
   };
+
+  const keyExtractor = useCallback(
+    (_: any, index: number) => `carousel-item-${index}`,
+    []
+  );
 
   if (loading) {
     return (
@@ -89,7 +113,7 @@ const Carousel = ({
         estimatedItemSize={ITEM_WIDTH}
         horizontal
         pagingEnabled
-        keyExtractor={(_: any, index: any) => index}
+        keyExtractor={keyExtractor}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         snapToInterval={ITEM_WIDTH}

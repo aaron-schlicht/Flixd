@@ -12,6 +12,11 @@ export interface Movie {
   backdrop_path?: string;
   genre_ids?: number[];
   genres?: Genre[];
+  revenue?: number;
+  production_countries?: { iso_3166_1: string; name: string }[];
+  production_companies?: { id: number; logo_path: string; name: string }[];
+  original_language?: string;
+  budget?: number;
 }
 
 export interface Service {

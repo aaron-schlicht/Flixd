@@ -23,6 +23,14 @@ export interface PersonCreditResults {
   crew: CrewMovie[];
 }
 
+export interface PersonDetails {
+  biography?: string;
+  known_for_department?: string;
+  name?: string;
+  place_of_birth?: string;
+  profile_path?: string;
+}
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({

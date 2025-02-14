@@ -1,49 +1,57 @@
-import { Pressable, TouchableOpacity, View } from "react-native";
-import { Image } from "expo-image";
-import { FC } from "react";
+import { TouchableOpacity, View } from "react-native";
+import React from "react";
 import { Movie } from "../../types";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
+import { Image } from "expo-image";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-export interface PosterButtonProps {
-  dimensions?: { width: number; height: number };
-  movie: Movie;
-  onPress?: () => void;
-  posterPath: string;
-}
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-const PosterButton: FC<PosterButtonProps> = ({
-  dimensions = { width: 100, height: 150 },
-  onPress,
+const PosterImage = ({ uri, style }: { uri: string; style: any }) => {
+  const opacity = useSharedValue(0);
+
+  return (
+    <View style={[style, { backgroundColor: "#2A2E43", overflow: "hidden" }]}>
+      <AnimatedImage
+        source={{ uri }}
+        style={style}
+        onLoad={() => {
+          opacity.value = withTiming(1, { duration: 150 });
+        }}
+        cachePolicy="memory-disk"
+      />
+    </View>
+  );
+};
+
+const PosterButton = ({
   movie,
   posterPath,
-}) => (
-  <TouchableOpacity onPress={() => router.push(`/modal/movie?id=${movie.id}`)}>
-    <View
-      style={{
-        shadowColor: "black",
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        borderRadius: 10,
-        backgroundColor: "black",
-        width: dimensions.width,
-        height: dimensions.height,
-      }}
+  dimensions,
+}: {
+  movie: Movie;
+  posterPath: string;
+  dimensions: { width: number; height: number };
+}) => {
+  return (
+    <TouchableOpacity
+      onPress={() => router.push(`/modal/movie?id=${movie.id}`)}
+      activeOpacity={0.7}
     >
-      <Image
+      <PosterImage
+        uri={posterPath}
         style={{
           width: dimensions.width,
           height: dimensions.height,
           borderRadius: 10,
         }}
-        contentFit="cover"
-        transition={500}
-        source={{
-          uri: posterPath,
-        }}
       />
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
-export default PosterButton;
+export default React.memo(PosterButton);

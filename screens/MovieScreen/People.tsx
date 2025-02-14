@@ -1,10 +1,11 @@
 import {
   View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
   Dimensions,
+  ScrollView,
+  Text,
+  TouchableOpacity,
 } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Colors, imageBasePath } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -15,100 +16,118 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@rneui/themed";
 import { Link, router } from "expo-router";
 
-const People = ({
-  topCast,
-  topCrew,
-}: {
-  topCast: CastMember[];
-  topCrew: CrewMember[];
-}) => {
-  return (
-    <View style={{ gap: 20 }}>
-      <DirectorView directors={topCrew} />
-      <CastView cast={topCast} />
-    </View>
-  );
-};
+const SCREEN_PADDING = 15;
+const GRID_GAP = 10;
+const COLUMNS = 3;
+const screenWidth = Dimensions.get("window").width;
+const ITEM_WIDTH =
+  (screenWidth - SCREEN_PADDING * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
+const IMAGE_SIZE = ITEM_WIDTH - 20; // Leave some margin for the text below
 
-const DirectorView = ({ directors }: { directors: CrewMember[] }) => {
-  if (!directors.length) return null;
-  else {
-    return (
-      <View>
-        <Text
+const PeopleGrid = ({ people }: { people: (CastMember | CrewMember)[] }) => {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        flexWrap: "wrap",
+        padding: SCREEN_PADDING,
+        gap: GRID_GAP,
+      }}
+    >
+      {people.map((person, index) => (
+        <View
+          key={`person-${index}`}
           style={{
-            fontSize: 25,
-            fontWeight: "bold",
-            color: "white",
-            paddingLeft: 15,
+            width: ITEM_WIDTH,
+            marginBottom: 20,
           }}
         >
-          {directors.length > 1 ? "Directors" : "Director"}
-        </Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 5, paddingTop: 10 }}
-        >
-          {directors.map((director, index) => (
-            <View
-              key={`director-${index}`}
-              style={{
-                paddingLeft: index === 0 ? 15 : 0,
-                paddingRight: index === directors.length - 1 ? 15 : 0,
-              }}
-            >
-              <Person
-                name={director.name}
-                profile_path={director.profile_path}
-                id={director.id}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-    );
-  }
-};
-
-const CastView = ({ cast }: { cast: CastMember[] }) => {
-  if (!cast.length) return null;
-  return (
-    <View>
-      <Text
-        style={{
-          fontSize: 25,
-          fontWeight: "bold",
-          color: "white",
-          paddingLeft: 15,
-        }}
-      >
-        Cast
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 5, paddingTop: 10 }}
-      >
-        {cast.map((member, index) => (
-          <View
-            key={`castMember-${index}`}
-            style={{
-              paddingLeft: index === 0 ? 15 : 0,
-              paddingRight: index === cast.length - 1 ? 15 : 0,
-            }}
-          >
-            <Person
-              name={member.name}
-              profile_path={member.profile_path}
-              id={member.id}
-              character={member.character}
-            />
-          </View>
-        ))}
-      </ScrollView>
+          <Person
+            name={person.name}
+            profile_path={person.profile_path}
+            id={person.id}
+            character={"character" in person ? person.character : undefined}
+          />
+        </View>
+      ))}
     </View>
   );
+};
+
+const Tab = createMaterialTopTabNavigator();
+
+const EmptyState = ({ message }: { message: string }) => (
+  <View
+    style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    }}
+  >
+    <Ionicons name="people" size={50} color={Colors.secondary} />
+    <Text style={{ color: "white", textAlign: "center", marginTop: 10 }}>
+      {message}
+    </Text>
+  </View>
+);
+
+const PeopleList = ({ people }: { people: (CastMember | CrewMember)[] }) => {
+  if (!people?.length) {
+    return <EmptyState message="No people to display" />;
+  }
+
+  return (
+    <ScrollView
+      style={{ backgroundColor: Colors.background }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 20 }}
+    >
+      <PeopleGrid people={people} />
+    </ScrollView>
+  );
+};
+
+const DirectorTab = ({ crew }: { crew: CrewMember[] }) => {
+  const directors =
+    crew?.filter((c) => c?.job?.toUpperCase() === "DIRECTOR") ?? [];
+
+  if (!directors.length) {
+    return <EmptyState message="No directors found" />;
+  }
+
+  return <PeopleList people={directors} />;
+};
+
+const ProducerTab = ({ crew }: { crew: CrewMember[] }) => {
+  const producers =
+    crew?.filter((c) => c?.job?.toUpperCase().includes("PRODUCER")) ?? [];
+
+  if (!producers.length) {
+    return <EmptyState message="No producers found" />;
+  }
+
+  return <PeopleList people={producers} />;
+};
+
+const CastTab = ({ cast }: { cast: CastMember[] }) => {
+  if (!cast?.length) {
+    return <EmptyState message="No cast members found" />;
+  }
+
+  return <PeopleList people={cast} />;
+};
+
+const fetchTopCredits = async (id: number) => {
+  const { data } = await get<CastResults>(`movie/${id}/credits`);
+  if (data) {
+    return {
+      cast: data.cast,
+      crew: data.crew, // Return all crew members
+    };
+  } else {
+    return { cast: [], crew: [] };
+  }
 };
 
 const Person = ({
@@ -125,7 +144,7 @@ const Person = ({
   return (
     <TouchableOpacity
       onPress={() => router.push(`/modal/person?id=${id}`)}
-      style={{ width: 110, alignItems: "center" }}
+      style={{ alignItems: "center" }}
     >
       <View
         style={{
@@ -133,30 +152,34 @@ const Person = ({
           shadowOffset: { width: 2, height: 4 },
           shadowOpacity: 0.8,
           shadowRadius: 2,
-          borderRadius: 30,
+          borderRadius: IMAGE_SIZE / 4,
           backgroundColor: "black",
-          alignSelf: "center",
         }}
       >
         <View
           style={{
-            height: 100,
+            height: IMAGE_SIZE,
+            width: IMAGE_SIZE,
             backgroundColor: Colors.secondary,
-            borderRadius: 20,
-            width: 100,
+            borderRadius: IMAGE_SIZE / 4,
             justifyContent: "center",
             alignItems: "center",
+            overflow: "hidden",
           }}
         >
           {profile_path ? (
             <Image
               source={{ uri: imageBasePath + profile_path }}
-              style={{ width: 100, height: 100, borderRadius: 20 }}
+              style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}
               transition={200}
               contentFit="cover"
             />
           ) : (
-            <Ionicons name="person" color={Colors.primary} size={80} />
+            <Ionicons
+              name="person"
+              color={Colors.primary}
+              size={IMAGE_SIZE * 0.75}
+            />
           )}
         </View>
       </View>
@@ -164,70 +187,48 @@ const Person = ({
         style={{
           color: "white",
           textAlign: "center",
-          paddingTop: 10,
-          height: 30,
+          paddingTop: 5,
+          fontSize: 12,
+          width: ITEM_WIDTH,
         }}
         numberOfLines={1}
-        adjustsFontSizeToFit
       >
         {name}
       </Text>
-      {character ? (
+      {character && (
         <Text
-          style={{ color: Colors.primary, textAlign: "center", fontSize: 10 }}
-          numberOfLines={2}
+          style={{
+            color: Colors.primary,
+            textAlign: "center",
+            fontSize: 10,
+            width: ITEM_WIDTH,
+          }}
+          numberOfLines={1}
         >
-          "{character}"
+          {character}
         </Text>
-      ) : null}
+      )}
     </TouchableOpacity>
   );
 };
 
-const fetchTopCredits = async (id: number) => {
-  const { data } = await get<CastResults>(`movie/${id}/credits`);
-  if (data) {
-    return {
-      cast: data.cast,
-      crew: data.crew.filter(
-        (crew) => crew.job.toLocaleUpperCase() === "DIRECTOR"
-      ),
-    };
-  } else {
-    return { cast: [], crew: [] };
-  }
-};
-
-const PeopleSkeleton = () => (
-  <View
-    style={{
-      width: Dimensions.get("window").width,
-      alignItems: "center",
-      paddingTop: 10,
-    }}
-  >
-    <Skeleton
-      style={{ backgroundColor: "#373D63", borderRadius: 10 }}
-      skeletonStyle={{
-        backgroundColor: "#252942",
-      }}
-      width={Dimensions.get("window").width * 0.91}
-      height={220}
-    />
-  </View>
-);
-
 const ConnectedPeople = ({ id }: { id: number }) => {
   const [topCast, setTopCast] = useState<CastMember[]>([]);
   const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Changed to start as true
+  const windowHeight = Dimensions.get("window").height;
 
   const getTopCredits = async () => {
-    setLoading(true);
-    const { cast, crew } = await fetchTopCredits(id);
-    setTopCast(cast);
-    setTopCrew(crew);
-    setLoading(false);
+    try {
+      const { cast, crew } = await fetchTopCredits(id);
+      setTopCast(cast ?? []);
+      setTopCrew(crew ?? []);
+    } catch (error) {
+      setTopCast([]);
+      setTopCrew([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -235,9 +236,74 @@ const ConnectedPeople = ({ id }: { id: number }) => {
   }, []);
 
   if (loading) {
-    return <PeopleSkeleton />;
+    return (
+      <View
+        style={{
+          marginTop: 15,
+          height: windowHeight * 0.6,
+          backgroundColor: Colors.secondary,
+          marginHorizontal: 15,
+          borderRadius: 10,
+        }}
+      />
+    );
   }
+
   return <People topCast={topCast} topCrew={topCrew} />;
+};
+
+const People = ({
+  topCast,
+  topCrew,
+}: {
+  topCast: CastMember[];
+  topCrew: CrewMember[];
+}) => {
+  const windowHeight = Dimensions.get("window").height;
+
+  return (
+    <View
+      style={{
+        height: windowHeight * 0.6,
+        marginTop: 15,
+        borderBottomColor: Colors.secondary,
+        borderBottomWidth: 1,
+      }}
+    >
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: Colors.secondary,
+            marginHorizontal: 15,
+            borderRadius: 10,
+            height: 50,
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: Colors.primary,
+            height: 50,
+            borderRadius: 10,
+          },
+          tabBarActiveTintColor: Colors.background,
+          tabBarInactiveTintColor: "white",
+          tabBarLabelStyle: {
+            fontSize: 14,
+            textTransform: "none",
+          },
+        }}
+        sceneContainerStyle={{ backgroundColor: Colors.background }}
+      >
+        <Tab.Screen name="Cast" children={() => <CastTab cast={topCast} />} />
+        <Tab.Screen
+          name="Director"
+          children={() => <DirectorTab crew={topCrew} />}
+        />
+        <Tab.Screen
+          name="Producer"
+          children={() => <ProducerTab crew={topCrew} />}
+        />
+      </Tab.Navigator>
+    </View>
+  );
 };
 
 export default ConnectedPeople;

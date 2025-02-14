@@ -8,16 +8,22 @@ import {
   Dimensions,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import MovieList from "../../components/ui/MovieList";
-import { Movie } from "../../types";
-import { get } from "../../api/index";
+import { Movie, Service } from "../../types";
+import { fetchMovieServices, get } from "../../api/index";
 import { Flex } from "../../components/ui/Layouts";
 import { H1, H3 } from "../../components/ui/Typography";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import useFindStreamingMovies from "../../hooks/useFindStreamingMovies";
+import Carousel from "../../components/ui/Carousel";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 const { width } = Dimensions.get("screen");
 
 const BackButton = ({ onPress }: { onPress: () => void }) => (
@@ -38,57 +44,25 @@ const BackButton = ({ onPress }: { onPress: () => void }) => (
   </TouchableOpacity>
 );
 
-const useFindStreamingMovies = (isRefreshing: boolean, url: string) => {
-  const selectedServices = useSelector(
-    (state: RootState) => state.movies.selectedServices
-  );
-  const [data, setData] = useState<
-    { name: string; movies: Movie[]; imagePath?: string }[]
-  >([]);
-
-  const fetchStreamingMovies = async () => {
-    if (selectedServices.length > 0) {
-      let allData = [];
-      for (const service of selectedServices) {
-        const { data: serviceData } = await get<{ results: Movie[] }>(url, {
-          params: {
-            watch_region: "US",
-            with_watch_providers: service.provider_id,
-            "vote_count.gte": 300,
-          },
-        });
-        if (serviceData && serviceData.results) {
-          allData.push({
-            name: service.provider_name,
-            movies: serviceData.results,
-            imagePath: service.logo_path,
-          });
-        }
-      }
-      setData(allData);
-    }
-  };
-
-  useEffect(() => {
-    fetchStreamingMovies();
-  }, []);
-
-  useEffect(() => {
-    fetchStreamingMovies();
-  }, [selectedServices, isRefreshing]);
-
-  return data;
-};
-
 export default function GenreMovies() {
   const { name, url } = useLocalSearchParams();
   const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [trendingMovieServices, setTrendingMovieServices] = useState<
+    Service[][]
+  >([]);
   const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const streamingMovies = useFindStreamingMovies(isRefreshing, url as string);
-  const selectedServices = useSelector(
-    (state: RootState) => state.movies.selectedServices
+  const { data: streamingMovieData, loadMore } = useFindStreamingMovies(
+    isRefreshing,
+    url as string
   );
+  const scrollY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
 
   useEffect(() => {
     if (isRefreshing) {
@@ -105,7 +79,13 @@ export default function GenreMovies() {
         const trendingResponse = await get<{ results: Movie[] }>(
           `${url}&sort_by=popularity.desc&vote_count.gte=1000`
         );
+        const trendingMovies = trendingResponse.data.results;
+        const servicePromises = trendingMovies.map(({ id }) =>
+          fetchMovieServices(id)
+        );
         setTrendingMovies(trendingResponse.data.results);
+        const services = await Promise.all(servicePromises);
+        setTrendingMovieServices(services);
 
         const topRatedUrl = `${url}&sort_by=vote_average.desc&vote_count.gte=1000`;
         const topRatedResponse = await get<{ results: Movie[] }>(topRatedUrl);
@@ -117,6 +97,13 @@ export default function GenreMovies() {
 
     fetchMovieLists();
   }, [url]);
+
+  const loadMoreMovies = useCallback(
+    (serviceName: string) => {
+      loadMore(serviceName);
+    },
+    [loadMore]
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: "#11142A" }}>
@@ -145,7 +132,7 @@ export default function GenreMovies() {
           </Flex>
         </Flex>
       </SafeAreaView>
-      <ScrollView
+      <Animated.ScrollView
         refreshControl={
           <RefreshControl
             style={{ position: "relative", top: 0, zIndex: 1 }}
@@ -153,15 +140,18 @@ export default function GenreMovies() {
             onRefresh={() => setIsRefreshing(true)}
           />
         }
+        onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 10, paddingBottom: 200 }}
+        contentContainerStyle={{ paddingBottom: 200 }}
       >
         <View style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <MovieList
-            name={"Trending"}
-            data={trendingMovies}
-            loading={trendingMovies.length === 0}
+          <Carousel
+            title="Trending"
+            movies={trendingMovies.slice(0, 10)}
             isRefreshing={isRefreshing}
+            loading={trendingMovies.length === 0}
+            scrollY={scrollY}
+            services={trendingMovieServices.slice(0, 10)}
           />
           <MovieList
             name={"Top Rated"}
@@ -173,20 +163,25 @@ export default function GenreMovies() {
         <H3 style={{ marginLeft: 15, marginTop: 20, marginBottom: 10 }}>
           Available on your services
         </H3>
-        {streamingMovies.map((service) => {
-          return (
-            <View key={`service-${service.name}`} style={{ marginBottom: 20 }}>
-              <MovieList
-                name={`${service.name}`}
-                data={service.movies}
-                imagePath={service.imagePath}
-                loading={service.movies.length === 0}
-                isRefreshing={isRefreshing}
-              />
-            </View>
-          );
-        })}
-      </ScrollView>
+        {streamingMovieData
+          .filter((service) => service.movies.length !== 0)
+          .map((service) => {
+            return (
+              <View
+                key={`service-${service.name}`}
+                style={{ marginBottom: 20 }}
+              >
+                <MovieList
+                  name={`${service.name}`}
+                  data={service.movies}
+                  imagePath={service.imagePath}
+                  isRefreshing={isRefreshing}
+                  onEndReached={() => loadMoreMovies(service.name)}
+                />
+              </View>
+            );
+          })}
+      </Animated.ScrollView>
     </View>
   );
 }

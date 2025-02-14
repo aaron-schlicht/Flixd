@@ -21,14 +21,10 @@ const useGetTrendingMovies = () => {
     });
     if (data) {
       const popularMovies = data.results as Movie[];
-      const moviePromises = popularMovies.map(({ id }) =>
-        fetchMovieDetails(id)
-      );
       const servicePromises = popularMovies.map(({ id }) =>
         fetchMovieServices(id)
       );
-      const movies = await Promise.all(moviePromises);
-      setTrendingMovies(movies);
+      setTrendingMovies(popularMovies);
       const services = await Promise.all(servicePromises);
       setTrendingMovieServices(services);
     }

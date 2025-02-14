@@ -29,12 +29,11 @@ const SearchBar = ({
   setQuery: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const width = useSharedValue(1);
+
   useEffect(() => {
-    if (isFocused) {
-      width.value = 0;
-    } else {
-      width.value = 1;
-    }
+    width.value = withTiming(isFocused ? 0 : 1, {
+      duration: 300,
+    });
   }, [isFocused]);
 
   const handleClear = () => {
@@ -48,13 +47,15 @@ const SearchBar = ({
   };
 
   const searchBoxAnimatedStyle = useAnimatedStyle(() => {
-    const interpolatedWidth = interpolate(width.value, [0, 1], [85, 100], {
-      extrapolateRight: "clamp",
-    });
+    "worklet";
+    const interpolatedWidth = interpolate(
+      width.value,
+      [0, 1],
+      [85, 100],
+      Extrapolation.CLAMP
+    );
     return {
-      width: withTiming(`${interpolatedWidth}%`, {
-        duration: 200,
-      }),
+      width: `${interpolatedWidth}%`,
     };
   });
 

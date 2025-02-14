@@ -15,6 +15,7 @@ import {
 } from "./styles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { H3 } from "../Typography";
+import { useCallback } from "react";
 
 const { width } = Dimensions.get("screen");
 const ITEM_WIDTH = width;
@@ -24,6 +25,7 @@ const CarouselItem = ({
   onPress,
   movie,
   service,
+  isRental,
   scrollX,
   sv,
   index,
@@ -31,40 +33,37 @@ const CarouselItem = ({
   onPress: () => void;
   movie: Movie;
   service: Service | undefined;
+  isRental: boolean;
   scrollX: SharedValue<number>;
   sv: SharedValue<number>;
   index: number;
 }) => {
-  const titleStyle = useAnimatedStyle(() => {
-    const translateX = interpolate(
-      scrollX.value,
-      [(index - 1) * width, index * width, (index + 1) * width],
-      [width * 0.2, 0, -width * 0.2],
-      "clamp"
-    );
-
-    return {
-      transform: [{ translateX }],
-    };
-  });
+  const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
 
   const imageStyle = useAnimatedStyle(() => {
     const translateX = interpolate(
       scrollX.value,
-      [(index - 1) * width, index * width, (index + 1) * width],
-      [-width * 0.5, 0, width * 0.5],
+      inputRange,
+      [-width * 0.3, 0, width * 0.3], // Reduced translation range
+      "clamp"
+    );
+
+    const scale = interpolate(
+      scrollX.value,
+      inputRange,
+      [0.9, 1, 0.9], // Add subtle scaling
       "clamp"
     );
 
     const opacity = interpolate(
       scrollX.value,
-      [(index - 1) * width, index * width, (index + 1) * width],
-      [0.2, 1, 0.2],
+      inputRange,
+      [0.5, 1, 0.5], // Increased minimum opacity
       "clamp"
     );
 
     return {
-      transform: [{ translateX }],
+      transform: [{ translateX }, { scale }],
       opacity,
     };
   });
@@ -95,11 +94,13 @@ const CarouselItem = ({
       style={{ width: ITEM_WIDTH, height: "100%", flex: 1 }}
     >
       <TouchableOpacity onPress={onPress}>
-        <View>
+        <View style={{ overflow: "hidden" }}>
           <Gradient
             style={{
               width: ITEM_WIDTH,
               height: ITEM_HEIGHT,
+              position: "absolute", // Make gradient absolute
+              zIndex: 1,
             }}
             colors={[
               "rgba(21, 24, 45, 0.9)",
@@ -114,6 +115,7 @@ const CarouselItem = ({
             style={[
               {
                 width: ITEM_WIDTH,
+                height: ITEM_HEIGHT,
               },
               imageStyle,
               imageOpacityStyle,
@@ -128,60 +130,79 @@ const CarouselItem = ({
               }}
               contentPosition="top"
               contentFit="cover"
+              transition={300} // Add transition duration
             />
           </Animated.View>
-          <ServiceImageView>
-            {!!service ? (
-              <View>
-                {service.isRental ? (
-                  <View
-                    style={{
-                      backgroundColor: Colors.secondary,
-                      width: 35,
-                      height: 35,
-                      borderRadius: 5,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <H3 style={{ color: Colors.primary, textAlign: "center" }}>
-                      $
-                    </H3>
-                  </View>
-                ) : (
-                  <Image
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                    }}
-                    source={{
-                      uri: SMALL_POSTER_BASE_PATH + service.logo_path,
-                    }}
-                    recyclingKey={movie.title}
-                    transition={200}
-                  />
-                )}
-              </View>
-            ) : (
-              <View
-                style={{
-                  backgroundColor: Colors.secondary,
-                  padding: 5,
-                  borderRadius: 5,
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="theater"
-                  size={25}
-                  color={Colors.primary}
-                />
-              </View>
-            )}
-          </ServiceImageView>
+          <ServiceIcon
+            service={service}
+            isRental={isRental}
+            recyclingKey={movie.title}
+          />
         </View>
       </TouchableOpacity>
     </CarouselItemContainer>
   );
+};
+
+const ServiceIcon = ({
+  service,
+  isRental,
+  recyclingKey,
+}: {
+  service?: Service;
+  isRental: boolean;
+  recyclingKey: string;
+}) => {
+  const renderServiceIcon = useCallback(() => {
+    if (service) {
+      return (
+        <Image
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 10,
+          }}
+          source={{
+            uri: SMALL_POSTER_BASE_PATH + service.logo_path,
+          }}
+          recyclingKey={recyclingKey}
+          transition={200}
+        />
+      );
+    } else if (isRental) {
+      return (
+        <View
+          style={{
+            backgroundColor: Colors.secondary,
+            width: 35,
+            height: 35,
+            borderRadius: 5,
+            justifyContent: "center",
+          }}
+        >
+          <H3 style={{ color: Colors.primary, textAlign: "center" }}>$</H3>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            backgroundColor: Colors.secondary,
+            padding: 5,
+            borderRadius: 5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="theater"
+            size={25}
+            color={Colors.primary}
+          />
+        </View>
+      );
+    }
+  }, [service, isRental]);
+
+  return <ServiceImageView>{renderServiceIcon()}</ServiceImageView>;
 };
 
 export default CarouselItem;

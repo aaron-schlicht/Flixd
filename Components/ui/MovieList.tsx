@@ -1,5 +1,5 @@
-import { View, Text, Dimensions } from "react-native";
-import React, { useEffect, useRef } from "react";
+import { View, Text, Dimensions, ActivityIndicator } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import PosterButton from "./PosterButton";
 import { Movie } from "../../types";
 import { FlashList } from "@shopify/flash-list";
@@ -11,7 +11,9 @@ import Animated, {
   withTiming,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
+import { Colors } from "../../constants";
 
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 const { width } = Dimensions.get("screen");
@@ -96,6 +98,12 @@ const SkeletonMovieList = ({
   );
 };
 
+const ListFooterSpinner = () => (
+  <View style={{ padding: 10, justifyContent: "center" }}>
+    <ActivityIndicator color={Colors.primary} size="small" />
+  </View>
+);
+
 const MovieList = React.memo(
   ({
     name,
@@ -103,12 +111,16 @@ const MovieList = React.memo(
     isRefreshing,
     imagePath,
     loading,
+    loadingMore,
+    onEndReached,
   }: {
     name: string;
     data: Movie[];
     isRefreshing: boolean;
     imagePath?: string;
     loading?: boolean;
+    loadingMore?: boolean;
+    onEndReached?: () => void;
   }) => {
     const ref = useRef<FlashList<Movie>>(null);
 
@@ -165,24 +177,27 @@ const MovieList = React.memo(
             data={data}
             ref={ref}
             horizontal
-            contentContainerStyle={{ paddingLeft: 15 }}
+            contentContainerStyle={{ paddingLeft: 15, paddingRight: 15 }}
             estimatedItemSize={IMAGE_WIDTH * 1.55}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => `${item.id}`}
-            renderItem={({ item }) => {
-              return (
-                <View style={{ marginHorizontal: 5 }}>
-                  <PosterButton
-                    movie={item}
-                    posterPath={SMALL_POSTER_BASE_PATH + item.poster_path}
-                    dimensions={{
-                      width: IMAGE_WIDTH,
-                      height: IMAGE_WIDTH * 1.5,
-                    }}
-                  />
-                </View>
-              );
-            }}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={() =>
+              loadingMore ? <ListFooterSpinner /> : null
+            }
+            renderItem={({ item }) => (
+              <View style={{ marginHorizontal: 5 }}>
+                <PosterButton
+                  movie={item}
+                  posterPath={SMALL_POSTER_BASE_PATH + item.poster_path}
+                  dimensions={{
+                    width: IMAGE_WIDTH,
+                    height: IMAGE_WIDTH * 1.5,
+                  }}
+                />
+              </View>
+            )}
           />
         </Flex>
       </View>

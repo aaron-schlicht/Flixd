@@ -23,6 +23,7 @@ import Header from "./Header";
 import { Image } from "expo-image";
 import ImageHeader from "./ImageHeader";
 import { H2 } from "../../components/ui/Typography";
+import MovieStats from "./MovieStats";
 const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.3;
 const HEADER_COLLAPSED_HEIGHT = 60;
 
@@ -45,11 +46,6 @@ const MovieScreen = ({ id }: { id: string }) => {
 
   const { movie, backdrop, rating, runtime, tagline, loading } =
     useGetMovieInfo(parseInt(id));
-
-  const genres =
-    movie && movie.genre_ids
-      ? movie.genre_ids.map((genre: number) => Genres[genre])
-      : [];
 
   if (loading) {
     return (
@@ -118,13 +114,18 @@ const MovieScreen = ({ id }: { id: string }) => {
         >
           <Header movie={movie} runtime={runtime} rating={rating} />
           <Description
-            tagline={tagline || ""}
             overview={movie.overview || ""}
-            genres={genres}
+            genres={movie.genres || []}
           />
           <StreamingServices id={parseInt(id)} />
           <People id={parseInt(id)} />
-          {/*<SimilarMovies similarMovies={similarMovies} />*/}
+          <MovieStats
+            budget={movie.budget}
+            revenue={movie.revenue}
+            original_language={movie.original_language}
+            production_companies={movie.production_companies}
+            production_countries={movie.production_countries}
+          />
           <PoweredLogo />
           <View style={{ paddingBottom: HEADER_EXPANDED_HEIGHT }} />
         </Animated.ScrollView>

@@ -8,7 +8,7 @@ const config = {
   key: "root",
   storage: AsyncStorage,
   version: 1,
-  blacklist: ["flow"],
+  blacklist: [apiSlice.reducerPath],
 };
 
 const rootReducer = combineReducers({

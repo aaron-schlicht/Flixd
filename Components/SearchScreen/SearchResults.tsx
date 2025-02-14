@@ -8,6 +8,8 @@ import SkeletonList from "./SkeletonList";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import ResultItem from "./ResultItem";
 import { router } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 const { width, height } = Dimensions.get("screen");
 const BASE_URL = "/search/movie";
 
@@ -15,6 +17,9 @@ const SearchResults = ({ query }: { query: string }) => {
   const [results, setResults] = useState<Movie[]>([]);
   const [services, setServices] = useState<Service[][]>([]);
   const [loading, setLoading] = useState(false);
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
 
   const fetchMoviesAndServices = async (query: string) => {
     setLoading(true);
@@ -28,17 +33,28 @@ const SearchResults = ({ query }: { query: string }) => {
     setServices(serviceResults);
     setLoading(false);
   };
+
   useEffect(() => {
     fetchMoviesAndServices(query);
   }, [query]);
 
-  const renderResult = ({ item, index }: { item: Movie; index: number }) => (
-    <ResultItem
-      item={item}
-      service={services?.at(index)?.at(0)}
-      handlePosterPress={() => router.push(`/modal/movie?id=${item.id}`)}
-    />
-  );
+  const renderResult = ({ item, index }: { item: Movie; index: number }) => {
+    const availableServices = services[index];
+    const personalizedService =
+      availableServices?.find((service) =>
+        selectedServices.some(
+          (selectedService: Service) =>
+            selectedService.provider_id === service.provider_id
+        )
+      ) || undefined;
+    return (
+      <ResultItem
+        item={item}
+        service={personalizedService}
+        handlePosterPress={() => router.push(`/modal/movie?id=${item.id}`)}
+      />
+    );
+  };
 
   return (
     <View>

@@ -95,14 +95,12 @@ const useGetFilteredMovies = () => {
   };
 
   const getRandomMovie = async () => {
-    const page = generateRandomPage(totalPages);
-    const params = buildQueryParams(Math.min(page, 40));
+    const page = generateRandomPage(Math.min(40, totalPages));
+    const params = buildQueryParams(page);
     const { data } = await get<any>(`/discover/movie`, { params });
     if (data && data.results) {
-      console.log(data);
       const movieResults = data.results as Movie[];
       if (movieResults.length > 0) {
-        console.log(movieResults.map((m) => m.title));
         const index = Math.floor(Math.random() * movieResults.length);
         const randomMovie = movieResults[index];
         return randomMovie;

@@ -1,17 +1,23 @@
 import { View, Text, ScrollView, Dimensions } from "react-native";
 import { Image } from "expo-image";
-import { Colors, imageBasePath } from "../../constants";
+import { Colors } from "../../constants";
 import { Service } from "../../types";
 import { useEffect, useState } from "react";
 import { fetchMovieServices } from "../../api";
 import { Skeleton } from "@rneui/themed";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+
+const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 
 const StreamingServices = ({
   streamingServices,
   loading,
+  title,
 }: {
   streamingServices: Service[];
   loading: boolean;
+  title: string;
 }) => (
   <View
     style={{
@@ -24,10 +30,13 @@ const StreamingServices = ({
         color: "white",
         fontSize: 20,
         paddingHorizontal: 20,
+        paddingBottom: 5,
         fontWeight: "bold",
       }}
+      numberOfLines={2}
+      adjustsFontSizeToFit
     >
-      Where to watch
+      {title}
     </Text>
     <View
       style={{
@@ -61,7 +70,7 @@ const StreamingServices = ({
             <View key={`service-${service.provider_id}`}>
               <Image
                 style={{ width: 60, height: 60, borderRadius: 10 }}
-                source={{ uri: imageBasePath + service.logo_path }}
+                source={{ uri: SMALL_POSTER_BASE_PATH + service.logo_path }}
                 transition={200}
               />
             </View>
@@ -94,6 +103,10 @@ const ServicesSkeleton = () => (
 const ConnectedStreamingServices = ({ id }: { id: number }) => {
   const [loading, setLoading] = useState(false);
   const [streamingServices, setStreamingServices] = useState<Service[]>([]);
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
+
   const getStreamingServices = async () => {
     setLoading(true);
     const data = await fetchMovieServices(id);
@@ -104,11 +117,30 @@ const ConnectedStreamingServices = ({ id }: { id: number }) => {
   useEffect(() => {
     getStreamingServices();
   }, []);
+
+  const availableOnUserServices = streamingServices.filter((service) =>
+    selectedServices.some(
+      (userService) => userService.provider_id === service.provider_id
+    )
+  );
+
   if (!streamingServices.length) return null;
+
+  if (availableOnUserServices.length > 0) {
+    return (
+      <StreamingServices
+        loading={loading}
+        streamingServices={availableOnUserServices}
+        title="Available on your services"
+      />
+    );
+  }
+
   return (
     <StreamingServices
       loading={loading}
       streamingServices={streamingServices}
+      title="Available to rent or stream"
     />
   );
 };
