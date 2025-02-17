@@ -18,7 +18,6 @@ import {
   AnimatedHeader,
   HEADER_COLLAPSED_HEIGHT,
 } from "./components";
-import { PersonDetails } from "../../redux/apiSlice";
 import { Credit } from "./types";
 
 const Tab = createMaterialTopTabNavigator();
@@ -108,7 +107,7 @@ const PersonScreen = ({ id }: PersonScreenProps) => {
           <View
             style={{
               height:
-                Dimensions.get("window").height - HEADER_COLLAPSED_HEIGHT - 70,
+                Dimensions.get("window").height - HEADER_COLLAPSED_HEIGHT - 60,
               backgroundColor: Colors.background,
               paddingTop: 15,
             }}

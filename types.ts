@@ -71,3 +71,33 @@ export interface Genre {
   name: string;
   id: number;
 }
+
+export interface SearchResults {
+  results: Movie[];
+}
+
+export interface KeywordSearchResults {
+  results: Keyword[];
+}
+
+export interface CastResults {
+  cast: CastMember[];
+  crew: CrewMember[];
+}
+
+export interface CrewMovie extends Movie {
+  job?: string;
+}
+
+export interface PersonCreditResults {
+  cast: Movie[];
+  crew: CrewMovie[];
+}
+
+export interface PersonDetails {
+  biography?: string;
+  known_for_department?: string;
+  name?: string;
+  place_of_birth?: string;
+  profile_path?: string;
+}

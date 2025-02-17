@@ -2,7 +2,8 @@ import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { imageBasePath, Colors } from "../../../constants";
-import { PersonDetails } from "../../../redux/apiSlice";
+import { PersonDetails } from "../../../types";
+import { memo } from "react";
 
 export const HEADER_HEIGHT = 140;
 export const PROFILE_IMAGE_SIZE = 100;
@@ -11,7 +12,7 @@ interface PersonBioHeaderProps {
   person: PersonDetails;
 }
 
-export const PersonBioHeader = ({ person }: PersonBioHeaderProps) => (
+const PersonBioHeader = memo(({ person }: { person: PersonDetails }) => (
   <View
     style={{
       height: HEADER_HEIGHT,
@@ -81,4 +82,8 @@ export const PersonBioHeader = ({ person }: PersonBioHeaderProps) => (
       )}
     </View>
   </View>
-);
+));
+
+PersonBioHeader.displayName = "PersonBioHeader";
+
+export { PersonBioHeader };

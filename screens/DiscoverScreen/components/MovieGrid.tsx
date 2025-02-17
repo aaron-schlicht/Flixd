@@ -2,8 +2,8 @@ import {
   View,
   TouchableOpacity,
   Text,
-  NativeSyntheticEvent,
   NativeScrollEvent,
+  NativeSyntheticEvent,
 } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
@@ -14,6 +14,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "../../../constants";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { ActivityIndicator } from "react-native";
+import { useCallback } from "react";
 
 interface MovieGridProps {
   movies: Movie[];
@@ -73,21 +74,9 @@ export const MovieGrid = ({
   onScroll,
   loadingMore,
   fetchMoreMovies,
-}: MovieGridProps) => (
-  <FlashList
-    ref={listRef}
-    data={movies}
-    numColumns={3}
-    estimatedItemSize={ITEM_WIDTH * 1.5}
-    showsVerticalScrollIndicator={false}
-    getItemType={(item) => item.id}
-    onEndReached={fetchMoreMovies}
-    onEndReachedThreshold={0.8}
-    onScroll={onScroll}
-    scrollEventThrottle={16}
-    ListEmptyComponent={EmptyListComponent}
-    ListFooterComponent={() => (loadingMore ? <ListFooterSpinner /> : null)}
-    renderItem={({ item }) => (
+}: MovieGridProps) => {
+  const renderItem = useCallback(
+    ({ item }: { item: Movie }) => (
       <Link href={`/modal/movie?id=${item.id}`} asChild>
         <TouchableOpacity
           style={{
@@ -109,11 +98,29 @@ export const MovieGrid = ({
           />
         </TouchableOpacity>
       </Link>
-    )}
-    keyExtractor={(item, index) => `${index}-${item.id.toString()}`}
-    contentContainerStyle={{
-      paddingHorizontal: ITEM_SPACING / 2,
-      paddingBottom: 300,
-    }}
-  />
-);
+    ),
+    []
+  );
+  return (
+    <FlashList
+      ref={listRef}
+      data={movies}
+      numColumns={3}
+      estimatedItemSize={ITEM_WIDTH * 1.5}
+      showsVerticalScrollIndicator={false}
+      getItemType={(item) => item.id}
+      onEndReached={fetchMoreMovies}
+      onEndReachedThreshold={0.8}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
+      ListEmptyComponent={EmptyListComponent}
+      ListFooterComponent={() => (loadingMore ? <ListFooterSpinner /> : null)}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => `${index}-${item.id.toString()}`}
+      contentContainerStyle={{
+        paddingHorizontal: ITEM_SPACING / 2,
+        paddingBottom: 300,
+      }}
+    />
+  );
+};

@@ -57,6 +57,9 @@ export const movieSlice = createSlice({
     setServices: (state, action) => {
       state.selectedServices = [...action.payload];
     },
+    clearSelectedServices: (state) => {
+      state.selectedServices = [];
+    },
   },
 });
 
@@ -69,6 +72,7 @@ export const {
   removeSelectedMovie,
   updateSearchResultServices,
   setServices,
+  clearSelectedServices, // Add this export
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

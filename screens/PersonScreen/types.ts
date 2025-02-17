@@ -1,7 +1,6 @@
 import { ViewStyle } from "react-native";
 import { AnimatedStyleProp } from "react-native-reanimated";
-import { Movie } from "../../types";
-import { PersonDetails } from "../../redux/apiSlice";
+import { Movie, PersonDetails } from "../../types";
 
 export interface Credit {
   name: string;

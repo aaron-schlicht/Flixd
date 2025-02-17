@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Movie, Service } from "../types";
-import { fetchMovieDetails, fetchMovieServices, get } from "../api";
+import { fetchMovieServices, get, batchFetch } from "../api";
 
 const POPULAR_MOVIES_URL = "/discover/movie";
 const useGetTrendingMovies = () => {
@@ -12,23 +12,28 @@ const useGetTrendingMovies = () => {
 
   const fetchMoviesAndServices = async () => {
     setLoading(true);
-    const { data } = await get<any>(POPULAR_MOVIES_URL, {
-      params: {
-        with_original_language: "en",
-        sort_by: "popularity.desc",
-        "vote_count.gte": 300,
-      },
-    });
-    if (data) {
-      const popularMovies = data.results as Movie[];
-      const servicePromises = popularMovies.map(({ id }) =>
-        fetchMovieServices(id)
-      );
-      setTrendingMovies(popularMovies);
-      const services = await Promise.all(servicePromises);
-      setTrendingMovieServices(services);
+    try {
+      const { data } = await get<any>(POPULAR_MOVIES_URL, {
+        params: {
+          with_original_language: "en",
+          sort_by: "popularity.desc",
+          "vote_count.gte": 300,
+        },
+      });
+
+      if (data) {
+        const popularMovies = data.results as Movie[];
+        setTrendingMovies(popularMovies);
+
+        const movieIds = popularMovies.map((movie) => movie.id);
+        const services = await batchFetch(movieIds, fetchMovieServices);
+        setTrendingMovieServices(services);
+      }
+    } catch (error) {
+      console.error("Error fetching movies and services:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

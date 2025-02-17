@@ -65,9 +65,9 @@ const StreamingServices = ({
         }}
         showsHorizontalScrollIndicator={false}
       >
-        {streamingServices.map((service) => {
+        {streamingServices.map((service, index) => {
           return (
-            <View key={`service-${service.provider_id}`}>
+            <View key={`service-${index}-${service.provider_id}`}>
               <Image
                 style={{ width: 60, height: 60, borderRadius: 10 }}
                 source={{ uri: SMALL_POSTER_BASE_PATH + service.logo_path }}

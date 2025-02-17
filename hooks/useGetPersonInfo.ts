@@ -1,9 +1,4 @@
-import { CastMember, CrewMember, Movie } from "../types";
-import {
-  PersonCreditResults,
-  PersonDetails,
-  useGetPersonCreditsQuery,
-} from "../redux/apiSlice";
+import { Movie, PersonCreditResults, PersonDetails } from "../types";
 import { get } from "../api";
 import { useEffect, useState } from "react";
 import { Credit } from "../screens/PersonScreen/types";

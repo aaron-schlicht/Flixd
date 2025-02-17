@@ -1,6 +1,5 @@
 import { get } from "../api";
-import { CastResults } from "../redux/apiSlice";
-import { CastMember, CrewMember, Movie } from "../types";
+import { CastMember, CrewMember, Movie, CastResults } from "../types";
 
 const findSimilarMovies = async (id: number) => {
   const { data: topCrew } = await get<CastResults>(`/movie/${id}/credits`);

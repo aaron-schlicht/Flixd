@@ -5,9 +5,15 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { Colors } from "../constants";
 import * as SystemUI from "expo-system-ui";
+import { useEffect } from "react";
+import { checkAndMigrateServices } from "../utils/serviceMigration";
 
 export default function Layout() {
   let persistor = persistStore(store);
+
+  useEffect(() => {
+    checkAndMigrateServices(store);
+  }, []);
 
   SystemUI.setBackgroundColorAsync(Colors.header);
   return (

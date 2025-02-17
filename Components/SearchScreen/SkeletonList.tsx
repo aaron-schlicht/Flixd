@@ -8,10 +8,14 @@ const SkeletonList = () => {
     <Animated.View
       entering={FadeIn.duration(300)}
       exiting={FadeOut.duration(300)}
-      style={{ flex: 1, width: width }}
+      style={{ flex: 1, flexGrow: 1 }}
     >
-      <ScrollView showsVerticalScrollIndicator={false} style={{ width: width }}>
-        {[1, 2, 3, 4, 5, 6].map((value) => {
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={{ width: width }}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => {
           return (
             <ResultItemContainer key={`skeleton-list-item-${value}`}>
               <SkeletonLayout>

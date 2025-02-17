@@ -52,7 +52,7 @@ const TabButton = ({
         style={{
           alignItems: "center",
           gap: 2,
-          paddingTop: 2,
+          paddingTop: 5,
           transform: [{ scale }],
         }}
       >

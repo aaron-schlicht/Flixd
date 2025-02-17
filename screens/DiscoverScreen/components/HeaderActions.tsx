@@ -21,7 +21,6 @@ export const HeaderActions = ({
   return (
     <Flex
       style={{
-        marginTop: -5,
         paddingBottom: 10,
         height: 45,
         justifyContent: "space-between",

@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Colors } from "../../../constants";
 
-export const CollapsibleBiography = ({ text }: { text: string }) => {
+export const CollapsibleBiography = memo(({ text }: { text: string }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [textHeight, setTextHeight] = useState(0);
   const maxHeight = 100;
@@ -47,4 +47,6 @@ export const CollapsibleBiography = ({ text }: { text: string }) => {
       )}
     </View>
   );
-};
+});
+
+CollapsibleBiography.displayName = "CollapsibleBiography";

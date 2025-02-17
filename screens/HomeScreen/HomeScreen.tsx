@@ -83,6 +83,10 @@ const HomeView = () => {
     useGetTrendingMovies();
   const scrollY = useSharedValue(0);
 
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
+  );
+
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollY.value = event.contentOffset.y;
@@ -108,9 +112,7 @@ const HomeView = () => {
   return (
     <View>
       <AppHeader>
-        <Flex
-          style={{ justifyContent: "center", marginTop: -5, paddingBottom: 10 }}
-        >
+        <Flex style={{ justifyContent: "center", paddingBottom: 10 }}>
           <Image
             source={require("../../assets/AppLogo.png")}
             style={{
@@ -163,22 +165,56 @@ const HomeView = () => {
             />
           );
         })}
-        <H3 style={{ marginLeft: 15, marginTop: 15, marginBottom: 10 }}>
-          Trending on your services
-        </H3>
-        {streamingMovieData.map((service) => {
-          return (
-            <MovieList
-              key={`service-${service.name}`}
-              name={`${service.name}`}
-              data={service.movies}
-              imagePath={service.imagePath}
-              loading={service.movies.length === 0}
-              isRefreshing={isRefreshing}
-              onEndReached={() => loadMoreMovies(service.name)}
-            />
-          );
-        })}
+        <View style={{ marginTop: 15, marginBottom: 30 }}>
+          <H3 style={{ paddingLeft: 15, paddingBottom: 10 }}>
+            Trending on your services
+          </H3>
+          {selectedServices.length === 0 ? (
+            <View
+              style={{
+                marginTop: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: 15,
+              }}
+            >
+              <H3
+                style={{
+                  color: "white",
+                  fontSize: 14,
+                  marginRight: 5,
+                }}
+              >
+                You have no services selected yet,
+              </H3>
+              <Link href="modal/services" asChild>
+                <TouchableOpacity>
+                  <H3
+                    style={{
+                      color: Colors.primary,
+                      fontWeight: "bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    get started here
+                  </H3>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          ) : (
+            streamingMovieData.map((service, index) => (
+              <MovieList
+                key={`service-${index}-{${service.name}`}
+                name={`${service.name}`}
+                data={service.movies}
+                imagePath={service.imagePath}
+                loading={service.movies.length === 0}
+                isRefreshing={isRefreshing}
+                onEndReached={() => loadMoreMovies(service.name)}
+              />
+            ))
+          )}
+        </View>
       </Animated.ScrollView>
     </View>
   );

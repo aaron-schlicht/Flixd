@@ -66,7 +66,6 @@ const SearchBar = ({
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
-        marginTop: -5,
       }}
     >
       <Animated.View

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { chunk } from "lodash";
 import { Movie, Service } from "../types";
 import api from "./instance";
 
@@ -77,4 +78,21 @@ export const fetchMovieDetails = async (id: number) => {
     params: { language: "en-US" },
   });
   return data || [];
+};
+
+const BATCH_SIZE = 5;
+
+export const batchFetch = async <T>(
+  ids: number[],
+  fetchFn: (id: number) => Promise<T>
+): Promise<T[]> => {
+  const batches = chunk(ids, BATCH_SIZE);
+  const results: T[] = [];
+
+  for (const batch of batches) {
+    const batchResults = await Promise.all(batch.map(fetchFn));
+    results.push(...batchResults);
+  }
+
+  return results;
 };

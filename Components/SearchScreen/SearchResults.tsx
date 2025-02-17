@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { Movie, RootStackParamList, Service } from "../../types";
-import { fetchMovieServices, get } from "../../api";
+import { fetchMovieServices, get, batchFetch } from "../../api";
 import { FlashList } from "@shopify/flash-list";
 import { Dimensions } from "react-native";
 import SkeletonList from "./SkeletonList";
@@ -23,15 +23,21 @@ const SearchResults = ({ query }: { query: string }) => {
 
   const fetchMoviesAndServices = async (query: string) => {
     setLoading(true);
-    const { data } = await get<{ results: Movie[] }>(
-      BASE_URL + `?query=${query}`
-    );
-    const movies = data.results.sort((a, b) => b.vote_count - a.vote_count);
-    setResults(movies);
-    const servicePromises = movies.map(({ id }) => fetchMovieServices(id));
-    const serviceResults = await Promise.all(servicePromises);
-    setServices(serviceResults);
-    setLoading(false);
+    try {
+      const { data } = await get<{ results: Movie[] }>(
+        BASE_URL + `?query=${query}`
+      );
+      const movies = data.results.sort((a, b) => b.vote_count - a.vote_count);
+      setResults(movies);
+
+      const movieIds = movies.map((movie) => movie.id);
+      const serviceResults = await batchFetch(movieIds, fetchMovieServices);
+      setServices(serviceResults);
+    } catch (error) {
+      console.error("Error fetching movies and services:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -57,13 +63,13 @@ const SearchResults = ({ query }: { query: string }) => {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           minHeight: 2,
+          flex: 1,
           height: height,
           width: width,
-          paddingBottom: 200,
         }}
       >
         {loading ? (

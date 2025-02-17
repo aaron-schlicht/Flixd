@@ -1,23 +1,18 @@
 import {
   View,
-  Text,
-  ScrollView,
-  SafeAreaView,
   RefreshControl,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { useState, useEffect, useCallback } from "react";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import { useState, useEffect, useCallback, memo } from "react";
 import MovieList from "../../components/ui/MovieList";
 import { Movie, Service } from "../../types";
-import { fetchMovieServices, get } from "../../api/index";
+import { fetchMovieServices, get, batchFetch } from "../../api";
 import { Flex } from "../../components/ui/Layouts";
 import { H1, H3 } from "../../components/ui/Typography";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 import useFindStreamingMovies from "../../hooks/useFindStreamingMovies";
 import Carousel from "../../components/ui/Carousel";
 import Animated, {
@@ -25,9 +20,11 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { AppHeader } from "../../components/ui/AppHeader";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 const { width } = Dimensions.get("screen");
 
-const BackButton = ({ onPress }: { onPress: () => void }) => (
+const BackButton = memo(({ onPress }: { onPress: () => void }) => (
   <TouchableOpacity
     style={{
       padding: 5,
@@ -43,7 +40,9 @@ const BackButton = ({ onPress }: { onPress: () => void }) => (
   >
     <Ionicons name="chevron-back" color="white" size={25} />
   </TouchableOpacity>
-);
+));
+
+BackButton.displayName = "BackButton";
 
 export default function GenreMovies() {
   const { name, url } = useLocalSearchParams();
@@ -56,6 +55,9 @@ export default function GenreMovies() {
   const { data: streamingMovieData, loadMore } = useFindStreamingMovies(
     isRefreshing,
     url as string
+  );
+  const selectedServices = useSelector(
+    (state: RootState) => state.movies.selectedServices
   );
   const scrollY = useSharedValue(0);
 
@@ -81,11 +83,9 @@ export default function GenreMovies() {
           `${url}&sort_by=popularity.desc&vote_count.gte=1000`
         );
         const trendingMovies = trendingResponse.data.results;
-        const servicePromises = trendingMovies.map(({ id }) =>
-          fetchMovieServices(id)
-        );
-        setTrendingMovies(trendingResponse.data.results);
-        const services = await Promise.all(servicePromises);
+        setTrendingMovies(trendingMovies);
+        const movieIds = trendingMovies.map((movie) => movie.id);
+        const services = await batchFetch(movieIds, fetchMovieServices);
         setTrendingMovieServices(services);
 
         const topRatedUrl = `${url}&sort_by=vote_average.desc&vote_count.gte=1000`;
@@ -109,7 +109,7 @@ export default function GenreMovies() {
   return (
     <View style={{ flex: 1, backgroundColor: Colors.header }}>
       <AppHeader>
-        <Flex style={{ marginTop: -5, paddingBottom: 10 }}>
+        <Flex style={{ paddingBottom: 10 }}>
           <Flex style={{ width: width * 0.25, paddingHorizontal: 15 }}>
             <BackButton onPress={() => router.back()} />
           </Flex>
@@ -152,27 +152,56 @@ export default function GenreMovies() {
             isRefreshing={isRefreshing}
           />
         </View>
-        <H3 style={{ marginLeft: 15, marginTop: 20, marginBottom: 10 }}>
-          Available on your services
-        </H3>
-        {streamingMovieData
-          .filter((service) => service.movies.length !== 0)
-          .map((service) => {
-            return (
-              <View
-                key={`service-${service.name}`}
-                style={{ marginBottom: 20 }}
+        <View style={{ marginTop: 15, marginBottom: 30 }}>
+          <H3 style={{ paddingLeft: 15, paddingBottom: 10 }}>
+            Trending on your services
+          </H3>
+          {selectedServices.length === 0 ? (
+            <View
+              style={{
+                marginTop: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: 15,
+              }}
+            >
+              <H3
+                style={{
+                  color: "white",
+                  fontSize: 14,
+                  marginRight: 5,
+                }}
               >
-                <MovieList
-                  name={`${service.name}`}
-                  data={service.movies}
-                  imagePath={service.imagePath}
-                  isRefreshing={isRefreshing}
-                  onEndReached={() => loadMoreMovies(service.name)}
-                />
-              </View>
-            );
-          })}
+                You have no services selected yet,
+              </H3>
+              <Link href="modal/services" asChild>
+                <TouchableOpacity>
+                  <H3
+                    style={{
+                      color: Colors.primary,
+                      fontWeight: "bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    get started here
+                  </H3>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          ) : (
+            streamingMovieData.map((service, index) => (
+              <MovieList
+                key={`service-${index}-{${service.name}`}
+                name={`${service.name}`}
+                data={service.movies}
+                imagePath={service.imagePath}
+                loading={service.movies.length === 0}
+                isRefreshing={isRefreshing}
+                onEndReached={() => loadMoreMovies(service.name)}
+              />
+            ))
+          )}
+        </View>
       </Animated.ScrollView>
     </View>
   );

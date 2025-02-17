@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { CastMember, CrewMember } from "../../../types";
 import { get } from "../../../api";
-import { CastResults } from "../../../redux/apiSlice";
+import { CastResults } from "../../../types";
 import { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
 
