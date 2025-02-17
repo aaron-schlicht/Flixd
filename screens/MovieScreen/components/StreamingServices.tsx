@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, Dimensions } from "react-native";
 import { Image } from "expo-image";
-import { Colors } from "../../constants";
-import { Service } from "../../types";
+import { Colors } from "../../../constants";
+import { Service } from "../../../types";
 import { useEffect, useState } from "react";
-import { fetchMovieServices } from "../../api";
+import { fetchMovieServices } from "../../../api";
 import { Skeleton } from "@rneui/themed";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 
@@ -50,7 +50,7 @@ const StreamingServices = ({
       <Image
         style={{ width: 120, height: "100%" }}
         contentFit="contain"
-        source={require("../../assets/justwatch.webp")}
+        source={require("../../../assets/justwatch.webp")}
       />
     </View>
     {loading ? (
@@ -120,7 +120,7 @@ const ConnectedStreamingServices = ({ id }: { id: number }) => {
 
   const availableOnUserServices = streamingServices.filter((service) =>
     selectedServices.some(
-      (userService) => userService.provider_id === service.provider_id
+      (userService: Service) => userService.provider_id === service.provider_id
     )
   );
 

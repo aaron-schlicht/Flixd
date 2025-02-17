@@ -1,7 +1,6 @@
 import {
   View,
   SafeAreaView,
-  Dimensions,
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
@@ -12,7 +11,6 @@ import useGetTrendingMovies from "../../hooks/useGetTrendingMovies";
 import Carousel from "../../components/ui/Carousel";
 import useFindStreamingMovies from "../../hooks/useFindStreamingMovies";
 import { Background, Flex } from "../../components/ui/Layouts";
-import MovieLists from "./MovieLists";
 import { H1, H3 } from "../../components/ui/Typography";
 import Animated, {
   useAnimatedScrollHandler,
@@ -24,6 +22,7 @@ import { MainProviders, imageBasePath } from "../../constants";
 import MovieList from "../../components/ui/MovieList";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { AppHeader } from "../../components/ui/AppHeader";
 
 const TopServiceLogos = () => {
   const selectedServices = useSelector(
@@ -108,16 +107,7 @@ const HomeView = () => {
 
   return (
     <View>
-      <SafeAreaView
-        style={{
-          backgroundColor: "#11142A",
-          shadowColor: "black",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-      >
+      <AppHeader>
         <Flex
           style={{ justifyContent: "center", marginTop: -5, paddingBottom: 10 }}
         >
@@ -141,7 +131,7 @@ const HomeView = () => {
             </TouchableOpacity>
           </Link>
         </Flex>
-      </SafeAreaView>
+      </AppHeader>
       <Animated.ScrollView
         contentContainerStyle={{ paddingBottom: 200, paddingTop: 0 }}
         onScroll={scrollHandler}

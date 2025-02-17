@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateGenre } from "../../redux/flowSlice";
-import { Colors, Genres } from "../../constants";
+import { updateGenre } from "../redux/flowSlice";
+import { Colors, Genres } from "../constants";
 import * as Haptics from "expo-haptics";
-import { RootState } from "../../redux/store";
-import { Genre } from "../../types";
+import { RootState } from "../redux/store";
+import { Genre } from "../types";
 import { FlashList } from "@shopify/flash-list";
 
-const GenreStep = () => {
+const GenreSelect = () => {
   const genres = useSelector((state: RootState) => state.flow.genres);
   const dispatch = useDispatch();
 
@@ -91,4 +91,4 @@ const GenreButton = ({
   );
 };
 
-export default GenreStep;
+export default GenreSelect;

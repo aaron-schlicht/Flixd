@@ -1,9 +1,17 @@
 import { router, Stack } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigationState } from "@react-navigation/native";
 
-const CloseButton = ({ onPress }: { onPress: () => void }) => (
+const HeaderButton = ({
+  onPress,
+  icon,
+  position,
+}: {
+  onPress: () => void;
+  icon: "close" | "chevron-back";
+  position: "left" | "right";
+}) => (
   <TouchableOpacity
     style={{
       padding: 10,
@@ -12,7 +20,7 @@ const CloseButton = ({ onPress }: { onPress: () => void }) => (
       height: 50,
       position: "absolute",
       top: 5,
-      right: 15,
+      [position]: 15,
       zIndex: 200,
       justifyContent: "center",
       alignItems: "center",
@@ -20,8 +28,27 @@ const CloseButton = ({ onPress }: { onPress: () => void }) => (
     }}
     onPress={onPress}
   >
-    <Ionicons name="close" color="white" size={30} />
+    <Ionicons name={icon} color="white" size={30} />
   </TouchableOpacity>
+);
+
+const Header = ({
+  canGoBack,
+  onClose,
+}: {
+  canGoBack?: boolean;
+  onClose: () => void;
+}) => (
+  <>
+    {canGoBack && (
+      <HeaderButton
+        onPress={() => router.back()}
+        icon="chevron-back"
+        position="left"
+      />
+    )}
+    <HeaderButton onPress={onClose} icon="close" position="right" />
+  </>
 );
 
 export default function Layout() {
@@ -38,26 +65,23 @@ export default function Layout() {
       router.dismissAll();
     }
   };
+
   return (
-    <Stack
-      initialRouteName="movie"
-      screenOptions={{
-        header: () => <CloseButton onPress={handlePress} />,
-      }}
-    >
-      <Stack.Screen
-        name="movie"
-        initialParams={{ id: "" }}
-        //options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="person"
-        initialParams={{ id: "" }}
-        //options={{ headerShown: false }}
-      />
-      <Stack.Screen name="filter" />
-      <Stack.Screen name="services" />
-      <Stack.Screen name="sort" />
-    </Stack>
+    <>
+      <Stack
+        initialRouteName="movie"
+        screenOptions={({ navigation }) => ({
+          header: () => (
+            <Header canGoBack={navigation.canGoBack()} onClose={handlePress} />
+          ),
+        })}
+      >
+        <Stack.Screen name="movie" initialParams={{ id: "" }} />
+        <Stack.Screen name="person" initialParams={{ id: "" }} />
+        <Stack.Screen name="filter" />
+        <Stack.Screen name="services" />
+        <Stack.Screen name="sort" />
+      </Stack>
+    </>
   );
 }

@@ -24,6 +24,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
+import { AppHeader } from "../../components/ui/AppHeader";
 const { width } = Dimensions.get("screen");
 
 const BackButton = ({ onPress }: { onPress: () => void }) => (
@@ -106,17 +107,8 @@ export default function GenreMovies() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#11142A" }}>
-      <SafeAreaView
-        style={{
-          backgroundColor: "#11142A",
-          shadowColor: "black",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-      >
+    <View style={{ flex: 1, backgroundColor: Colors.header }}>
+      <AppHeader>
         <Flex style={{ marginTop: -5, paddingBottom: 10 }}>
           <Flex style={{ width: width * 0.25, paddingHorizontal: 15 }}>
             <BackButton onPress={() => router.back()} />
@@ -131,7 +123,7 @@ export default function GenreMovies() {
             </H1>
           </Flex>
         </Flex>
-      </SafeAreaView>
+      </AppHeader>
       <Animated.ScrollView
         refreshControl={
           <RefreshControl

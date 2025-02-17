@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Colors, imageBasePath } from "../../constants";
+import { Colors, imageBasePath } from "../../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { CastMember, CrewMember, RootStackParamList } from "../../types";
-import { get } from "../../api";
-import { CastResults } from "../../redux/apiSlice";
+import { CastMember, CrewMember } from "../../../types";
+import { get } from "../../../api";
+import { CastResults } from "../../../redux/apiSlice";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@rneui/themed";
 import { Link, router } from "expo-router";
 
 const SCREEN_PADDING = 15;

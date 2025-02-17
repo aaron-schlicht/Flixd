@@ -1,6 +1,7 @@
 import { Genre, Keyword, Service, WatchProvider } from "./types";
 
 export const Colors = {
+  header: "#11142A",
   background: "#15182D",
   primary: "#A3BBD3",
   secondary: "#252942",

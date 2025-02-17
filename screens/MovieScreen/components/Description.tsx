@@ -1,6 +1,6 @@
 import { FlatList, View, Text, TouchableOpacity } from "react-native";
-import { Colors } from "../../constants";
-import { Genre } from "../../types";
+import { Colors } from "../../../constants";
+import { Genre } from "../../../types";
 import { router } from "expo-router";
 
 const navigateToGenre = (genre: Genre) => {

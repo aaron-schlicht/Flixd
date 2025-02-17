@@ -1,6 +1,6 @@
 import { View, Text, Dimensions } from "react-native";
-import { Colors } from "../../constants";
-import { Movie } from "../../types";
+import { Colors } from "../../../constants";
+import { Movie } from "../../../types";
 
 const getColor = (rating: number) => {
   if (rating < 5) {

@@ -1,12 +1,6 @@
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  Dimensions,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { Dimensions, View, StyleSheet } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,

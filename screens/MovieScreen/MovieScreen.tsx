@@ -8,10 +8,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import useGetMovieInfo from "../../hooks/useGetMovieInfo";
-import Description from "./Description";
-import StreamingServices from "./StreamingServices";
-import People from "./People";
-import SimilarMovies from "./SimilarMovies";
+import Description from "./components/Description";
+import StreamingServices from "./components/StreamingServices";
+import People from "./components/People";
+import SimilarMovies from "./components/SimilarMovies";
 import { Colors, Genres, imageBasePath } from "../../constants";
 import Animated, {
   interpolate,
@@ -19,11 +19,11 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import Header from "./Header";
+import Header from "./components/Header";
 import { Image } from "expo-image";
-import ImageHeader from "./ImageHeader";
+import ImageHeader from "./components/ImageHeader";
 import { H2 } from "../../components/ui/Typography";
-import MovieStats from "./MovieStats";
+import MovieStats from "./components/MovieStats";
 const HEADER_EXPANDED_HEIGHT = Dimensions.get("window").height * 0.3;
 const HEADER_COLLAPSED_HEIGHT = 60;
 

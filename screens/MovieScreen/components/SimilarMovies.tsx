@@ -1,6 +1,6 @@
 import { View, Text, ScrollView } from "react-native";
-import { Movie } from "../../types";
-import PosterButton from "../../components/ui/PosterButton";
+import { Movie } from "../../../types";
+import PosterButton from "../../../components/ui/PosterButton";
 
 const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
   const validMovies = similarMovies.filter(
@@ -38,7 +38,7 @@ const SimilarMovies = ({ similarMovies }: { similarMovies: Movie[] }) => {
                   "https://image.tmdb.org/t/p/w342/" + movie.poster_path
                 }
                 movie={movie}
-                onPress={() => {}}
+                dimensions={{ width: 150, height: 225 }}
               />
             </View>
           );

@@ -66,6 +66,7 @@ const SearchBar = ({
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
+        marginTop: -5,
       }}
     >
       <Animated.View
@@ -76,7 +77,7 @@ const SearchBar = ({
             borderColor: Colors.primary,
             borderWidth: 1,
             borderRadius: 10,
-            height: 50,
+            height: 40,
             flexDirection: "row",
             alignItems: "center",
             gap: 5,
@@ -114,7 +115,7 @@ const SearchBar = ({
       {isFocused ? (
         <Animated.View exiting={FadeOutRight}>
           <TouchableOpacity
-            style={{ height: 50, justifyContent: "center" }}
+            style={{ height: 40, justifyContent: "center" }}
             onPress={() => handleCancel()}
           >
             <Text style={{ color: "white" }}>Cancel</Text>

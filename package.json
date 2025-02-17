@@ -46,7 +46,8 @@
     "react-native-tab-view": "^3.5.2",
     "react-redux": "^9.0.1",
     "redux-persist": "^6.0.0",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "expo-system-ui": "~3.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

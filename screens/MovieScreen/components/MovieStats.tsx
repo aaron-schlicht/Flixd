@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Colors } from "../../constants";
+import { Colors } from "../../../constants";
 
 interface MovieStatsProps {
   budget: number | undefined;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, Dimensions, FlatList, SafeAreaView } from "react-native";
 import { Colors } from "../../constants";
-import GenreStep from "../FlowScreen/GenreStep";
+import GenreSelect from "../../components/GenreSelect";
 import Accordion from "../../components/Accordion";
-import KeywordStep from "../FlowScreen/KeywordStep";
+import KeywordSelect from "../../components/KeywordSelect";
 import RatingFilter from "../../components/RatingFilter";
 import ReleaseFilter from "../../components/ReleaseFilter";
 import SelectedFilters from "../../components/SelectedFilters";
@@ -14,11 +14,11 @@ import CertificationFilter from "../../components/CertificationFilter"; // Add i
 const { width, height } = Dimensions.get("screen");
 
 const AccordionItems = [
-  { h: 300, title: "Genres", component: <GenreStep /> },
-  { h: 400, title: "Keywords", component: <KeywordStep /> },
+  { h: 300, title: "Genres", component: <GenreSelect /> },
+  { h: 400, title: "Keywords", component: <KeywordSelect /> },
   { title: "Rating", component: <RatingFilter /> },
   { title: "Release Year", component: <ReleaseFilter /> },
-  { title: "Age Rating", component: <CertificationFilter /> }, // Add new filter
+  { title: "Age Rating", component: <CertificationFilter /> },
 ];
 
 const FilterScreen = () => {
@@ -32,7 +32,7 @@ const FilterScreen = () => {
             width,
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#11142A",
+            backgroundColor: Colors.header,
             gap: 10,
             height: 120,
           }}

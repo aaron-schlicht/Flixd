@@ -66,7 +66,7 @@ const ServicesSelect = () => {
           width,
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#11142A",
+          backgroundColor: Colors.header,
           gap: 10,
         }}
       >

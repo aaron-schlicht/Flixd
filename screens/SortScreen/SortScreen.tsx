@@ -3,12 +3,9 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  StyleSheet,
-  Dimensions,
   ScrollView,
 } from "react-native";
 import { Colors } from "../../constants";
-import { Ionicons } from "@expo/vector-icons";
 import { H2 } from "../../components/ui/Typography";
 import { Background } from "../../components/ui/Layouts";
 import { router } from "expo-router";
@@ -16,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSort } from "../../redux/flowSlice";
 import { RootState } from "../../redux/store";
 import * as Haptics from "expo-haptics";
+import { styles } from "./styles";
 
 const sortOptions = [
   {
@@ -78,7 +76,7 @@ const SortScreen = () => {
 
   return (
     <Background>
-      <SafeAreaView style={{ backgroundColor: "#11142A" }}>
+      <SafeAreaView style={{ backgroundColor: Colors.header }}>
         <View style={styles.header}>
           <H2 style={styles.title}>Sort By</H2>
           <View style={{ width: 40 }} />
@@ -111,49 +109,5 @@ const SortScreen = () => {
     </Background>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingBottom: 20,
-  },
-  title: {
-    color: Colors.primary,
-    textAlign: "center",
-  },
-  container: {
-    padding: 20,
-    gap: 25,
-  },
-  group: {
-    gap: 10,
-  },
-  groupTitle: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  button: {
-    flex: 1,
-    backgroundColor: Colors.secondary,
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    color: Colors.primary,
-    fontSize: 14,
-    fontWeight: "600",
-  },
-});
 
 export default SortScreen;

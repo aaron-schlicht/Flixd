@@ -6,13 +6,19 @@ import {
 } from "../redux/apiSlice";
 import { get } from "../api";
 import { useEffect, useState } from "react";
+import { Credit } from "../screens/PersonScreen/types";
 
 const DIRECTOR = "DIRECTOR";
 const PRODUCER = "PRODUCER";
 const WRITER = "WRITER";
 const SCREENPLAY = "SCREENPLAY";
 
-const useGetPersonInfo = (id: string) => {
+interface UseGetPersonInfoResult {
+  person: PersonDetails | null;
+  credits: Credit[];
+}
+
+const useGetPersonInfo = (id: string): UseGetPersonInfoResult => {
   const [credits, setCredits] = useState<{ name: string; movies: Movie[] }[]>(
     []
   );
@@ -96,7 +102,6 @@ const useGetPersonInfo = (id: string) => {
   return {
     credits,
     person,
-    loading,
   };
 };
 

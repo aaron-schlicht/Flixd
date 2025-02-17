@@ -1,15 +1,13 @@
 import { TouchableOpacity, View, Text, FlatList } from "react-native";
-import { Colors, Keywords } from "../../constants";
+import { Colors, Keywords } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
-import { updateKeywords } from "../../redux/flowSlice";
-import { RootState } from "../../redux/store";
+import { updateKeywords } from "../redux/flowSlice";
+import { RootState } from "../redux/store";
 import * as Haptics from "expo-haptics";
-import KeywordSearch from "./KeywordSearch";
-import { Keyword } from "../../types";
+import { Keyword } from "../types";
 import { FlashList } from "@shopify/flash-list";
 
-const KeywordStep = () => {
-  const genres = useSelector((state: RootState) => state.flow.genres);
+const KeywordSelect = () => {
   const keywords = useSelector((state: RootState) => state.flow.keywords);
   const dispatch = useDispatch();
 
@@ -25,12 +23,9 @@ const KeywordStep = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/*<KeywordSearch />*/}
       <View
         style={{
           paddingTop: 0,
-          //borderTopColor: Colors.secondary,
-          //borderTopWidth: 2,
           height: 500,
         }}
       >
@@ -99,4 +94,4 @@ const KeywordButton = ({
   );
 };
 
-export default KeywordStep;
+export default KeywordSelect;
