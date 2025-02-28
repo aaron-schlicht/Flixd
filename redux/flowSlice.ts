@@ -15,7 +15,7 @@ export interface InitialFlowType {
   filters: Filter;
   useStreamingServices: boolean;
   sortBy: string;
-  certifications: string[]; // Add certifications
+  certifications: string[];
 }
 
 const initialState: InitialFlowType = {
@@ -103,9 +103,9 @@ export const {
   resetFlow,
   updateFilters,
   resetFilter,
-  updateServiceSelect, // Export new action
-  updateSort, // Export new action
-  updateCertifications, // Export new action
+  updateServiceSelect,
+  updateSort,
+  updateCertifications,
 } = flowSlice.actions;
 
 export default flowSlice.reducer;

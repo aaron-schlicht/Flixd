@@ -19,7 +19,7 @@ import { useCallback } from "react";
 
 const { width } = Dimensions.get("screen");
 const ITEM_WIDTH = width;
-const ITEM_HEIGHT = width * 1.5;
+const ITEM_HEIGHT = width * 0.7;
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w780/";
 const CarouselItem = ({
   onPress,
@@ -44,26 +44,19 @@ const CarouselItem = ({
     const translateX = interpolate(
       scrollX.value,
       inputRange,
-      [-width * 0.3, 0, width * 0.3], // Reduced translation range
-      "clamp"
-    );
-
-    const scale = interpolate(
-      scrollX.value,
-      inputRange,
-      [0.9, 1, 0.9], // Add subtle scaling
+      [-width * 0.3, 0, width * 0.3],
       "clamp"
     );
 
     const opacity = interpolate(
       scrollX.value,
       inputRange,
-      [0.5, 1, 0.5], // Increased minimum opacity
+      [0.5, 1, 0.5],
       "clamp"
     );
 
     return {
-      transform: [{ translateX }, { scale }],
+      transform: [{ translateX }],
       opacity,
     };
   });
@@ -99,7 +92,7 @@ const CarouselItem = ({
             style={{
               width: ITEM_WIDTH,
               height: ITEM_HEIGHT,
-              position: "absolute", // Make gradient absolute
+              position: "absolute",
               zIndex: 1,
             }}
             colors={[
@@ -123,16 +116,19 @@ const CarouselItem = ({
             ]}
           >
             <Image
-              source={{ uri: SMALL_POSTER_BASE_PATH + movie.poster_path }}
+              source={{ uri: SMALL_POSTER_BASE_PATH + movie.backdrop_path }}
               style={{
                 width: "100%",
                 height: ITEM_HEIGHT,
               }}
               contentPosition="top"
               contentFit="cover"
-              transition={300} // Add transition duration
+              transition={300}
             />
           </Animated.View>
+          <MovieTitle numberOfLines={1} adjustsFontSizeToFit>
+            {movie.title}
+          </MovieTitle>
           <ServiceIcon
             service={service}
             isRental={isRental}

@@ -1,14 +1,8 @@
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Tabs } from "expo-router"; // Remove useRouter
+import { Tabs } from "expo-router";
 import { Colors } from "../../constants";
-import {
-  View,
-  Text,
-  Animated,
-  Pressable,
-  GestureResponderEvent,
-} from "react-native";
+import { Text, Animated, Pressable, GestureResponderEvent } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useRef } from "react";
 

@@ -15,7 +15,6 @@ const RatingFilter = () => {
     setRating([filters.rating.min, filters.rating.max]);
   }, [filters.rating]);
 
-  // Debounced dispatch to Redux
   const debouncedDispatch = useCallback(
     debounce((value: number[]) => {
       dispatch(updateFilters({ name: "rating", min: value[0], max: value[1] }));
@@ -24,11 +23,11 @@ const RatingFilter = () => {
   );
 
   const handleValueChange = (value: number[]) => {
-    setRating(value); // Update local state immediately
+    setRating(value);
   };
 
   const handleSlidingComplete = (value: number[]) => {
-    debouncedDispatch(value); // Update Redux when sliding stops
+    debouncedDispatch(value);
   };
 
   return (

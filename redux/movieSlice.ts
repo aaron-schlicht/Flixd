@@ -72,7 +72,7 @@ export const {
   removeSelectedMovie,
   updateSearchResultServices,
   setServices,
-  clearSelectedServices, // Add this export
+  clearSelectedServices,
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

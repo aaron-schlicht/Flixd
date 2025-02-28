@@ -7,9 +7,9 @@ import KeywordSelect from "../../components/KeywordSelect";
 import RatingFilter from "../../components/RatingFilter";
 import ReleaseFilter from "../../components/ReleaseFilter";
 import SelectedFilters from "../../components/SelectedFilters";
-import { Background, Center, Flex } from "../../components/ui/Layouts";
-import { H2, H3 } from "../../components/ui/Typography";
-import CertificationFilter from "../../components/CertificationFilter"; // Add import
+import { Background } from "../../components/ui/Layouts";
+import { H2 } from "../../components/ui/Typography";
+import CertificationFilter from "../../components/CertificationFilter";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -29,7 +29,7 @@ const FilterScreen = () => {
       <SafeAreaView>
         <View
           style={{
-            width,
+            width: "100%",
             display: "flex",
             flexDirection: "column",
             backgroundColor: Colors.header,
@@ -39,7 +39,7 @@ const FilterScreen = () => {
         >
           <H2
             style={{
-              width: width * 0.8,
+              width: "80%",
               marginLeft: 15,
               marginTop: 10,
               color: Colors.primary,
@@ -51,7 +51,7 @@ const FilterScreen = () => {
           </H2>
           <SelectedFilters />
         </View>
-        <View style={{ height: height, width: width }}>
+        <View style={{ height: height, width: "100%" }}>
           <FlatList
             data={AccordionItems}
             contentContainerStyle={{ paddingBottom: 200, overflow: "hidden" }}

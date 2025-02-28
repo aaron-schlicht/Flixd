@@ -13,15 +13,17 @@ import { CastMember, CrewMember } from "../../../types";
 import { get } from "../../../api";
 import { CastResults } from "../../../types";
 import { useEffect, useState } from "react";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 const SCREEN_PADDING = 15;
 const GRID_GAP = 10;
 const COLUMNS = 3;
 const screenWidth = Dimensions.get("window").width;
-const ITEM_WIDTH =
-  (screenWidth - SCREEN_PADDING * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
-const IMAGE_SIZE = ITEM_WIDTH - 20; // Leave some margin for the text below
+const ITEM_WIDTH = Math.min(
+  (screenWidth - SCREEN_PADDING * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS,
+  200
+);
+const IMAGE_SIZE = ITEM_WIDTH - 20;
 
 const PeopleGrid = ({ people }: { people: (CastMember | CrewMember)[] }) => {
   return (
@@ -122,7 +124,7 @@ const fetchTopCredits = async (id: number) => {
   if (data) {
     return {
       cast: data.cast,
-      crew: data.crew, // Return all crew members
+      crew: data.crew,
     };
   } else {
     return { cast: [], crew: [] };
@@ -214,7 +216,7 @@ const Person = ({
 const ConnectedPeople = ({ id }: { id: number }) => {
   const [topCast, setTopCast] = useState<CastMember[]>([]);
   const [topCrew, setTopCrew] = useState<CrewMember[]>([]);
-  const [loading, setLoading] = useState(true); // Changed to start as true
+  const [loading, setLoading] = useState(true);
   const windowHeight = Dimensions.get("window").height;
 
   const getTopCredits = async () => {

@@ -2,6 +2,7 @@ import { Dimensions, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { ResultItemContainer, SkeletonBox, SkeletonLayout } from "./styles";
 const { width } = Dimensions.get("screen");
+const POSTER_WIDTH = width * 0.15;
 
 const SkeletonList = () => {
   return (
@@ -20,8 +21,8 @@ const SkeletonList = () => {
             <ResultItemContainer key={`skeleton-list-item-${value}`}>
               <SkeletonLayout>
                 <SkeletonBox
-                  width={50}
-                  height={75}
+                  width={POSTER_WIDTH}
+                  height={POSTER_WIDTH * 1.5}
                   skeletonStyle={{
                     backgroundColor: "#252942",
                   }}

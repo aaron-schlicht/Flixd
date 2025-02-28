@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, View } from "react-native";
+import { Dimensions, FlatList, View, Platform } from "react-native";
 import { Movie, Service } from "../../../types";
 import React, { useRef, useEffect, useState, useCallback, memo } from "react";
 import { Skeleton } from "@rneui/themed";
@@ -88,7 +88,7 @@ const Carousel = ({
         <Skeleton
           animation="wave"
           width={ITEM_WIDTH}
-          height={ITEM_WIDTH * 1.5}
+          height={ITEM_WIDTH * 0.7}
         />
       </View>
     );

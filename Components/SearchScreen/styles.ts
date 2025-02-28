@@ -4,6 +4,7 @@ import { Colors } from "../../constants";
 import { Image } from "expo-image";
 import { Skeleton } from "@rneui/themed";
 const { width } = Dimensions.get("screen");
+const POSTER_WIDTH = width * 0.15;
 
 export const ResultItemContainer = styled.View`
   width: ${width * 0.97}px;
@@ -14,16 +15,17 @@ export const ResultItemContainer = styled.View`
 `;
 
 export const ItemButton = styled.TouchableOpacity`
-  padding: 10px;
+  padding: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 `;
 
 export const PosterImage = styled(Image)`
-  width: 50px;
-  height: 75px;
+  width: ${POSTER_WIDTH}px;
+  height: ${POSTER_WIDTH * 1.5}px;
   border-radius: 10px;
 `;
 
@@ -41,8 +43,8 @@ export const SkeletonLayout = styled.View`
   padding: 10px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 10px;
 `;
 

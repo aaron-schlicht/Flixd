@@ -23,6 +23,12 @@ const formatRuntime = (minutes: number): string => {
   return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
 };
 
+const formatReleaseDate = (releaseDate: string | null): string => {
+  if (!releaseDate) return "N/A";
+  const date = new Date(releaseDate);
+  return isNaN(date.getTime()) ? "N/A" : date.getFullYear().toString();
+};
+
 const Header = ({
   movie,
   runtime,
@@ -69,7 +75,7 @@ const Header = ({
             <Text
               style={{ color: Colors.primary, fontSize: 20, fontWeight: "600" }}
             >
-              {new Date(movie.release_date).getFullYear()}
+              {formatReleaseDate(movie.release_date)}
             </Text>
             <Text
               style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}
@@ -107,9 +113,15 @@ const Header = ({
                 ·
               </Text>
             ) : null}
-            <Text style={{ color: Colors.primary, fontSize: 18 }}>
-              {formatRuntime(runtime)}
-            </Text>
+            {movie.runtime && movie.runtime > 0 ? (
+              <Text style={{ color: Colors.primary, fontSize: 18 }}>
+                {formatRuntime(runtime)}
+              </Text>
+            ) : (
+              <Text style={{ color: Colors.primary, fontSize: 18 }}>
+                Runtime unknown
+              </Text>
+            )}
             <Text
               style={{ color: Colors.primary, fontSize: 20, fontWeight: "900" }}
             >

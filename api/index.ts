@@ -24,7 +24,6 @@ export async function get<T>(
   }
 }
 
-//TODO: Maybe move into separate hook file
 export const useFetchList = (
   url: string,
   isRefreshing: boolean,

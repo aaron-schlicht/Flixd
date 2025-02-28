@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   genreButton: {
     width: "48%",
-    height: 120, // Add fixed height
+    aspectRatio: 1.5,
     borderRadius: 15,
   },
   imageContainer: {

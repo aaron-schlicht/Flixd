@@ -5,15 +5,19 @@ import { router } from "expo-router";
 import { imageBasePath, Colors } from "../../../constants";
 import { Movie } from "../../../types";
 
-export const ITEM_WIDTH = Dimensions.get("window").width * 0.28;
 export const ITEM_SPACING = 10;
 export const PADDING = 20;
+// Calculate item width based on container width
+// (Container width - padding on both sides - total spacing between 3 items) / 3
+export const ITEM_WIDTH =
+  (Dimensions.get("window").width - PADDING * 2 - ITEM_SPACING * 2) / 3;
 
 export const MovieGrid = ({ movies }: { movies: Movie[] }) => {
   const renderItem = ({ item: movie }: { item: Movie }) => (
     <TouchableOpacity
       style={{
         width: ITEM_WIDTH,
+        maxWidth: 200,
         marginHorizontal: ITEM_SPACING / 2,
         marginBottom: 15,
       }}

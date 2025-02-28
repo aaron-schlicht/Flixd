@@ -33,7 +33,10 @@ export const MovieTitle = styled.Text`
   width: ${width * 0.7}px;
   font-size: 25px;
   font-weight: bold;
-  z-index: 3;
+  z-index: 300;
+  position: absolute;
+  left: 15px;
+  bottom: 30px;
 `;
 
 export const CarouselImage = styled(Image)`

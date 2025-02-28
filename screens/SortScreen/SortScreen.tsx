@@ -62,8 +62,6 @@ const SortScreen = () => {
     dispatch(updateSort(value));
     router.back();
   };
-
-  // Update button style to show selected state
   const getButtonStyle = (value: string) => ({
     ...styles.button,
     backgroundColor: currentSort === value ? Colors.primary : Colors.secondary,
