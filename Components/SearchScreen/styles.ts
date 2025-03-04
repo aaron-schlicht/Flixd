@@ -3,6 +3,7 @@ import { Dimensions } from "react-native";
 import { Colors } from "../../constants";
 import { Image } from "expo-image";
 import { Skeleton } from "@rneui/themed";
+import { TEXT_BOX_WIDTH } from "./constants";
 const { width } = Dimensions.get("screen");
 const POSTER_WIDTH = width * 0.15;
 
@@ -12,10 +13,11 @@ export const ResultItemContainer = styled.View`
   padding: 5px;
   border-bottom-color: ${Colors.secondary};
   border-bottom-width: 1px;
+  padding-vertical: 10px;
 `;
 
 export const ItemButton = styled.TouchableOpacity`
-  padding: 5px;
+  padding: 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -30,7 +32,9 @@ export const PosterImage = styled(Image)`
 `;
 
 export const TextBox = styled.View`
-  width: ${width * 0.6}px;
+  width: ${TEXT_BOX_WIDTH}px;
+  padding-horizontal: 10px;
+  justify-content: space-between;
 `;
 
 export const Title = styled.Text`
@@ -40,7 +44,7 @@ export const Title = styled.Text`
 `;
 
 export const SkeletonLayout = styled.View`
-  padding: 10px;
+  padding: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

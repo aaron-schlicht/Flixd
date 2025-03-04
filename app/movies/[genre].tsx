@@ -189,17 +189,20 @@ export default function GenreMovies() {
               </Link>
             </View>
           ) : (
-            streamingMovieData.map((service, index) => (
-              <MovieList
-                key={`service-${index}-{${service.name}`}
-                name={`${service.name}`}
-                data={service.movies}
-                imagePath={service.imagePath}
-                loading={service.movies.length === 0}
-                isRefreshing={isRefreshing}
-                onEndReached={() => loadMoreMovies(service.name)}
-              />
-            ))
+            streamingMovieData.map((service, index) => {
+              if (service.movies.length === 0) return null;
+              return (
+                <MovieList
+                  key={`service-${index}-{${service.name}`}
+                  name={`${service.name}`}
+                  data={service.movies}
+                  imagePath={service.imagePath}
+                  loading={service.movies.length === 0}
+                  isRefreshing={isRefreshing}
+                  onEndReached={() => loadMoreMovies(service.name)}
+                />
+              );
+            })
           )}
         </View>
       </Animated.ScrollView>

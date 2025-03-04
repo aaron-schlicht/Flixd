@@ -1,8 +1,13 @@
-import { Dimensions, ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { ResultItemContainer, SkeletonBox, SkeletonLayout } from "./styles";
-const { width } = Dimensions.get("screen");
-const POSTER_WIDTH = width * 0.15;
+import {
+  POSTER_WIDTH,
+  TEXT_BOX_WIDTH,
+  SERVICE_ICON_SIZE,
+  SERVICE_CONTAINER_WIDTH,
+  width,
+} from "./constants";
 
 const SkeletonList = () => {
   return (
@@ -28,19 +33,27 @@ const SkeletonList = () => {
                   }}
                 />
                 <SkeletonBox
-                  width={width * 0.6}
+                  width={TEXT_BOX_WIDTH}
                   height={60}
                   skeletonStyle={{
                     backgroundColor: "#252942",
                   }}
                 />
-                <SkeletonBox
-                  width={35}
-                  height={35}
-                  skeletonStyle={{
-                    backgroundColor: "#252942",
+                <View
+                  style={{
+                    width: SERVICE_CONTAINER_WIDTH,
+                    alignItems: "center",
                   }}
-                />
+                >
+                  <SkeletonBox
+                    width={SERVICE_ICON_SIZE}
+                    height={SERVICE_ICON_SIZE}
+                    skeletonStyle={{
+                      backgroundColor: "#252942",
+                      borderRadius: 5,
+                    }}
+                  />
+                </View>
               </SkeletonLayout>
             </ResultItemContainer>
           );

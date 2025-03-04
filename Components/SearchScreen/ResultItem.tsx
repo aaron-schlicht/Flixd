@@ -16,6 +16,11 @@ import {
 } from "./styles";
 import { useCallback } from "react";
 import { H3 } from "../ui/Typography";
+import {
+  POSTER_WIDTH,
+  SERVICE_ICON_SIZE,
+  SERVICE_CONTAINER_WIDTH,
+} from "./constants";
 const SMALL_POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w342/";
 
 const ResultItem = ({
@@ -36,6 +41,7 @@ const ResultItem = ({
             uri: MEDIUM_POSTER_BASE_URL + item.poster_path,
           }}
           recyclingKey={item.title}
+          style={{ width: POSTER_WIDTH, height: POSTER_WIDTH * 1.5 }}
         />
         <TextBox>
           <Title minimumFontScale={0.7} numberOfLines={3} adjustsFontSizeToFit>
@@ -74,8 +80,8 @@ const ServiceIcon = ({
       return (
         <Image
           style={{
-            width: 35,
-            height: 35,
+            width: SERVICE_ICON_SIZE,
+            height: SERVICE_ICON_SIZE,
             borderRadius: 5,
           }}
           source={{
@@ -90,8 +96,8 @@ const ServiceIcon = ({
         <View
           style={{
             backgroundColor: Colors.secondary,
-            width: 35,
-            height: 35,
+            width: SERVICE_ICON_SIZE,
+            height: SERVICE_ICON_SIZE,
             borderRadius: 5,
             justifyContent: "center",
           }}
@@ -103,7 +109,7 @@ const ServiceIcon = ({
   }, [service]);
 
   return (
-    <View style={{ alignItems: "center", width: 60 }}>
+    <View style={{ alignItems: "center", width: SERVICE_CONTAINER_WIDTH }}>
       {renderServiceIcon()}
     </View>
   );
